@@ -32,4 +32,8 @@ public class SubjectServiceImpl extends SubjectService {
     public Optional<Subject> findBySubjectName(String subjectName) {
         return subjectRepository.findBySubjectName(subjectName);
     }
+
+    public Optional<Subject> findBySubjectNameBn(String subjectNameBn) {
+        return subjectRepository.findBySubjectNameBn(subjectNameBn);
+    }
 }

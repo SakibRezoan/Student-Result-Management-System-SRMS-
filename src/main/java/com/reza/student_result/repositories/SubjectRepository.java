@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
     Optional<Subject> findBySubjectName(String subjectName);
 
+    Optional<Subject> findBySubjectNameBn(String subjectNameBn);
 }

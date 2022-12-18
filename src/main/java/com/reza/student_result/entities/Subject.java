@@ -16,7 +16,7 @@ public class Subject extends BaseEntity {
     @Column(name = "SUBJECT_ID")
     private Long id;
     @Column(name = "SUBJECT_NAME", length = 100)
-    private String SubjectName;
+    private String subjectName;
     @Column(name = "SUBJECT_NAME_BN",columnDefinition = "nvarchar(150)")
     private String subjectNameBn;
     @Column(name = "SUBJECT_CODE")
