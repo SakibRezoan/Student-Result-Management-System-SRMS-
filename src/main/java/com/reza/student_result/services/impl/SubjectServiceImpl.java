@@ -23,13 +23,13 @@ public class SubjectServiceImpl extends SubjectService {
 
     @Override
     @Transactional
-    protected Subject save(SubjectRequest request) {
+    public Subject save(SubjectRequest request) {
         Subject subject = request.to(request);
-        return repository.save(subject);
+        return subjectRepository.save(subject);
     }
 
     @Override
     public Optional<Subject> findBySubjectName(String subjectName) {
-        return repository.findBySubjectName(subjectName);
+        return subjectRepository.findBySubjectName(subjectName);
     }
 }

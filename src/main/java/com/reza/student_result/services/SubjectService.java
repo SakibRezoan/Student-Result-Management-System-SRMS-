@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 public abstract class SubjectService {
-    protected final SubjectRepository repository;
+    protected final SubjectRepository subjectRepository;
 
     protected abstract Subject save(SubjectRequest request);
 

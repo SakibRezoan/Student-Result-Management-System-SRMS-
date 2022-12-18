@@ -22,14 +22,4 @@ public class SubjectRequest {
         BeanUtils.copyProperties(request, subject);
         return subject;
     }
-
-//    public Subject to(SubjectRequest request) {
-//        Subject subject = new Subject();
-//        BeanUtils.copyProperties(request, subject);
-//        return subject;
-//    }
-//
-//    public void update(SubjectRequest request, Subject subject) {
-//        BeanUtils.copyProperties(request, subject);
-//    }
 }
