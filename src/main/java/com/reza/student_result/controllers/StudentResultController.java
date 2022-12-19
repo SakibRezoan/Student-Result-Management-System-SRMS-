@@ -62,9 +62,9 @@ public class StudentResultController {
         Student student = studentService.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student " + studentId));
 
-//        if (nonNull(file) && isEmpty(request))
-//            return badRequest().body(
-//                    error("file data must be selected").getJson());
+        if (nonNull(file) && request.isEmpty())
+            return badRequest().body(
+                    error("file data must be selected").getJson());
 
         List<Enclosure> enclosures = null;
         try {

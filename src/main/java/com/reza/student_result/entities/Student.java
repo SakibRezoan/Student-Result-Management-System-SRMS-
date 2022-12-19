@@ -40,7 +40,7 @@ public class Student implements Serializable {
     private String result;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "student_id")
-    List<Enclosure> enclosures;
+    private List<Enclosure> enclosures;
 
     public void addEnclosures(List<Enclosure> enclosure) {
         if (this.enclosures == null) {
