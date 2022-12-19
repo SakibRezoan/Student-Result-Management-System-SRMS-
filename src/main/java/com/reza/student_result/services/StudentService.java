@@ -20,11 +20,12 @@ public class StudentService implements StudentServiceForPagingAndSorting{
     private StudentRepo studentRepo;
 
     public Student saveNewStudent (StudentRequest studentRequest) {
-        Student student = Student.build(0,
+        Student student = Student.build(0L,
                                         studentRequest.getRoll(),
                                         studentRequest.getName(),
                                         studentRequest.getEmail(),
-                                        studentRequest.getResult() );
+                                        studentRequest.getResult(),
+                                        studentRequest.getEnclosures());
         return studentRepo.save(student);
     }
     public List<Student> fetchAllStudents () throws StudentNotFoundException {
@@ -42,13 +43,9 @@ public class StudentService implements StudentServiceForPagingAndSorting{
         return studentRepo.findByName(name);
     }
 
-    public Student getStudentById (int id) throws StudentNotFoundException {
-        Optional<Student> student = studentRepo.findById(id);
-        if(student.isPresent()) {
-            return student.get();
-        }else {
-            throw new StudentNotFoundException("Student not found with id : " + id);
-        }
+    public Optional<Student> findById(Integer studentId) {
+        Optional<Student> student = studentRepo.findById(studentId);
+        return student;
     }
 
     public Student updateStudent (Student student) {
@@ -72,5 +69,8 @@ public class StudentService implements StudentServiceForPagingAndSorting{
     }
     public List<Student> getStudentsByResult(String result) {
         return studentRepo.findAllByResult(result);
+    }
+    public Student saveEnclosure(Student student) {
+        return studentRepo.save(student);
     }
 }

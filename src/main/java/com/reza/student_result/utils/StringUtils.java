@@ -1,5 +1,7 @@
 package com.reza.student_result.utils;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
@@ -8,7 +10,7 @@ public class StringUtils {
         return Objects.nonNull(str) && str.trim().length() > 0;
     }
 
-    public static boolean nonNull(Objects boj) {
+    public static boolean nonNull(Object boj) {
         return Objects.nonNull(boj);
     }
 

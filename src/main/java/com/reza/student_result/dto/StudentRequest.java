@@ -1,10 +1,12 @@
 package com.reza.student_result.dto;
 
+import com.reza.student_result.entities.Enclosure;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor (staticName = "build")
@@ -24,4 +26,6 @@ public class StudentRequest {
 
     @Pattern(regexp = "A+|A|A-|B|C|D|F", message = "Please enter valid result")
     private String result;
+
+    private List<Enclosure> enclosures;
 }
