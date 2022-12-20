@@ -1,19 +1,21 @@
 package com.reza.student_result.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.reza.student_result.dto.StudentRequest;
+import com.reza.student_result.requests.StudentRequest;
 import com.reza.student_result.entities.Enclosure;
 import com.reza.student_result.entities.Student;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.exceptions.StudentNotFoundException;
 import com.reza.student_result.helper.StudentHelper;
-import com.reza.student_result.repositories.StudentRepo;
+import com.reza.student_result.response.StudentResponse;
 import com.reza.student_result.services.StudentService;
+import com.reza.student_result.validators.StudentValidator;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,9 +24,10 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
+import static com.reza.student_result.constant.MessageConstants.STUDENT_SAVE;
+import static com.reza.student_result.exceptions.ApiError.fieldError;
 import static com.reza.student_result.utils.ResponseBuilder.error;
 import static com.reza.student_result.utils.ResponseBuilder.success;
-import static com.reza.student_result.utils.StringUtils.isEmpty;
 import static com.reza.student_result.utils.StringUtils.nonNull;
 import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
@@ -33,12 +36,10 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping("/student")
 public class StudentResultController {
 
-
-
     @Autowired
     private StudentService studentService;
-    @Autowired
-    private StudentRepo studentRepo;
+
+    private final StudentValidator validator;
     private final StudentHelper studentHelper;
 
     @GetMapping("/")
@@ -47,9 +48,22 @@ public class StudentResultController {
     }
 
     @PostMapping("/save")
-    private ResponseEntity<Student> saveNewStudent (@RequestBody @Valid StudentRequest studentRequest) {
-        return new ResponseEntity<>(studentService.saveNewStudent(studentRequest), HttpStatus.CREATED);
+    public ResponseEntity<JSONObject> save(@Valid @RequestBody StudentRequest studentRequest, BindingResult bindingResult) {
+
+        ValidationUtils.invokeValidator(validator, studentRequest, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return badRequest().body(error(fieldError(bindingResult)).getJson());
+        }
+
+        Student student = studentService.saveNewStudent(studentRequest);
+        return ok(success(StudentResponse.from(student), STUDENT_SAVE).getJson());
     }
+
+//    @PostMapping("/save")
+//    private ResponseEntity<Student> saveNewStudent (@RequestBody @Valid StudentRequest studentRequest) {
+//        return new ResponseEntity<>(studentService.saveNewStudent(studentRequest), HttpStatus.CREATED);
+//    }
 
     @RequestMapping(
             path = "/save/enclosure/{studentId}",

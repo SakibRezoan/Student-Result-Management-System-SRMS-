@@ -1,6 +1,6 @@
 package com.reza.student_result.validators;
-import com.reza.student_result.dto.StudentDto;
 import com.reza.student_result.entities.Student;
+import com.reza.student_result.requests.StudentRequest;
 import com.reza.student_result.services.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,20 +12,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentValidator implements Validator {
 
-    private final StudentService service;
+    private final StudentService studentService;
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return StudentDto.class.isAssignableFrom(clazz);
+        return StudentRequest.class.isAssignableFrom(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        StudentDto dto = (StudentDto) target;
-        if(!dto.getName().isEmpty()){
-            List<Student> student = service.getStudentByName(dto.getName());
+        StudentRequest studentRequest = (StudentRequest) target;
+        if(studentRequest.getStudentName() != null){
+            List<Student> student = studentService.getStudentByName(studentRequest.getStudentName());
             if(!student.isEmpty()){
-                errors.rejectValue("name", null , "Already Exists");
+                errors.rejectValue("name", "" , "Student Already Exists");
             }
         }
 
