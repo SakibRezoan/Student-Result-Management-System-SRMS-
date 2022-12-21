@@ -21,6 +21,22 @@ public class ResponseBuilder implements Response {
         this.type = type;
     }
 
+    public static ResponseBuilder paginatedSuccess(PaginatedResponse data){
+        ResponseBuilder response = new ResponseBuilder(ResponseType.DATA);
+        response.data = data.list;
+        response.meta = data.meta;
+        response.status = ResponseStatus.SUCCESS;
+        return response;
+    }
+    public static ResponseBuilder paginatedSuccess(PaginatedResponse data, String message){
+        ResponseBuilder response = new ResponseBuilder(ResponseType.DATA);
+        response.data = data.list;
+        response.meta = data.meta;
+        response.message = message;
+        response.status = ResponseStatus.SUCCESS;
+        return response;
+    }
+
     public static ResponseBuilder success(Object data) {
         ResponseBuilder response = new ResponseBuilder(ResponseType.DATA);
         response.status = ResponseStatus.SUCCESS;

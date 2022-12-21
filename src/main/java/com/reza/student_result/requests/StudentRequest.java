@@ -22,7 +22,6 @@ public class StudentRequest {
     @Email
     private String studentEmail;
     @NotNull
-
     private String studentResult;
 
     public static StudentRequest response(Student student) {

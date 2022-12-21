@@ -36,9 +36,9 @@ public class StudentHelper extends FileUpload {
             }
         }
 
-        Enclosure enclosure = new ObjectMapper().readValue(request, Enclosure.class);
-//        Enclosure enclosure = new Enclosure();
-//        enclosure.setName(request);
+        //Enclosure enclosure = new ObjectMapper().readValue(request, Enclosure.class);
+        Enclosure enclosure = new Enclosure();
+        enclosure.setName(request);
 
         enclosures.add(enclosure);
 

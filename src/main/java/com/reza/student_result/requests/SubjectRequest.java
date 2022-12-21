@@ -13,7 +13,7 @@ public class SubjectRequest {
     private Long id;
     @NotBlank
     @NotNull
-    private String SubjectName;
+    private String subjectName;
     @NotBlank
     @NotNull
     private String subjectNameBn;
@@ -24,5 +24,9 @@ public class SubjectRequest {
         Subject subject = new Subject();
         BeanUtils.copyProperties(request, subject);
         return subject;
+    }
+
+    public void update(SubjectRequest request, Subject subject) {
+        BeanUtils.copyProperties(request, subject);
     }
 }

@@ -29,6 +29,7 @@ import static com.reza.student_result.exceptions.ApiError.fieldError;
 import static com.reza.student_result.utils.ResponseBuilder.error;
 import static com.reza.student_result.utils.ResponseBuilder.success;
 import static com.reza.student_result.utils.StringUtils.nonNull;
+import static com.reza.student_result.utils.StringUtils.isEmpty;
 import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
 @RequiredArgsConstructor
@@ -60,11 +61,6 @@ public class StudentResultController {
         return ok(success(StudentResponse.from(student), STUDENT_SAVE).getJson());
     }
 
-//    @PostMapping("/save")
-//    private ResponseEntity<Student> saveNewStudent (@RequestBody @Valid StudentRequest studentRequest) {
-//        return new ResponseEntity<>(studentService.saveNewStudent(studentRequest), HttpStatus.CREATED);
-//    }
-
     @RequestMapping(
             path = "/save/enclosure/{studentId}",
             method = RequestMethod.POST,
@@ -76,7 +72,7 @@ public class StudentResultController {
         Student student = studentService.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student " + studentId));
 
-        if (nonNull(file) && request.isEmpty())
+        if (nonNull(file) && isEmpty(request))
             return badRequest().body(
                     error("file data must be selected").getJson());
 
@@ -88,7 +84,6 @@ public class StudentResultController {
         }
 
         student.addEnclosures(enclosures);
-
         studentService.saveEnclosure(student);
         return ok(success(null, "success").getJson());
     }

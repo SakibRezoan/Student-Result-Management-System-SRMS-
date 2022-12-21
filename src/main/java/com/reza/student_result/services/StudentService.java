@@ -4,6 +4,7 @@ import com.reza.student_result.requests.StudentRequest;
 import com.reza.student_result.entities.Student;
 import com.reza.student_result.exceptions.StudentNotFoundException;
 import com.reza.student_result.repositories.StudentRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +19,7 @@ import java.util.Optional;
 public class StudentService implements StudentServiceForPagingAndSorting{
     @Autowired
     private StudentRepository studentRepository;
-
+    @Transactional
     public Student saveNewStudent(StudentRequest studentRequest) {
         Student student = studentRequest.to(studentRequest);
         return studentRepository.save(student);
