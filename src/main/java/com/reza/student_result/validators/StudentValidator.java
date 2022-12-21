@@ -2,6 +2,7 @@ package com.reza.student_result.validators;
 import com.reza.student_result.entities.Student;
 import com.reza.student_result.requests.StudentRequest;
 import com.reza.student_result.services.StudentService;
+import com.reza.student_result.services.impl.StudentServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -12,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentValidator implements Validator {
 
-    private final StudentService studentService;
+    private final StudentServiceImpl studentServiceImpl;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -23,7 +24,7 @@ public class StudentValidator implements Validator {
     public void validate(Object target, Errors errors) {
         StudentRequest studentRequest = (StudentRequest) target;
         if(studentRequest.getStudentName() != null){
-            List<Student> student = studentService.getStudentByName(studentRequest.getStudentName());
+            List<Student> student = studentServiceImpl.getStudentByName(studentRequest.getStudentName());
             if(!student.isEmpty()){
                 errors.rejectValue("name", "" , "Student Already Exists");
             }

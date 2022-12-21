@@ -20,11 +20,6 @@ public class SubjectResponse {
     public static SubjectResponse from(Subject subject) {
         SubjectResponse response = new SubjectResponse();
         BeanUtils.copyProperties(subject, response);
-//        response.setId(subject.getId());
-//        response.setSubjectName(subject.getSubjectName());
-//        response.setSubjectNameBn(subject.getSubjectNameBn());
-//        response.setSubjectCode(subject.getSubjectCode());
-//        response.setSubjectTypeId(subject.getSubjectTypeId());
         return response;
     }
 }

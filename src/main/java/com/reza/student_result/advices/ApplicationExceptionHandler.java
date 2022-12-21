@@ -1,6 +1,6 @@
 package com.reza.student_result.advices;
 
-import com.reza.student_result.exceptions.StudentNotFoundException;
+import com.reza.student_result.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,8 +22,8 @@ public class ApplicationExceptionHandler {
         return errorMap;
     }
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(StudentNotFoundException.class)
-    public Map<String, String> handleBusinessException (StudentNotFoundException ex) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public Map<String, String> handleBusinessException (ResourceNotFoundException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("errorMessage", ex.getMessage());
         return errorMap;

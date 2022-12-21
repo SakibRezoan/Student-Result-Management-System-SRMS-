@@ -1,14 +1,15 @@
 package com.reza.student_result.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.requests.StudentRequest;
 import com.reza.student_result.entities.Enclosure;
 import com.reza.student_result.entities.Student;
-import com.reza.student_result.exceptions.ResourceNotFoundException;
-import com.reza.student_result.exceptions.StudentNotFoundException;
 import com.reza.student_result.helper.StudentHelper;
 import com.reza.student_result.response.StudentResponse;
-import com.reza.student_result.services.StudentService;
+import com.reza.student_result.services.impl.StudentServiceImpl;
+import com.reza.student_result.utils.CommonDataHelper;
+import com.reza.student_result.utils.PaginatedResponse;
 import com.reza.student_result.validators.StudentValidator;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -24,7 +25,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-import static com.reza.student_result.constant.MessageConstants.STUDENT_SAVE;
+import static com.reza.student_result.constant.MessageConstants.*;
 import static com.reza.student_result.exceptions.ApiError.fieldError;
 import static com.reza.student_result.utils.ResponseBuilder.error;
 import static com.reza.student_result.utils.ResponseBuilder.success;
@@ -38,14 +39,32 @@ import static org.springframework.http.ResponseEntity.ok;
 public class StudentResultController {
 
     @Autowired
-    private StudentService studentService;
+    private StudentServiceImpl studentServiceImpl;
 
     private final StudentValidator validator;
     private final StudentHelper studentHelper;
 
+    private final CommonDataHelper helper;
+
     @GetMapping("/")
     private String Welcome() {
         return "Welcome";
+    }
+
+    @GetMapping("list")
+    public ResponseEntity<JSONObject> getList(
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "sortBy", defaultValue = "") String sortBy,
+            @RequestParam(value = "studentRoll", defaultValue = "") Long studentRoll,
+            @RequestParam(value = "studentName", defaultValue = "") String studentName,
+            @RequestParam(value = "studentEmail", defaultValue = "") String studentEmail,
+            @RequestParam(value = "studentResult", defaultValue = "") String studentResult
+    ) {
+        helper.setPageSize(page,size);
+        PaginatedResponse paginatedResponse = new PaginatedResponse();
+//        Map<String,Object> studentMapSearchResult =
+        return null;
     }
 
     @PostMapping("/save")
@@ -57,7 +76,7 @@ public class StudentResultController {
             return badRequest().body(error(fieldError(bindingResult)).getJson());
         }
 
-        Student student = studentService.saveNewStudent(studentRequest);
+        Student student = studentServiceImpl.save(studentRequest);
         return ok(success(StudentResponse.from(student), STUDENT_SAVE).getJson());
     }
 
@@ -65,12 +84,12 @@ public class StudentResultController {
             path = "/save/enclosure/{studentId}",
             method = RequestMethod.POST,
             consumes = {"multipart/form-data"})
-    public ResponseEntity<JSONObject> saveEnclosure(@PathVariable("studentId") @NotNull int studentId,
+    public ResponseEntity<JSONObject> saveEnclosure(@PathVariable("studentId") @NotNull Long studentId,
                                                     @RequestPart(value = "file", required = false) MultipartFile file,
-                                                    @RequestParam(value = "request", required = false) String request) {
+                                                    @RequestParam(value = "request", required = false) String request)
+                                                    throws ResourceNotFoundException {
 
-        Student student = studentService.findById(studentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Student " + studentId));
+        Student student = studentServiceImpl.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Student " + studentId));
 
         if (nonNull(file) && isEmpty(request))
             return badRequest().body(
@@ -84,55 +103,74 @@ public class StudentResultController {
         }
 
         student.addEnclosures(enclosures);
-        studentService.saveEnclosure(student);
+        studentServiceImpl.saveEnclosure(student);
         return ok(success(null, "success").getJson());
     }
 
-    @PostMapping("/update")
-    public Student updateStudent (@RequestBody Student student) {
-        return studentService.updateStudent(student);
+    @PutMapping("/update")
+    public ResponseEntity<JSONObject> update(@Valid @RequestBody StudentRequest request, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return badRequest().body(error(fieldError(bindingResult)).getJson());
+        }
+
+        Student student = studentServiceImpl.update(request);
+        return ok(success(StudentResponse.from(student), STUDENT_UPDATE).getJson());
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteOne (@PathVariable int id) {
-        return studentService.deleteOne(id);
+    @GetMapping("/find/{id}")
+    public ResponseEntity<JSONObject> findById(@PathVariable Long id) {
+
+        Optional<StudentResponse> response = Optional.ofNullable(studentServiceImpl.findById(id)
+                .map(StudentResponse::from)
+                .orElseThrow(ResourceNotFoundException::new));
+
+        return ok(success(response).getJson());
     }
 
-    @GetMapping("/fetchAll")
-    private ResponseEntity<List<Student>> getAllStudents () throws StudentNotFoundException {
-        return  ResponseEntity.ok(studentService.fetchAllStudents());
-    }
-    @GetMapping("/getStudent/{id}")
-    public ResponseEntity<Optional<Student>> getOneStudent (@PathVariable int id) throws StudentNotFoundException {
-        return ResponseEntity.ok(studentService.findById(id));
-    }
 
-    @GetMapping("/getStudentByName/{name}")
-    public ResponseEntity<List<Student>> getStudentByName (@PathVariable String name) {
-        return ResponseEntity.ok(studentService.getStudentByName(name));
-    }
+//    @PostMapping("/update")
+//    public Student updateStudent (@RequestBody Student student) {
+//        return studentService.updateStudent(student);
+//    }
+//
+//    @GetMapping("/delete/{id}")
+//    public String deleteOne (@PathVariable int id) {
+//        return studentService.deleteOne(id);
+//    }
+//
+//    @GetMapping("/fetchAll")
+//    private ResponseEntity<List<Student>> getAllStudents () throws StudentNotFoundException {
+//        return  ResponseEntity.ok(studentService.fetchAllStudents());
+//    }
 
-    @GetMapping("/getStudentByEmail/{email}")
-    public ResponseEntity<Student> getStudentByEmail(@PathVariable String email) {
-        return ResponseEntity.ok(studentService.getStudentByEmail(email));
-    }
-
-    @GetMapping("/getStudentByRoll/{roll}")
-    public ResponseEntity<Student> getStudentByRoll (@PathVariable long roll) {
-        return ResponseEntity.ok(studentService.getStudentByRoll(roll));
-    }
-
-    @GetMapping("/getStudentsByResult/{result}")
-    public ResponseEntity<List<Student>> getStudentsByResult (@PathVariable String result) {
-        return ResponseEntity.ok(studentService.getStudentsByResult(result));
-    }
-
-    @GetMapping("/getPaginated/{pageNo}/{pageSize}/{sortBy}")
-    public List<Student> getPaginatedStudents(@PathVariable int pageNo,
-                                              @PathVariable int pageSize, @PathVariable String sortBy) {
-
-        return studentService.findPaginated(pageNo, pageSize, sortBy);
-    }
+//
+//    @GetMapping("/getStudentByName/{name}")
+//    public ResponseEntity<List<Student>> getStudentByName (@PathVariable String name) {
+//        return ResponseEntity.ok(studentService.getStudentByName(name));
+//    }
+//
+//    @GetMapping("/getStudentByEmail/{email}")
+//    public ResponseEntity<Student> getStudentByEmail(@PathVariable String email) {
+//        return ResponseEntity.ok(studentService.getStudentByEmail(email));
+//    }
+//
+//    @GetMapping("/getStudentByRoll/{roll}")
+//    public ResponseEntity<Student> getStudentByRoll (@PathVariable long roll) {
+//        return ResponseEntity.ok(studentService.getStudentByRoll(roll));
+//    }
+//
+//    @GetMapping("/getStudentsByResult/{result}")
+//    public ResponseEntity<List<Student>> getStudentsByResult (@PathVariable String result) {
+//        return ResponseEntity.ok(studentService.getStudentsByResult(result));
+//    }
+//
+//    @GetMapping("/getPaginated/{pageNo}/{pageSize}/{sortBy}")
+//    public List<Student> getPaginatedStudents(@PathVariable int pageNo,
+//                                              @PathVariable int pageSize, @PathVariable String sortBy) {
+//
+//        return studentService.findPaginated(pageNo, pageSize, sortBy);
+//    }
 
 
 }

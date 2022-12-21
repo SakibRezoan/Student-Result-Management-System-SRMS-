@@ -1,6 +1,7 @@
 package com.reza.student_result.requests;
 
 import com.reza.student_result.entities.Student;
+import com.reza.student_result.entities.Subject;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -24,16 +25,14 @@ public class StudentRequest {
     @NotNull
     private String studentResult;
 
-    public static StudentRequest response(Student student) {
-        StudentRequest studentRequest = new StudentRequest();
-        studentRequest.setId(student.getId());
-        studentRequest.setStudentRoll(student.getStudentRoll());
-        studentRequest.setStudentName(student.getStudentName());
-        studentRequest.setStudentEmail(student.getStudentEmail());
-        studentRequest.setStudentResult(student.getStudentResult());
-        return studentRequest;
+    public void update(StudentRequest request, Student student) {
+        student.setId(request.getId());
+        student.setStudentName(request.getStudentName());
+        student.setStudentRoll(request.getStudentRoll());
+        student.setStudentEmail(request.getStudentEmail());
+        student.setStudentResult(request.getStudentResult());
+//        student.setEnclosures(student.getEnclosures());
     }
-
     public Student to(StudentRequest studentRequest) {
         Student student = new Student();
         BeanUtils.copyProperties(studentRequest, student);

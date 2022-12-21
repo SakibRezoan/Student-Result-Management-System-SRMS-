@@ -20,21 +20,17 @@ public class Student implements Serializable {
     @Column(name = "student_id")
     private Long id;
 
-    @Column(name = "student_roll", unique = true)
-    @JdbcTypeCode(SqlTypes.INTEGER)
+    @Column(name = "student_roll")
     private Long studentRoll;
 
     @Column(name = "student_name")
-    @JdbcTypeCode(SqlTypes.VARCHAR)
     private String studentName;
 
 
-    @Column(name = "student_email", unique = true)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(name = "student_email")
     private String studentEmail;
 
     @Column(name = "student_result")
-    @JdbcTypeCode(SqlTypes.VARCHAR)
     private String studentResult;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "student_id")

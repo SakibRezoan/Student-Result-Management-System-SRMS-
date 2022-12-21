@@ -77,7 +77,8 @@ public class SubjectController {
     @GetMapping("/find/{id}")
     public ResponseEntity<JSONObject> findById(@PathVariable Long id) {
 
-        Optional<SubjectResponse> response = Optional.ofNullable(subjectServiceImpl.findById(id).map(SubjectResponse::from)
+        Optional<SubjectResponse> response = Optional.ofNullable(subjectServiceImpl.findById(id)
+                .map(SubjectResponse::from)
                 .orElseThrow(ResourceNotFoundException::new));
 
         return ok(success(response).getJson());

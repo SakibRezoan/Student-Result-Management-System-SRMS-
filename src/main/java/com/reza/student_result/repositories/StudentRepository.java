@@ -6,11 +6,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StudentRepository extends JpaRepository <Student, Integer> {
+public interface StudentRepository extends JpaRepository <Student, Long> {
     List <Student> findByStudentName(String name);
-
     Student findByStudentEmail(String email);
-    Student findByStudentRoll(long roll);
-
+    Student findByStudentRoll(Long roll);
     List<Student> findAllByStudentResult(String result);
 }
