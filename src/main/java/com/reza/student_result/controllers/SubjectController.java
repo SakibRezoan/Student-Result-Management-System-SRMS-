@@ -50,14 +50,14 @@ public class SubjectController {
 
         PaginatedResponse paginatedResponse = new PaginatedResponse();
 
-        Map <String, Object> subjectMapSearchResult = subjectServiceImpl.searchSubject(subjectName, subjectTypeId,
+        Map <String, Object> subjectMappedSearchResult = subjectServiceImpl.searchSubject(subjectName, subjectTypeId,
                                                                             page, size, sortBy);
-        List<Subject> responses = (List<Subject>) subjectMapSearchResult.get("lists");
+        List<Subject> responses = (List<Subject>) subjectMappedSearchResult.get("lists");
 
         List<SubjectResponse> customResponse = responses.stream().
                             map(SubjectResponse::from).
                             collect(Collectors.toList());
-        helper.getCommonData(page, size, subjectMapSearchResult, paginatedResponse, customResponse);
+        helper.getCommonData(page, size, subjectMappedSearchResult, paginatedResponse, customResponse);
 
         return ok(paginatedSuccess(paginatedResponse).getJson());
     }

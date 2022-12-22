@@ -1,6 +1,5 @@
 package com.reza.student_result.utils;
 
-import com.reza.student_result.response.SubjectResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

@@ -7,6 +7,7 @@ import com.reza.student_result.entities.Enclosure;
 import com.reza.student_result.entities.Student;
 import com.reza.student_result.helper.StudentHelper;
 import com.reza.student_result.response.StudentResponse;
+import com.reza.student_result.response.SubjectResponse;
 import com.reza.student_result.services.impl.StudentServiceImpl;
 import com.reza.student_result.utils.CommonDataHelper;
 import com.reza.student_result.utils.PaginatedResponse;
@@ -23,12 +24,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.reza.student_result.constant.MessageConstants.*;
 import static com.reza.student_result.exceptions.ApiError.fieldError;
-import static com.reza.student_result.utils.ResponseBuilder.error;
-import static com.reza.student_result.utils.ResponseBuilder.success;
+import static com.reza.student_result.utils.ResponseBuilder.*;
 import static com.reza.student_result.utils.StringUtils.nonNull;
 import static com.reza.student_result.utils.StringUtils.isEmpty;
 import static org.springframework.http.ResponseEntity.badRequest;
@@ -63,8 +65,16 @@ public class StudentResultController {
     ) {
         helper.setPageSize(page,size);
         PaginatedResponse paginatedResponse = new PaginatedResponse();
-//        Map<String,Object> studentMapSearchResult =
-        return null;
+        Map<String,Object> studentMappedSearchResult = studentServiceImpl.searchStudent(
+                                    studentRoll, studentName, studentEmail, studentResult,
+                                    page, size, sortBy);
+        List<Student> responses =(List<Student>) studentMappedSearchResult.get("lists");
+
+        List<StudentResponse> customResponse = responses.stream().map(StudentResponse::from).
+                                                collect(Collectors.toList());
+        helper.getCommonData(page,size, studentMappedSearchResult, paginatedResponse, customResponse);
+
+        return ok(paginatedSuccess(paginatedResponse).getJson());
     }
 
     @PostMapping("/save")

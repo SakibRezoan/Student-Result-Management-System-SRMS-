@@ -5,10 +5,12 @@ import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.repositories.StudentRepository;
 import com.reza.student_result.requests.StudentRequest;
 import com.reza.student_result.services.StudentService;
+import com.reza.student_result.utils.ServiceHelper;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -51,5 +53,16 @@ public class StudentServiceImpl extends StudentService {
     @Override
     public List<Student> getStudentByName(String studentName) {
         return studentRepository.findByStudentName(studentName);
+    }
+
+    public Map<String, Object> searchStudent(Long studentRoll, String studentName, String studentEmail,
+                                             String studentResult, Integer page, Integer size, String sortBy) {
+        ServiceHelper helper = new ServiceHelper<>(Student.class);
+        return helper.getList(
+                studentRepository.searchStudentInDB(studentRoll, studentName, studentEmail, studentResult,
+                        helper.getPageable(sortBy,page,size)),
+                page,
+                size
+        );
     }
 }
