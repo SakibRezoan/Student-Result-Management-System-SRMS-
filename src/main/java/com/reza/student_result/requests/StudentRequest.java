@@ -2,6 +2,7 @@ package com.reza.student_result.requests;
 
 import com.reza.student_result.entities.Student;
 import com.reza.student_result.entities.Subject;
+import com.reza.student_result.enums.RecordStatus;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +32,11 @@ public class StudentRequest {
         student.setStudentRoll(request.getStudentRoll());
         student.setStudentEmail(request.getStudentEmail());
         student.setStudentResult(request.getStudentResult());
-//        student.setEnclosures(student.getEnclosures());
     }
     public Student to(StudentRequest studentRequest) {
         Student student = new Student();
         BeanUtils.copyProperties(studentRequest, student);
+        student.setRecordStatus(RecordStatus.ACTIVE);
         return student;
     }
 

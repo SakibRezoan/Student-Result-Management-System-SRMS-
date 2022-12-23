@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reza.student_result.entities.Enclosure;
 import com.reza.student_result.entities.Student;
+import com.reza.student_result.entities.Subject;
+import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.utils.FileUpload;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +53,10 @@ public class StudentHelper extends FileUpload {
             Enclosure enclosure,
             MultipartFile file) {
         enclosure.setUrl(upload(file, env.getProperty("ftpFileUploadPath")));
+    }
+
+    public void setBaseData(Student student, RecordStatus status, Boolean forUpdate) {
+        student.setRecordStatus(status);
     }
 
 }

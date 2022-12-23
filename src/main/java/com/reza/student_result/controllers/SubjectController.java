@@ -1,6 +1,7 @@
 package com.reza.student_result.controllers;
 
 import com.reza.student_result.entities.Subject;
+import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.requests.SubjectRequest;
 import com.reza.student_result.response.SubjectResponse;
@@ -15,8 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.*;
 
-import static com.reza.student_result.constant.MessageConstants.SUBJECT_SAVE;
-import static com.reza.student_result.constant.MessageConstants.SUBJECT_UPDATE;
+import static com.reza.student_result.constant.MessageConstants.*;
 import static com.reza.student_result.exceptions.ApiError.fieldError;
 import javax.validation.Valid;
 import java.util.List;
@@ -95,6 +95,12 @@ public class SubjectController {
         return ok(success(SubjectResponse.from(subject), SUBJECT_UPDATE).getJson());
     }
 
+    @PutMapping("/change-record-status/{id}/{status}")
+    public ResponseEntity<JSONObject> changeRecordStatus(@PathVariable Long id, @PathVariable RecordStatus status) {
+
+        Subject subject = subjectServiceImpl.update(id, status);
+        return ok(success(SubjectResponse.from(subject), RECORD_STATUS_UPDATE).getJson());
+    }
 
 
 

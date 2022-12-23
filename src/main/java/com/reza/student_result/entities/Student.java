@@ -2,19 +2,18 @@ package com.reza.student_result.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-import java.io.Serializable;
+
+import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor(staticName = "build")
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
-@ToString
 @Table (name = "student")
-public class Student implements Serializable {
+public class Student extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
@@ -26,8 +25,8 @@ public class Student implements Serializable {
     @Column(name = "student_name")
     private String studentName;
 
-
     @Column(name = "student_email")
+    @Email
     private String studentEmail;
 
     @Column(name = "student_result")

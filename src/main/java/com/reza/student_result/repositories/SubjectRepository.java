@@ -16,7 +16,9 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     Optional<Subject> findBySubjectNameBn(String subjectNameBn);
 
     @Query("SELECT s FROM Subject s WHERE " +
-            "LOWER(s.subjectName) LIKE LOWER(CONCAT('%', :subjectName, '%')) AND " +
-            "(:subjectTypeId IS NULL OR s.subjectTypeId = :subjectTypeId)")
+            "(LOWER(s.subjectName) LIKE LOWER(CONCAT('%', :subjectName, '%'))) AND " +
+            "(:subjectTypeId IS NULL OR s.subjectTypeId = :subjectTypeId) AND " +
+            "(s.recordStatus <> 'DELETED')"
+    )
     Page<Subject> searchSubject (String subjectName, Long subjectTypeId, Pageable pageable);
 }

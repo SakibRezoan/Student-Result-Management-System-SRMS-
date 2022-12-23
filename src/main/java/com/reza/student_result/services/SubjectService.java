@@ -1,6 +1,7 @@
 package com.reza.student_result.services;
 
 import com.reza.student_result.entities.Subject;
+import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.repositories.SubjectRepository;
 import com.reza.student_result.requests.SubjectRequest;
@@ -18,6 +19,8 @@ public abstract class SubjectService {
     protected abstract Optional<Subject> findBySubjectName(String subjectName);
 
     protected abstract Optional<Subject> findById(Long id);
+
+    protected abstract Subject update(Long id, RecordStatus status);
 
     public Subject findSubjectById(Long id) {
         Optional<Subject> subject = subjectRepository.findById(id);

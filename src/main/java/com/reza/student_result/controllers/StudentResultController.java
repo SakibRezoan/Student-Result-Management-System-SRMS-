@@ -1,13 +1,13 @@
 package com.reza.student_result.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.requests.StudentRequest;
 import com.reza.student_result.entities.Enclosure;
 import com.reza.student_result.entities.Student;
 import com.reza.student_result.helper.StudentHelper;
 import com.reza.student_result.response.StudentResponse;
-import com.reza.student_result.response.SubjectResponse;
 import com.reza.student_result.services.impl.StudentServiceImpl;
 import com.reza.student_result.utils.CommonDataHelper;
 import com.reza.student_result.utils.PaginatedResponse;
@@ -37,7 +37,7 @@ import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/student")
+@RequestMapping("api/v1/student")
 public class StudentResultController {
 
     @Autowired
@@ -131,11 +131,17 @@ public class StudentResultController {
     @GetMapping("/find/{id}")
     public ResponseEntity<JSONObject> findById(@PathVariable Long id) {
 
-        Optional<StudentResponse> response = Optional.ofNullable(studentServiceImpl.findById(id)
+        Optional<StudentResponse> response = Optional.ofNullable(studentServiceImpl.findStudentById(id)
                 .map(StudentResponse::from)
                 .orElseThrow(ResourceNotFoundException::new));
 
         return ok(success(response).getJson());
+    }
+    @PutMapping("/change-record-status/{id}/{status}")
+    public ResponseEntity<JSONObject> changeRecordStatus(@PathVariable Long id, @PathVariable RecordStatus status) {
+
+        Student student = studentServiceImpl.update(id, status);
+        return ok(success(StudentResponse.from(student), RECORD_STATUS_UPDATE).getJson());
     }
 
 

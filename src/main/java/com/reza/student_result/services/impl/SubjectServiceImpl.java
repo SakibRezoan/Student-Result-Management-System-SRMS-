@@ -1,6 +1,7 @@
 package com.reza.student_result.services.impl;
 
 import com.reza.student_result.entities.Subject;
+import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.helper.SubjectHelper;
 import com.reza.student_result.repositories.SubjectRepository;
 import com.reza.student_result.requests.SubjectRequest;
@@ -35,6 +36,13 @@ public class SubjectServiceImpl extends SubjectService {
     public Subject update(SubjectRequest request) {
         Subject subject = findSubjectById(request.getId());
         request.update(request, subject);
+        return subjectRepository.save(subject);
+    }
+    @Override
+    @Transactional
+    public Subject update(Long id, RecordStatus status) {
+        Subject subject = findSubjectById(id);
+        subjectHelper.setBaseData(subject, status, true);
         return subjectRepository.save(subject);
     }
     @Override
