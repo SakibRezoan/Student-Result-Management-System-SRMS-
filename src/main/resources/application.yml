@@ -9,11 +9,15 @@ server:
 
 # Spring Configuration
 spring:
+  sql:
+    init:
+      mode: always
   application:
     name: StudentResultApplication
   jackson:
     date-format: yyyy-MM-dd
     time-zone: IST
+
 
   # Database Configuration
   datasource:
@@ -33,6 +37,7 @@ spring:
 
   # JPA Configuration
   jpa:
+    defer-datasource-initialization: true
     # Properties
     properties:
       hibernate:
