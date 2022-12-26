@@ -13,7 +13,6 @@ import com.reza.student_result.utils.CommonDataHelper;
 import com.reza.student_result.utils.PaginatedResponse;
 import com.reza.student_result.validators.StudentValidator;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +39,10 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/student")
-@Tag(name = "Student's Data")
 public class StudentResultController {
 
     @Autowired
     private StudentServiceImpl studentServiceImpl;
-
     private final StudentValidator validator;
     private final StudentHelper studentHelper;
 

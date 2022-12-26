@@ -2,8 +2,11 @@ package com.reza.student_result.response;
 
 import com.reza.student_result.entities.Course;
 import com.reza.student_result.enums.Semester;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
-
+@Data
+@NoArgsConstructor
 public class CourseResponse {
     private Long id;
     private String courseCode;
@@ -13,7 +16,7 @@ public class CourseResponse {
 
     public static CourseResponse from (Course course) {
         CourseResponse courseResponse = new CourseResponse();
-        BeanUtils.copyProperties(course, courseResponse);
+        BeanUtils.copyProperties(course,courseResponse);
         return courseResponse;
     }
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "course")
+@Table(name = "COURSE")
 public class Course extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +22,8 @@ public class Course extends BaseEntity {
     private String courseTitle;
     @Column(name = "NO_OF_CREDITS", nullable = false)
     private Integer noOfCredits;
+    @Enumerated(EnumType.STRING)
     @Column(name = "SEMESTER_NO", nullable = false)
     private Semester semesterNo;
-
 
 }

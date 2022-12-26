@@ -9,14 +9,13 @@ public enum Semester {
     SIXTH("SIXTH"),
     SEVENTH("SEVENTH"),
     EIGHTH("EIGHTH"),
-    
     ;
-    private final String semester;
+    private final String semesterNo;
 
-    Semester(String semester) {
-        this.semester = semester;
+    Semester(String semesterNo) {
+        this.semesterNo = semesterNo;
     }
     public String getSemester() {
-        return semester;
+        return semesterNo;
     }
 }

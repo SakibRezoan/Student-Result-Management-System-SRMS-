@@ -10,4 +10,7 @@ public class MessageConstants {
 
     public static final String RECORD_STATUS_UPDATE = "Record status update successfully";
 
+    public static final String COURSE_SAVE = "Course saved successfully";
+
+
 }
