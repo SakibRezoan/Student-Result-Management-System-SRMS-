@@ -2,7 +2,7 @@ package com.reza.student_result.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.reza.student_result.enums.RecordStatus;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 

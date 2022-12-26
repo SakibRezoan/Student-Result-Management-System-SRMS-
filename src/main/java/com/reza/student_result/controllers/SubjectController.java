@@ -9,6 +9,7 @@ import com.reza.student_result.services.impl.SubjectServiceImpl;
 import com.reza.student_result.utils.CommonDataHelper;
 import com.reza.student_result.utils.PaginatedResponse;
 import com.reza.student_result.validators.SubjectValidator;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,8 @@ public class SubjectController {
     private final CommonDataHelper helper;
 
     @GetMapping("/list")
+    @Operation(summary = "Fetch subjects", description =
+            "Fetch all subjects with page, size, sortBy, Roll, Name, Email & Result ")
     public ResponseEntity<JSONObject> getList (
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "size", defaultValue = "10") Integer size,
@@ -63,6 +66,7 @@ public class SubjectController {
     }
 
     @PostMapping("/save")
+    @Operation(summary = "Save subject", description = "Save a new subject with valid credentials")
     public ResponseEntity<JSONObject> save(@Valid @RequestBody SubjectRequest request, BindingResult bindingResult) {
 
         ValidationUtils.invokeValidator(validator, request, bindingResult);
@@ -75,6 +79,7 @@ public class SubjectController {
     }
 
     @GetMapping("/find/{id}")
+    @Operation(summary = "Find a subject", description = "Find subject by id")
     public ResponseEntity<JSONObject> findById(@PathVariable Long id) {
 
         Optional<SubjectResponse> response = Optional.ofNullable(subjectServiceImpl.findById(id)
@@ -85,6 +90,7 @@ public class SubjectController {
     }
 
     @PutMapping("/update")
+    @Operation(summary = "update subject", description = "Update existing student")
     public ResponseEntity<JSONObject> update(@Valid @RequestBody SubjectRequest request, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -96,6 +102,8 @@ public class SubjectController {
     }
 
     @PutMapping("/change-record-status/{id}/{status}")
+    @Operation(summary = "Update subject record status", description =
+            "Update record status of subject with the parameter id and status")
     public ResponseEntity<JSONObject> changeRecordStatus(@PathVariable Long id, @PathVariable RecordStatus status) {
 
         Subject subject = subjectServiceImpl.update(id, status);

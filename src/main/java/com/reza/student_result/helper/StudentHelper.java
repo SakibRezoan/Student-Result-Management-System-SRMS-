@@ -7,7 +7,7 @@ import com.reza.student_result.entities.Student;
 import com.reza.student_result.entities.Subject;
 import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.utils.FileUpload;
-import jakarta.annotation.Resource;
+import javax.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;

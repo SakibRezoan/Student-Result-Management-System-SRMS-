@@ -1,6 +1,6 @@
 package com.reza.student_result.entities;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 import javax.validation.constraints.Email;

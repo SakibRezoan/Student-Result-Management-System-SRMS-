@@ -19,7 +19,3 @@ INSERT INTO `lettergradepoint` (`LETTER_GRADE`,`GRADE_POINT`) VALUES ('D', '2.0'
 INSERT INTO `lettergradepoint` (`LETTER_GRADE`,`GRADE_POINT`) VALUES ('F', '0.0');
 
 
-
-INSERT INTO `lettergradepoint` (`LETTER_GRADE`,`GRADE_POINT`) VALUES ('A+', '4.0');
-
-

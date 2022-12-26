@@ -8,7 +8,7 @@ import com.reza.student_result.repositories.StudentRepository;
 import com.reza.student_result.requests.StudentRequest;
 import com.reza.student_result.services.StudentService;
 import com.reza.student_result.utils.ServiceHelper;
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

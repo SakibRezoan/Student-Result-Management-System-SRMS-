@@ -12,6 +12,8 @@ import com.reza.student_result.services.impl.StudentServiceImpl;
 import com.reza.student_result.utils.CommonDataHelper;
 import com.reza.student_result.utils.PaginatedResponse;
 import com.reza.student_result.validators.StudentValidator;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/student")
+@Tag(name = "Student's Data")
 public class StudentResultController {
 
     @Autowired
@@ -54,6 +57,8 @@ public class StudentResultController {
     }
 
     @GetMapping("list")
+    @Operation(summary = "Fetch all students", description =
+            "Fetch all students with page, size, sortBy, Roll, Name, Email & Result ")
     public ResponseEntity<JSONObject> getList(
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "size", defaultValue = "10") Integer size,
@@ -78,6 +83,7 @@ public class StudentResultController {
     }
 
     @PostMapping("/save")
+    @Operation(summary = "Save student", description = "Save new Student")
     public ResponseEntity<JSONObject> save(@Valid @RequestBody StudentRequest studentRequest, BindingResult bindingResult) {
 
         ValidationUtils.invokeValidator(validator, studentRequest, bindingResult);
@@ -94,6 +100,7 @@ public class StudentResultController {
             path = "/save/enclosure/{studentId}",
             method = RequestMethod.POST,
             consumes = {"multipart/form-data"})
+    @Operation(summary = "Save enclosure", description = "Save enclosure of student with id")
     public ResponseEntity<JSONObject> saveEnclosure(@PathVariable("studentId") @NotNull Long studentId,
                                                     @RequestPart(value = "file", required = false) MultipartFile file,
                                                     @RequestParam(value = "request", required = false) String request)
@@ -118,6 +125,8 @@ public class StudentResultController {
     }
 
     @PutMapping("/update")
+    @Operation(summary = "Update Student", description = "Update existing student")
+
     public ResponseEntity<JSONObject> update(@Valid @RequestBody StudentRequest request, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -129,6 +138,7 @@ public class StudentResultController {
     }
 
     @GetMapping("/find/{id}")
+    @Operation(summary = "Find one student", description = "Find a new student by id")
     public ResponseEntity<JSONObject> findById(@PathVariable Long id) {
 
         Optional<StudentResponse> response = Optional.ofNullable(studentServiceImpl.findStudentById(id)
@@ -138,6 +148,8 @@ public class StudentResultController {
         return ok(success(response).getJson());
     }
     @PutMapping("/change-record-status/{id}/{status}")
+    @Operation(summary = "Change record status of student", description =
+            "Change record status of student with parameter id and status")
     public ResponseEntity<JSONObject> changeRecordStatus(@PathVariable Long id, @PathVariable RecordStatus status) {
 
         Student student = studentServiceImpl.update(id, status);

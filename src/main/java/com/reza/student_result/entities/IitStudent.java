@@ -2,7 +2,7 @@ package com.reza.student_result.entities;
 
 import com.reza.student_result.enums.Semester;
 import com.reza.student_result.enums.StudentStatus;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class IITStudent extends BaseEntity {
+public class IitStudent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,8 +35,5 @@ public class IITStudent extends BaseEntity {
     @OneToMany
     @JoinColumn(name = "IIT_STUDENT_ID")
     private List<CourseResult> courseResults;
-
-
-
 
 }
