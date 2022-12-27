@@ -19,7 +19,6 @@ public abstract class StudentService{
     protected abstract Student update (StudentRequest studentRequest);
 
     protected abstract Student update(Long id, RecordStatus status);
-
     protected abstract Optional<Student> findById(Long id);
     protected abstract Optional<Student> findByStudentRoll(Long studentRoll);
 

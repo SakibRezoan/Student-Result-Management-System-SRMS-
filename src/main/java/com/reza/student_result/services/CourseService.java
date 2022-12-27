@@ -15,4 +15,6 @@ public abstract class CourseService {
     protected final CourseRepository courseRepository;
     protected abstract Course save (CourseRequest courseRequest);
     protected abstract Optional<Course> findByCourseCode(String courseCode);
+    protected abstract Optional<Course> findCourseById(Long id);
+    protected abstract Optional <Course> findById(Long id);
 }

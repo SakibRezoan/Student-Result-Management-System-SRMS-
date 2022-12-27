@@ -10,7 +10,17 @@ import java.util.Optional;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecificationExecutor<Course> {
     @Query("SELECT c FROM Course c WHERE " +
-            "(c.courseCode = :courseCode) AND (c.recordStatus <> 'DELETED')"
+            "(LOWER(c.courseCode) = LOWER(:courseCode)) AND (c.recordStatus <> 'DELETED')"
     )
     Optional<Course> findByCourseCode(String courseCode);
+    @Query("SELECT c FROM Course c WHERE " +
+            "(c.id = :id) AND (c.recordStatus <> 'DELETED')"
+    )
+    Optional <Course> findCourseById(Long id);
+    Optional <Course> findById(Long id);
+
+    @Query("SELECT c FROM Course c WHERE " +
+            "(LOWER(c.courseTitle) = LOWER(:courseTitle)) AND (c.recordStatus <> 'DELETED')"
+    )
+    Optional<Course> findByCourseTitle(String courseTitle);
 }

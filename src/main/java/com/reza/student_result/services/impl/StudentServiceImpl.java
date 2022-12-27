@@ -35,18 +35,22 @@ public class StudentServiceImpl extends StudentService {
         Optional<Student> student = findStudentById(studentRequest.getId());
         studentRequest.update(studentRequest, student.get());
         return studentRepository.save(student.get());
-
     }
     @Override
     @Transactional
     public Student update(Long id, RecordStatus status) {
-        Optional<Student> student = findStudentById(id);
+
+        Optional<Student> student = studentRepository.findById(id);
         studentHelper.setBaseData(student.get(), status, true);
         return studentRepository.save(student.get());
     }
     @Override
     public Optional<Student> findById(Long id) {
-        return studentRepository.findById(id);
+        Optional<Student> student = studentRepository.findById(id);
+        if (student.isEmpty()) {
+            throw new ResourceNotFoundException(String.format("Student was not found for parameter {id=%s}", id));
+        }
+        return student;
     }
 
     @Override
@@ -56,9 +60,9 @@ public class StudentServiceImpl extends StudentService {
     }
     @Override
     public Optional<Student> findStudentById(Long id) {
-        Optional<Student> student = studentRepository.findById(id);
+        Optional<Student> student = studentRepository.findStudentById(id);
         if (student.isEmpty()) {
-            throw new ResourceNotFoundException(String.format("Student was not found for parameters {id=%s}", id));
+            throw new ResourceNotFoundException(String.format("Student was not found for parameter {id=%s}", id));
         }
         return student;
     }
@@ -75,6 +79,6 @@ public class StudentServiceImpl extends StudentService {
     }
     @Override
     public Optional<Student> findByStudentRoll(Long studentRoll) {
-        return  studentRepository.findByStudentRoll(studentRoll);
+        return studentRepository.findByStudentRoll(studentRoll);
     }
 }

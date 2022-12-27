@@ -83,7 +83,7 @@ public class SubjectController {
     @Operation(summary = "Find a subject", description = "Find subject by id")
     public ResponseEntity<JSONObject> findById(@PathVariable Long id) {
 
-        Optional<SubjectResponse> response = Optional.ofNullable(subjectServiceImpl.findById(id)
+        Optional<SubjectResponse> response = Optional.ofNullable(subjectServiceImpl.findSubjectById(id)
                 .map(SubjectResponse::from)
                 .orElseThrow(ResourceNotFoundException::new));
 

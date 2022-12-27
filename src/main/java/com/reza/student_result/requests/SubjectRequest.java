@@ -1,5 +1,6 @@
 package com.reza.student_result.requests;
 import com.reza.student_result.entities.Subject;
+import com.reza.student_result.enums.RecordStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -23,6 +24,7 @@ public class SubjectRequest {
     public Subject to(SubjectRequest request) {
         Subject subject = new Subject();
         BeanUtils.copyProperties(request, subject);
+        subject.setRecordStatus(RecordStatus.ACTIVE);
         return subject;
     }
 

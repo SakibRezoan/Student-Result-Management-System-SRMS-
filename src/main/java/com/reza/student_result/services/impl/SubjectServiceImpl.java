@@ -2,7 +2,9 @@ package com.reza.student_result.services.impl;
 
 import com.reza.student_result.entities.Subject;
 import com.reza.student_result.enums.RecordStatus;
+import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.helper.SubjectHelper;
+import com.reza.student_result.repositories.StudentRepository;
 import com.reza.student_result.repositories.SubjectRepository;
 import com.reza.student_result.requests.SubjectRequest;
 import com.reza.student_result.services.SubjectService;
@@ -17,11 +19,14 @@ import java.util.Optional;
 public class SubjectServiceImpl extends SubjectService {
 
     private final SubjectHelper subjectHelper;
+    private final StudentRepository studentRepository;
 
 
-    public SubjectServiceImpl(SubjectHelper subjectHelper, SubjectRepository subjectRepository) {
+    public SubjectServiceImpl(SubjectHelper subjectHelper, SubjectRepository subjectRepository,
+                              StudentRepository studentRepository) {
         super(subjectRepository);
         this.subjectHelper = subjectHelper;
+        this.studentRepository = studentRepository;
     }
 
     @Override
@@ -34,16 +39,23 @@ public class SubjectServiceImpl extends SubjectService {
     @Override
     @Transactional
     public Subject update(SubjectRequest request) {
-        Subject subject = findSubjectById(request.getId());
-        request.update(request, subject);
-        return subjectRepository.save(subject);
+        Optional<Subject> subject = findSubjectById(request.getId());
+        if (subject.isEmpty()) {
+            throw new ResourceNotFoundException(String.format("Subject was not found for parameter {id=%s}", request.getId()));
+        }
+        request.update(request, subject.get());
+        return subjectRepository.save(subject.get());
     }
     @Override
     @Transactional
     public Subject update(Long id, RecordStatus status) {
-        Subject subject = findSubjectById(id);
-        subjectHelper.setBaseData(subject, status, true);
-        return subjectRepository.save(subject);
+        Optional<Subject> subject = findById(id);
+        if (subject.isEmpty()) {
+            throw new ResourceNotFoundException(String.format("Subject was not found for parameter {id=%s}", id));
+        } else {
+            subjectHelper.setBaseData(subject.get(), status, true);
+            return subjectRepository.save(subject.get());
+        }
     }
     @Override
     public Optional<Subject> findBySubjectName(String subjectName) {
@@ -55,8 +67,20 @@ public class SubjectServiceImpl extends SubjectService {
     }
 
     @Override
+    public Optional<Subject> findSubjectById(Long id) {
+        Optional<Subject> subject = subjectRepository.findSubjectById(id);
+        if (subject.isEmpty()) {
+            throw new ResourceNotFoundException(String.format("Subject was not found for parameter {id=%s}", id));
+        }
+        return subjectRepository.findSubjectById(id);
+    }
+    @Override
     public Optional<Subject> findById(Long id) {
-        return subjectRepository.findById(id);
+        Optional<Subject> subject = subjectRepository.findById(id);
+        if (subject.isEmpty()) {
+            throw new ResourceNotFoundException(String.format("Subject was not found for parameter {id=%s}", id));
+        }
+        return subject;
     }
 
     public Map<String, Object> searchSubject(String subjectName, Long subjectTypeId,

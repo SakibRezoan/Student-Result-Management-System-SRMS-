@@ -1,10 +1,8 @@
 package com.reza.student_result.helper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reza.student_result.entities.Enclosure;
 import com.reza.student_result.entities.Student;
-import com.reza.student_result.entities.Subject;
 import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.utils.FileUpload;
 import javax.annotation.Resource;

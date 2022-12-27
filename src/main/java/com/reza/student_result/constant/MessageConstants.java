@@ -8,9 +8,11 @@ public class MessageConstants {
 
     public static final String STUDENT_UPDATE = "Student updated successfully";
 
-    public static final String RECORD_STATUS_UPDATE = "Record status update successfully";
+    public static final String RECORD_STATUS_UPDATE = "Record status updated successfully";
 
     public static final String COURSE_SAVE = "Course saved successfully";
+
+    public static final String COURSE_UPDATE = "Course updated successfully";
 
 
 }

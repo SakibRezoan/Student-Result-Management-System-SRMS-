@@ -35,6 +35,12 @@ public class CourseValidator implements Validator {
                 errors.rejectValue("courseCode", "500", ALREADY_EXIST);
             }
         }
+        if (isNotEmpty(courseRequest.getCourseTitle())) {
+            Optional<Course> course = courseServiceImpl.findByCourseTitle(courseRequest.getCourseTitle());
+            if (course.isPresent()) {
+                errors.rejectValue("courseTitle", "500", ALREADY_EXIST);
+            }
+        }
 
     }
 }

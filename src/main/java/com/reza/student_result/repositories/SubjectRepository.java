@@ -11,8 +11,17 @@ import java.util.Optional;
 
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
+
+    @Query("SELECT s FROM Subject s WHERE " +
+            "(LOWER(s.subjectName) LIKE LOWER(CONCAT('%', :subjectName, '%'))) AND " +
+            "(s.recordStatus <> 'DELETED')"
+    )
     Optional<Subject> findBySubjectName(String subjectName);
 
+    @Query("SELECT s FROM Subject s WHERE " +
+            "(LOWER(s.subjectNameBn) LIKE LOWER(CONCAT('%', :subjectNameBn, '%'))) AND " +
+            "(s.recordStatus <> 'DELETED')"
+    )
     Optional<Subject> findBySubjectNameBn(String subjectNameBn);
 
     @Query("SELECT s FROM Subject s WHERE " +
@@ -21,4 +30,10 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
             "(s.recordStatus <> 'DELETED')"
     )
     Page<Subject> searchSubject (String subjectName, Long subjectTypeId, Pageable pageable);
+    @Query("SELECT s FROM Subject s WHERE " +
+            "(s.id = :id) AND " +
+            "(s.recordStatus <> 'DELETED')"
+    )
+    Optional<Subject> findSubjectById(Long id);
+    Optional<Subject> findById(Long id);
 }

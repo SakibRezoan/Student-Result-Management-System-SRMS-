@@ -15,7 +15,7 @@ import static com.reza.student_result.utils.StringUtils.isNotEmpty;
 @RequiredArgsConstructor
 public class SubjectValidator implements Validator {
 
-    private final SubjectServiceImpl service;
+    private final SubjectServiceImpl subjectService;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -28,16 +28,16 @@ public class SubjectValidator implements Validator {
         SubjectRequest request = (SubjectRequest) target;
 
         if (isNotEmpty(request.getSubjectName())) {
-            Optional<Subject> subject = service.findBySubjectName(request.getSubjectName());
+            Optional<Subject> subject = subjectService.findBySubjectName(request.getSubjectName());
             if (subject.isPresent()) {
-                errors.rejectValue("subjectName", null, ALREADY_EXIST);
+                errors.rejectValue("subjectName", "500", ALREADY_EXIST);
             }
         }
 
         if (isNotEmpty(request.getSubjectNameBn())) {
-            Optional<Subject> subject = service.findBySubjectNameBn(request.getSubjectNameBn());
+            Optional<Subject> subject = subjectService.findBySubjectNameBn(request.getSubjectNameBn());
             if (subject.isPresent()) {
-                errors.rejectValue("subjectNameBn", null, ALREADY_EXIST);
+                errors.rejectValue("subjectNameBn", "500", ALREADY_EXIST);
             }
         }
 

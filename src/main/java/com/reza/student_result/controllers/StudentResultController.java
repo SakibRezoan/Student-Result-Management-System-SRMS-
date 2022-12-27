@@ -15,7 +15,6 @@ import com.reza.student_result.validators.StudentValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
@@ -40,9 +39,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("api/v1/student")
 public class StudentResultController {
-
-    @Autowired
-    private StudentServiceImpl studentServiceImpl;
+    private final StudentServiceImpl studentServiceImpl;
     private final StudentValidator validator;
     private final StudentHelper studentHelper;
 
@@ -135,7 +132,7 @@ public class StudentResultController {
     }
 
     @GetMapping("/find/{id}")
-    @Operation(summary = "Find one student", description = "Find a new student by id")
+    @Operation(summary = "Find one student", description = "Find a student by id")
     public ResponseEntity<JSONObject> findById(@PathVariable Long id) {
 
         Optional<StudentResponse> response = Optional.ofNullable(studentServiceImpl.findStudentById(id)
@@ -148,7 +145,6 @@ public class StudentResultController {
     @Operation(summary = "Change record status of student", description =
             "Change record status of student with parameter id and status")
     public ResponseEntity<JSONObject> changeRecordStatus(@PathVariable Long id, @PathVariable RecordStatus status) {
-
         Student student = studentServiceImpl.update(id, status);
         return ok(success(StudentResponse.from(student), RECORD_STATUS_UPDATE).getJson());
     }

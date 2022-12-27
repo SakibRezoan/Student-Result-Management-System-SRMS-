@@ -13,6 +13,8 @@ public interface StudentRepository extends JpaRepository <Student, Long> {
     @Query("SELECT std FROM Student std WHERE " +
             "(std.id = :id) AND (std.recordStatus <> 'DELETED')"
     )
+    Optional<Student> findStudentById(Long id);
+
     Optional<Student> findById(Long id);
     @Query("SELECT std FROM Student std WHERE " +
             "(std.studentRoll = :studentRoll) AND (std.recordStatus <> 'DELETED')"

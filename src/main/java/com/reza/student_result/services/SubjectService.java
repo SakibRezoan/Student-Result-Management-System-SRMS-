@@ -17,18 +17,13 @@ public abstract class SubjectService {
 
     protected abstract Subject update(SubjectRequest request);
     protected abstract Optional<Subject> findBySubjectName(String subjectName);
-
-    protected abstract Optional<Subject> findById(Long id);
-
     protected abstract Subject update(Long id, RecordStatus status);
-
-    public Subject findSubjectById(Long id) {
-        Optional<Subject> subject = subjectRepository.findById(id);
+    protected abstract Optional<Subject> findById(Long id);
+    public Optional<Subject> findSubjectById(Long id) {
+        Optional<Subject> subject = subjectRepository.findSubjectById(id);
         if (subject.isEmpty()) {
             throw new ResourceNotFoundException(String.format("Subject was not found for parameters {id=%s}", id));
         }
-        return subject.get();
+        return subject;
     }
-
-
 }
