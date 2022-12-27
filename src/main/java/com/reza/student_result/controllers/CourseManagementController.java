@@ -1,15 +1,13 @@
 package com.reza.student_result.controllers;
 
 import com.reza.student_result.entities.Course;
-import com.reza.student_result.entities.Student;
 import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.requests.CourseRequest;
-import com.reza.student_result.requests.StudentRequest;
 import com.reza.student_result.response.CourseResponse;
-import com.reza.student_result.response.StudentResponse;
 import com.reza.student_result.services.impl.CourseServiceImpl;
 import com.reza.student_result.utils.CommonDataHelper;
+import com.reza.student_result.utils.PaginatedResponse;
 import com.reza.student_result.validators.CourseValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +19,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.reza.student_result.constant.MessageConstants.*;
 import static com.reza.student_result.exceptions.ApiError.fieldError;
-import static com.reza.student_result.utils.ResponseBuilder.error;
-import static com.reza.student_result.utils.ResponseBuilder.success;
+import static com.reza.student_result.utils.ResponseBuilder.*;
 import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -40,11 +40,12 @@ public class CourseManagementController {
     private final CourseValidator validator;
     private final CommonDataHelper helper;
     @GetMapping("/")
-    private String Welcome() {
+    @Operation(summary = "Welcome Message", description = "Welcome Message")
+    private String welcome() {
         return "Welcome to IIT Course Management System";
     }
 
-    //Teacher::
+    /*    ****Teacher****   */
 
     //Add Course
     @PostMapping("/teacher/add-new-course")
@@ -71,9 +72,6 @@ public class CourseManagementController {
 
         return ok(success(response).getJson());
     }
-
-    //Find Course by course code
-
     //Update Course
     @PutMapping("/teacher/update-course")
     @Operation(summary = "Update Course", description = "Update existing course")
@@ -98,18 +96,42 @@ public class CourseManagementController {
         return ok(success(CourseResponse.from(course), RECORD_STATUS_UPDATE).getJson());
     }
 
-    //Register Student
+    //Get Paginated List of Courses
+    @GetMapping("/teacher/course-list")
+    @Operation(summary = "Fetch all courses", description =
+            "Fetch all courses with page, size, sortBy, courseCode, courseTitle")
+    public ResponseEntity<JSONObject> getList(
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "sortBy", defaultValue = "") String sortBy,
+            @RequestParam(value = "courseCode", defaultValue = "") String courseCode,
+            @RequestParam(value = "courseTitle", defaultValue = "") String courseTitle
+    ) {
+        helper.setPageSize(page,size);
 
-    //Save Student Result
+        PaginatedResponse paginatedResponse = new PaginatedResponse();
 
-    //View All Student
+        Map<String,Object> courseMappedSearchResult = courseServiceImpl.searchCourse(courseCode, courseTitle,
+                page, size, sortBy);
+        List<Course> responses =(List<Course>) courseMappedSearchResult.get("lists");
 
-    //Find one Student
+        List<CourseResponse> customResponse = responses.stream().map(CourseResponse::from).
+                                                collect(Collectors.toList());
+        helper.getCommonData(page,size, courseMappedSearchResult, paginatedResponse, customResponse);
 
-    //IIT_Student::
+        return ok(paginatedSuccess(paginatedResponse).getJson());
+    }
 
-    //View Result by roll
+    //Register IIT_Student
 
+    //Save IIT_Student Result
 
+    //View All IIT_Student
+
+    //Find one IIT_Student
+
+    /*     ****IIT_Student****     */
+
+    //Get Result By Roll
 
 }

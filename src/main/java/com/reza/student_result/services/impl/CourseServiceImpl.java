@@ -6,9 +6,11 @@ import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.repositories.CourseRepository;
 import com.reza.student_result.requests.CourseRequest;
 import com.reza.student_result.services.CourseService;
+import com.reza.student_result.utils.ServiceHelper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -56,5 +58,16 @@ public class CourseServiceImpl extends CourseService {
     }
     public Optional<Course> findByCourseTitle(String courseTitle) {
         return courseRepository.findByCourseTitle(courseTitle);
+    }
+
+    public Map<String, Object> searchCourse(String courseCode, String courseTitle,
+                                            Integer page, Integer size, String sortBy) {
+        ServiceHelper<Course> helper = new ServiceHelper<>(Course.class);
+        return helper.getList(
+            courseRepository.searchCourse(courseCode, courseTitle,
+                    helper.getPageable(sortBy,page,size)),
+            page,
+            size
+        );
     }
 }

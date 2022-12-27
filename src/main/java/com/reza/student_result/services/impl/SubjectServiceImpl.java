@@ -4,7 +4,6 @@ import com.reza.student_result.entities.Subject;
 import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.helper.SubjectHelper;
-import com.reza.student_result.repositories.StudentRepository;
 import com.reza.student_result.repositories.SubjectRepository;
 import com.reza.student_result.requests.SubjectRequest;
 import com.reza.student_result.services.SubjectService;
@@ -19,14 +18,11 @@ import java.util.Optional;
 public class SubjectServiceImpl extends SubjectService {
 
     private final SubjectHelper subjectHelper;
-    private final StudentRepository studentRepository;
 
 
-    public SubjectServiceImpl(SubjectHelper subjectHelper, SubjectRepository subjectRepository,
-                              StudentRepository studentRepository) {
+    public SubjectServiceImpl(SubjectHelper subjectHelper, SubjectRepository subjectRepository) {
         super(subjectRepository);
         this.subjectHelper = subjectHelper;
-        this.studentRepository = studentRepository;
     }
 
     @Override
@@ -85,7 +81,7 @@ public class SubjectServiceImpl extends SubjectService {
 
     public Map<String, Object> searchSubject(String subjectName, Long subjectTypeId,
                                              Integer page, Integer size, String sortBy) {
-        ServiceHelper helper = new ServiceHelper<>(Subject.class);
+        ServiceHelper<Subject> helper = new ServiceHelper<>(Subject.class);
         return helper.getList(
             subjectRepository.searchSubject(subjectName, subjectTypeId,
                     helper.getPageable(sortBy,page,size)),
