@@ -1,13 +1,10 @@
 package com.reza.student_result.entities;
 
-import com.reza.student_result.enums.Semester;
 import com.reza.student_result.enums.StudentStatus;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -23,16 +20,15 @@ public class IIT_Student extends BaseEntity{
 
     @Column(name = "STUDENT_ROLL", nullable = false)
     private Long roll;
-    @Column(name = "CURRENT_SEMESTER")
-    private Semester currentSemester;
-    @Column(name = "PASSING_YEAR")
-    private Date passingYear;
+    @Column(name = "STUDENT_NAME", nullable = false)
+    private String name;
+    @Column(name = "PASSING_YEAR", nullable = true)
+    private String passingYear;
     @Column(name = "CURRENT_STATUS")
     private StudentStatus currentStatus;
-    @Column(name = "CGPA")
+    @Column(name = "CGPA", nullable = true)
     private Double cgpa;
-
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "IIT_STUDENT_ID")
     private List<CourseResult> courseResults;
 

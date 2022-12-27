@@ -1,18 +1,25 @@
 package com.reza.student_result.enums;
 
 public enum StudentStatus {
-    REGULAR("REGULAR"),
-    DROPPED_OUT("DROPPED_OUT"),
+    DROPPED("DROPPED"),
+    FIRST("FIRST"),
+    SECOND("SECOND"),
+    THIRD("THIRD"),
+    FOURTH("FOURTH"),
+    FIFTH("FIFTH"),
+    SIXTH("SIXTH"),
+    SEVENTH("SEVENTH"),
+    EIGHTH("EIGHTH"),
     PASSED("PASSED")
 
     ;
-    private final String status;
+    private final String currentStatus;
 
-    public String getStatus() {
-        return status;
+    public String getCurrentStatus() {
+        return currentStatus;
     }
 
-    StudentStatus(String status) {
-        this.status = status;
+    StudentStatus(String currentStatus) {
+        this.currentStatus = currentStatus;
     }
 }

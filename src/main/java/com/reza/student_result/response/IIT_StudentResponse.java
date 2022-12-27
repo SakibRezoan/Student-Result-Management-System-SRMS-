@@ -14,12 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 public class IIT_StudentResponse {
     private Long id;
-
     private Long roll;
 
-    private Semester currentSemester;
-    private Date passingYear;
-
+    private String name;
+    private String passingYear;
     private StudentStatus currentStatus;
     private Double cgpa;
 

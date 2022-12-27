@@ -1,10 +1,14 @@
 package com.reza.student_result.controllers;
 
 import com.reza.student_result.entities.Course;
+import com.reza.student_result.entities.IIT_Student;
 import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.requests.CourseRequest;
+import com.reza.student_result.requests.IIT_StudentRequest;
 import com.reza.student_result.response.CourseResponse;
+import com.reza.student_result.response.IIT_StudentResponse;
+import com.reza.student_result.services.impl.IIT_StudentServiceImpl;
 import com.reza.student_result.services.impl.CourseServiceImpl;
 import com.reza.student_result.utils.CommonDataHelper;
 import com.reza.student_result.utils.PaginatedResponse;
@@ -122,9 +126,7 @@ public class CourseManagementController {
         return ok(paginatedSuccess(paginatedResponse).getJson());
     }
 
-    //Register IIT_Student
-
-    //Save IIT_Student Result
+    //Update IIT_Student Result
 
     //View All IIT_Student
 
