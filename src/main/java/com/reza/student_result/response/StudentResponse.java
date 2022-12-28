@@ -9,12 +9,9 @@ import org.springframework.beans.BeanUtils;
 @NoArgsConstructor
 public class StudentResponse {
     private Long id;
-
     private Long studentRoll;
     private String studentName;
-
     private String studentEmail;
-
     private String studentResult;
 
     public static StudentResponse from(Student student) {

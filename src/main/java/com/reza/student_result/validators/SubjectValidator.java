@@ -1,6 +1,7 @@
 package com.reza.student_result.validators;
 
 import com.reza.student_result.entities.Subject;
+import com.reza.student_result.repositories.SubjectRepository;
 import com.reza.student_result.requests.SubjectRequest;
 import com.reza.student_result.services.impl.SubjectServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import static com.reza.student_result.utils.StringUtils.isNotEmpty;
 public class SubjectValidator implements Validator {
 
     private final SubjectServiceImpl subjectService;
+    private final SubjectRepository subjectRepository;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -38,6 +40,12 @@ public class SubjectValidator implements Validator {
             Optional<Subject> subject = subjectService.findBySubjectNameBn(request.getSubjectNameBn());
             if (subject.isPresent()) {
                 errors.rejectValue("subjectNameBn", "500", ALREADY_EXIST);
+            }
+        }
+        if (isNotEmpty(request.getId())) {
+            Optional<Subject> subject = subjectRepository.findById(request.getId());
+            if (subject.isPresent()) {
+                errors.rejectValue("id", "500", ALREADY_EXIST);
             }
         }
 

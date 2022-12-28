@@ -1,5 +1,6 @@
 package com.reza.student_result.validators;
 import com.reza.student_result.entities.Student;
+import com.reza.student_result.repositories.StudentRepository;
 import com.reza.student_result.requests.StudentRequest;
 import com.reza.student_result.services.impl.StudentServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import static com.reza.student_result.utils.StringUtils.isNotEmpty;
 public class StudentValidator implements Validator {
 
     private final StudentServiceImpl studentServiceImpl;
+    private final StudentRepository studentRepository;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -30,6 +32,12 @@ public class StudentValidator implements Validator {
             Optional<Student> student = studentServiceImpl.findByStudentRoll(studentRequest.getStudentRoll());
             if (student.isPresent()) {
                 errors.rejectValue("studentRoll", "500", ALREADY_EXIST);
+            }
+        }
+        if (isNotEmpty(studentRequest.getId())) {
+            Optional<Student> student = studentRepository.findById(studentRequest.getId());
+            if (student.isPresent()) {
+                errors.rejectValue("id", "500", ALREADY_EXIST);
             }
         }
 

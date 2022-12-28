@@ -1,14 +1,18 @@
 package com.reza.student_result.services.impl;
 
 import com.reza.student_result.entities.IIT_Student;
+import com.reza.student_result.entities.Student;
 import com.reza.student_result.enums.RecordStatus;
+import com.reza.student_result.enums.StudentStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.repositories.IIT_StudentRepository;
 import com.reza.student_result.requests.IIT_StudentRequest;
 import com.reza.student_result.services.IIT_StudentService;
+import com.reza.student_result.utils.ServiceHelper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -54,5 +58,14 @@ public class IIT_StudentServiceImpl extends IIT_StudentService {
         Optional<IIT_Student> iitStudent = findById(id);
         iitStudent.get().setRecordStatus(status);
         return iitStudentRepository.save(iitStudent.get());
+    }
+    public Map<String, Object> search(Long roll, String name, String studentEmail, Integer passingYear, StudentStatus semesterStatus, Double cgpa, Integer page, Integer size, String sortBy) {
+        ServiceHelper helper = new ServiceHelper<>(Student.class);
+        return helper.getList(
+                iitStudentRepository.searchIIT_StudentInDB(roll, name, studentEmail, passingYear, semesterStatus, cgpa,
+                        helper.getPageable(sortBy,page,size)),
+                page,
+                size
+        );
     }
 }

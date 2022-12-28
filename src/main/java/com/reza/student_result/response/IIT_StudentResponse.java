@@ -15,8 +15,8 @@ import java.util.Date;
 public class IIT_StudentResponse {
     private Long id;
     private Long roll;
-
     private String name;
+    private String studentEmail;
     private Integer passingYear;
     private StudentStatus semesterStatus;
     private Double cgpa;

@@ -2,11 +2,13 @@ package com.reza.student_result.controllers;
 
 import com.reza.student_result.entities.IIT_Student;
 import com.reza.student_result.enums.RecordStatus;
+import com.reza.student_result.enums.StudentStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.requests.IIT_StudentRequest;
 import com.reza.student_result.response.IIT_StudentResponse;
 import com.reza.student_result.services.impl.IIT_StudentServiceImpl;
 import com.reza.student_result.utils.CommonDataHelper;
+import com.reza.student_result.utils.PaginatedResponse;
 import com.reza.student_result.validators.IIT_StudentValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,10 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.reza.student_result.constant.MessageConstants.*;
 import static com.reza.student_result.exceptions.ApiError.fieldError;
@@ -88,30 +93,36 @@ public class IIT_StudentManagementController {
         return ok(success(IIT_StudentResponse.from(iitStudent), RECORD_STATUS_UPDATE).getJson());
     }
 
-    //Get Paginated List of Courses
-//    @GetMapping("/teacher/course-list")
-//    @Operation(summary = "Fetch all courses", description =
-//            "Fetch all courses with page, size, sortBy, courseCode, courseTitle")
-//    public ResponseEntity<JSONObject> getList(
-//            @RequestParam(value = "page", defaultValue = "1") Integer page,
-//            @RequestParam(value = "size", defaultValue = "10") Integer size,
-//            @RequestParam(value = "sortBy", defaultValue = "") String sortBy,
-//            @RequestParam(value = "courseCode", defaultValue = "") String courseCode,
-//            @RequestParam(value = "courseTitle", defaultValue = "") String courseTitle
-//    ) {
-//        helper.setPageSize(page,size);
-//
-//        PaginatedResponse paginatedResponse = new PaginatedResponse();
-//
-//        Map<String,Object> courseMappedSearchResult = courseServiceImpl.searchCourse(courseCode, courseTitle,
-//                page, size, sortBy);
-//        List<Course> responses =(List<Course>) courseMappedSearchResult.get("lists");
-//
-//        List<CourseResponse> customResponse = responses.stream().map(CourseResponse::from).
-//                collect(Collectors.toList());
-//        helper.getCommonData(page,size, courseMappedSearchResult, paginatedResponse, customResponse);
-//
-//        return ok(paginatedSuccess(paginatedResponse).getJson());
-//    }
+    //Get Paginated List of Students
+    @GetMapping("/teacher/student-list")
+    @Operation(summary = "Fetch all students", description =
+            "Fetch all students with page, size, sortBy, roll, name, email, passingYear, semesterStatus, cgpa")
+    public ResponseEntity<JSONObject> getList(
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "sortBy", defaultValue = "") String sortBy,
+            @RequestParam(value = "roll", defaultValue = "") Long roll,
+            @RequestParam(value = "name", defaultValue = "") String name,
+            @RequestParam(value = "studentEmail", defaultValue = "") String studentEmail,
+            @RequestParam(value = "passingYear", defaultValue = "") Integer passingYear,
+            @RequestParam(value = "semesterStatus", defaultValue = "") StudentStatus semesterStatus,
+            @RequestParam(value = "cgpa", defaultValue = "") Double cgpa
+
+    ) {
+        helper.setPageSize(page,size);
+
+        PaginatedResponse paginatedResponse = new PaginatedResponse();
+
+        Map<String,Object> iitStudentMappedSearchResult = iitStudentServiceImpl.search(
+                roll, name, studentEmail, passingYear, semesterStatus, cgpa,
+                page, size, sortBy);
+        List<IIT_Student> responses =(List<IIT_Student>) iitStudentMappedSearchResult.get("lists");
+
+        List<IIT_StudentResponse> customResponse = responses.stream().map(IIT_StudentResponse::from).
+                collect(Collectors.toList());
+        helper.getCommonData(page,size, iitStudentMappedSearchResult, paginatedResponse, customResponse);
+
+        return ok(paginatedSuccess(paginatedResponse).getJson());
+    }
 
 }

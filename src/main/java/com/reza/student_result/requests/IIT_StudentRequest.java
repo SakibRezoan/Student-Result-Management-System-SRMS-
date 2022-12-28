@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -19,6 +20,8 @@ public class IIT_StudentRequest {
     private Long roll;
     @NotNull
     private String name;
+    @Email
+    private String studentEmail;
     private Integer passingYear;
     private StudentStatus semesterStatus;
     private Double cgpa;
