@@ -126,12 +126,6 @@ public class CourseManagementController {
         return ok(paginatedSuccess(paginatedResponse).getJson());
     }
 
-    //Update IIT_Student Result
-
-    //View All IIT_Student
-
-    //Find one IIT_Student
-
     /*     ****IIT_Student****     */
 
     //Get Result By Roll

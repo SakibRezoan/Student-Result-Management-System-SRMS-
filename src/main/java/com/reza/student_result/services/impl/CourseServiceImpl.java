@@ -35,6 +35,11 @@ public class CourseServiceImpl extends CourseService {
         return courseRepository.save(course.get());
 
     }
+    public Course update(Long id, RecordStatus status) {
+        Optional<Course> course = findById(id);
+        course.get().setRecordStatus(status);
+        return courseRepository.save(course.get());
+    }
     @Override
     public Optional<Course> findCourseById(Long id) {
         Optional<Course> course = courseRepository.findCourseById(id);
@@ -43,6 +48,7 @@ public class CourseServiceImpl extends CourseService {
         }
         return course;
     }
+
     @Override
     public Optional<Course> findById(Long id) {
         Optional<Course> course = courseRepository.findById(id);
@@ -50,11 +56,6 @@ public class CourseServiceImpl extends CourseService {
             throw new ResourceNotFoundException(String.format("Course was not found for parameter {id = %s}", id));
         }
         return course;
-    }
-    public Course update(Long id, RecordStatus status) {
-        Optional<Course> course = courseRepository.findById(id);
-        course.get().setRecordStatus(status);
-        return courseRepository.save(course.get());
     }
     public Optional<Course> findByCourseTitle(String courseTitle) {
         return courseRepository.findByCourseTitle(courseTitle);

@@ -13,4 +13,12 @@ public interface IIT_StudentRepository extends JpaRepository<IIT_Student, Long> 
             "(iitStd.roll = :roll) AND (iitStd.recordStatus <> 'DELETED')"
     )
     Optional<IIT_Student> findByRoll(Long roll);
+    @Query("SELECT iitStd FROM IIT_Student iitStd WHERE " +
+            "(iitStd.id = :id) AND (iitStd.recordStatus <> 'DELETED')"
+    )
+    Optional<IIT_Student> findStudentById(Long id);
+    @Query("SELECT iitStd FROM IIT_Student iitStd WHERE " +
+            "(iitStd.id = :id)"
+    )
+    Optional<IIT_Student> findById(Long id);
 }

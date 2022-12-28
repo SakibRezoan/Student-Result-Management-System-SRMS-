@@ -1,11 +1,8 @@
 package com.reza.student_result.validators;
 
 import com.reza.student_result.entities.Course;
-import com.reza.student_result.entities.Student;
 import com.reza.student_result.requests.CourseRequest;
-import com.reza.student_result.requests.StudentRequest;
 import com.reza.student_result.services.impl.CourseServiceImpl;
-import com.reza.student_result.services.impl.StudentServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

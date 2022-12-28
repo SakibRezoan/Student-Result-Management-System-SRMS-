@@ -17,7 +17,6 @@ public class LetterGradePoint {
     private Long id;
 
     @Column(name = "LETTER_GRADE")
-
     private String letterGrade;
     @Column(name = "GRADE_POINT")
     private Double gradePoint;

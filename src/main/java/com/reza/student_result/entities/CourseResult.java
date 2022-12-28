@@ -19,6 +19,10 @@ public class CourseResult extends BaseEntity{
     @OneToOne
     @JoinColumn(name = "COURSE_ID")
     private Course courseId;
+
+    @OneToOne
+    @JoinColumn(name = "COURSE_CODE")
+    private Course courseCode;
     @OneToOne
     @JoinColumn(name = "LETTER_GRADE_POINT_ID")
     private LetterGradePoint letterGradePointId;

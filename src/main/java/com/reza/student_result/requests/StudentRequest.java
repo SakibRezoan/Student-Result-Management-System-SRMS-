@@ -1,10 +1,8 @@
 package com.reza.student_result.requests;
 
 import com.reza.student_result.entities.Student;
-import com.reza.student_result.entities.Subject;
 import com.reza.student_result.enums.RecordStatus;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 

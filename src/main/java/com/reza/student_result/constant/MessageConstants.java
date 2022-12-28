@@ -14,6 +14,7 @@ public class MessageConstants {
 
     public static final String COURSE_UPDATE = "Course updated successfully";
     public static final String IIT_STUDENT_SAVE = "A New IIT Student Saved Successfully";
+    public static final String IIT_STUDENT_UPDATE = "IIT Student Updated Successfully";
 
 
 }

@@ -1,11 +1,11 @@
 package com.reza.student_result.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.reza.student_result.entities.Student;
 import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.requests.StudentRequest;
 import com.reza.student_result.entities.Enclosure;
-import com.reza.student_result.entities.Student;
 import com.reza.student_result.helper.StudentHelper;
 import com.reza.student_result.response.StudentResponse;
 import com.reza.student_result.services.impl.StudentServiceImpl;

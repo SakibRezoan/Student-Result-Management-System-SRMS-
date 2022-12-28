@@ -1,9 +1,9 @@
 package com.reza.student_result.services;
 
+import com.reza.student_result.entities.Student;
 import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.requests.StudentRequest;
-import com.reza.student_result.entities.Student;
 import com.reza.student_result.repositories.StudentRepository;
 import lombok.RequiredArgsConstructor;
 

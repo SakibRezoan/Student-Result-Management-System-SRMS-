@@ -91,7 +91,7 @@ public class SubjectController {
     }
 
     @PutMapping("/update")
-    @Operation(summary = "update subject", description = "Update existing student")
+    @Operation(summary = "update subject", description = "Update existing subject")
     public ResponseEntity<JSONObject> update(@Valid @RequestBody SubjectRequest request, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {

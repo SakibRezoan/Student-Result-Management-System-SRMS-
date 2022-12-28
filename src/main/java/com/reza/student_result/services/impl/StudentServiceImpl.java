@@ -40,7 +40,7 @@ public class StudentServiceImpl extends StudentService {
     @Transactional
     public Student update(Long id, RecordStatus status) {
 
-        Optional<Student> student = studentRepository.findById(id);
+        Optional<Student> student = findById(id);
         studentHelper.setBaseData(student.get(), status, true);
         return studentRepository.save(student.get());
     }

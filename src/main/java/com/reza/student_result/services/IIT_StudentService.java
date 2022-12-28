@@ -15,4 +15,6 @@ public abstract class IIT_StudentService {
     protected final IIT_StudentRepository iitStudentRepository;
     protected abstract IIT_Student save(IIT_StudentRequest iitStudentRequest);
     protected abstract Optional<IIT_Student> findByRoll(Long roll);
+    protected abstract Optional<IIT_Student> findById(Long id);
+    protected abstract Optional<IIT_Student> findStudentById(Long id);
 }

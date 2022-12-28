@@ -17,8 +17,8 @@ public class IIT_StudentResponse {
     private Long roll;
 
     private String name;
-    private String passingYear;
-    private StudentStatus currentStatus;
+    private Integer passingYear;
+    private StudentStatus semesterStatus;
     private Double cgpa;
 
     public static IIT_StudentResponse from(IIT_Student IITStudent) {
