@@ -3,7 +3,7 @@ package com.reza.student_result.services.impl;
 import com.reza.student_result.entities.IIT_Student;
 import com.reza.student_result.entities.Student;
 import com.reza.student_result.enums.RecordStatus;
-import com.reza.student_result.enums.StudentStatus;
+import com.reza.student_result.enums.SemesterStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.repositories.IIT_StudentRepository;
 import com.reza.student_result.requests.IIT_StudentRequest;
@@ -59,7 +59,7 @@ public class IIT_StudentServiceImpl extends IIT_StudentService {
         iitStudent.get().setRecordStatus(status);
         return iitStudentRepository.save(iitStudent.get());
     }
-    public Map<String, Object> search(Long roll, String name, String studentEmail, Integer passingYear, StudentStatus semesterStatus, Double cgpa, Integer page, Integer size, String sortBy) {
+    public Map<String, Object> search(Long roll, String name, String studentEmail, Integer passingYear, SemesterStatus semesterStatus, Double cgpa, Integer page, Integer size, String sortBy) {
         ServiceHelper helper = new ServiceHelper<>(Student.class);
         return helper.getList(
                 iitStudentRepository.searchIIT_StudentInDB(roll, name, studentEmail, passingYear, semesterStatus, cgpa,
@@ -67,5 +67,9 @@ public class IIT_StudentServiceImpl extends IIT_StudentService {
                 page,
                 size
         );
+    }
+    @Transactional
+    public IIT_Student saveResults(IIT_Student iitStudent) {
+        return iitStudentRepository.save(iitStudent);
     }
 }

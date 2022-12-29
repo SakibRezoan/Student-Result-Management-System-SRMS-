@@ -34,12 +34,6 @@ public class StudentValidator implements Validator {
                 errors.rejectValue("studentRoll", "500", ALREADY_EXIST);
             }
         }
-        if (isNotEmpty(studentRequest.getId())) {
-            Optional<Student> student = studentRepository.findById(studentRequest.getId());
-            if (student.isPresent()) {
-                errors.rejectValue("id", "500", ALREADY_EXIST);
-            }
-        }
 
     }
 }

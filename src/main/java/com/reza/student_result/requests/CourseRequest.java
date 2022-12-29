@@ -2,7 +2,7 @@ package com.reza.student_result.requests;
 
 import com.reza.student_result.entities.Course;
 import com.reza.student_result.enums.RecordStatus;
-import com.reza.student_result.enums.Semester;
+import com.reza.student_result.enums.SemesterStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ public class CourseRequest {
     private String courseCode;
     private String courseTitle;
     private Integer noOfCredits;
-    private Semester semesterNo;
+    private SemesterStatus semesterStatus;
 
     public void update(CourseRequest courseRequest, Course course) {
         BeanUtils.copyProperties(courseRequest, course);

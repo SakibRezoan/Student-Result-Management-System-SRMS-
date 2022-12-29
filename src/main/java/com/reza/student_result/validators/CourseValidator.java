@@ -1,8 +1,6 @@
 package com.reza.student_result.validators;
 
 import com.reza.student_result.entities.Course;
-import com.reza.student_result.entities.IIT_Student;
-import com.reza.student_result.repositories.CourseRepository;
 import com.reza.student_result.requests.CourseRequest;
 import com.reza.student_result.services.impl.CourseServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +16,6 @@ import static com.reza.student_result.utils.StringUtils.isNotEmpty;
 @RequiredArgsConstructor
 public class CourseValidator implements Validator {
     private final CourseServiceImpl courseServiceImpl;
-    private final CourseRepository courseRepository;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -39,12 +36,6 @@ public class CourseValidator implements Validator {
             Optional<Course> course = courseServiceImpl.findByCourseTitle(courseRequest.getCourseTitle());
             if (course.isPresent()) {
                 errors.rejectValue("courseTitle", "500", ALREADY_EXIST);
-            }
-        }
-        if (isNotEmpty(courseRequest.getId())) {
-            Optional<Course> course = courseRepository.findById(courseRequest.getId());
-            if (course.isPresent()) {
-                errors.rejectValue("id", "500", ALREADY_EXIST);
             }
         }
 

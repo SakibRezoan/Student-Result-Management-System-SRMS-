@@ -1,20 +1,19 @@
 package com.reza.student_result.controllers;
 
 import com.reza.student_result.entities.Course;
-import com.reza.student_result.entities.IIT_Student;
 import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.requests.CourseRequest;
-import com.reza.student_result.requests.IIT_StudentRequest;
 import com.reza.student_result.response.CourseResponse;
-import com.reza.student_result.response.IIT_StudentResponse;
-import com.reza.student_result.services.impl.IIT_StudentServiceImpl;
 import com.reza.student_result.services.impl.CourseServiceImpl;
 import com.reza.student_result.utils.CommonDataHelper;
 import com.reza.student_result.utils.PaginatedResponse;
 import com.reza.student_result.validators.CourseValidator;
+
 import io.swagger.v3.oas.annotations.Operation;
+
 import lombok.RequiredArgsConstructor;
+
 import org.json.simple.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,7 +21,6 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,10 +35,9 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/iit-course-management")
-public class CourseManagementController {
+public class IIT_CourseController {
 
     private final CourseServiceImpl courseServiceImpl;
-
     private final CourseValidator validator;
     private final CommonDataHelper helper;
     @GetMapping("/")

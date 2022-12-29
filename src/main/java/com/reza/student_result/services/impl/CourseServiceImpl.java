@@ -48,6 +48,12 @@ public class CourseServiceImpl extends CourseService {
         }
         return course;
     }
+    @Override
+    public Course findCourseByIdNotOptional (Long id) {
+        Course course = courseRepository.findCourseByIdNotOptional(id);
+        return course;
+
+    }
 
     @Override
     public Optional<Course> findById(Long id) {

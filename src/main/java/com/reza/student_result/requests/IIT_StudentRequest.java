@@ -1,8 +1,9 @@
 package com.reza.student_result.requests;
 
+import com.reza.student_result.entities.IIT_Result;
 import com.reza.student_result.entities.IIT_Student;
 import com.reza.student_result.enums.RecordStatus;
-import com.reza.student_result.enums.StudentStatus;
+import com.reza.student_result.enums.SemesterStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,8 +24,9 @@ public class IIT_StudentRequest {
     @Email
     private String studentEmail;
     private Integer passingYear;
-    private StudentStatus semesterStatus;
+    private SemesterStatus semesterStatus;
     private Double cgpa;
+    private IIT_Result iitResult;
 
     public void update(IIT_StudentRequest IITStudentRequest, IIT_Student IITStudent) {
         BeanUtils.copyProperties(IITStudentRequest, IITStudent);

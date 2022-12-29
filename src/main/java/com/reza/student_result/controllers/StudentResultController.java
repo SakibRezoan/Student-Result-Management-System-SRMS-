@@ -12,8 +12,11 @@ import com.reza.student_result.services.impl.StudentServiceImpl;
 import com.reza.student_result.utils.CommonDataHelper;
 import com.reza.student_result.utils.PaginatedResponse;
 import com.reza.student_result.validators.StudentValidator;
+
 import io.swagger.v3.oas.annotations.Operation;
+
 import lombok.RequiredArgsConstructor;
+
 import org.json.simple.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -100,11 +103,12 @@ public class StudentResultController {
                                                     @RequestParam(value = "request", required = false) String request)
                                                     throws ResourceNotFoundException {
 
-        Student student = studentServiceImpl.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Student " + studentId));
+        Student student = studentServiceImpl.findById(studentId).orElseThrow(
+                () -> new ResourceNotFoundException("Student not found with the id = {%s}" + studentId)
+        );
 
         if (nonNull(file) && isEmpty(request))
-            return badRequest().body(
-                    error("file data must be selected").getJson());
+            return badRequest().body(error("File data must be selected").getJson());
 
         List<Enclosure> enclosures = null;
         try {

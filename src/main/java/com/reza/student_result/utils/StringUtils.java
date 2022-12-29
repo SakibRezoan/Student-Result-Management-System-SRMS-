@@ -30,6 +30,9 @@ public class StringUtils {
     public static boolean isEmpty(Integer integer) {
         return !isNotEmpty(integer);
     }
+    public static boolean isEmpty(Long ln) {
+        return !isNotEmpty(ln);
+    }
 
     public static boolean isEmptyArr(Set<?> strArr) {
         return strArr.size() == 0;

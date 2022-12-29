@@ -1,7 +1,7 @@
 package com.reza.student_result.response;
 
 import com.reza.student_result.entities.Course;
-import com.reza.student_result.enums.Semester;
+import com.reza.student_result.enums.SemesterStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -12,7 +12,7 @@ public class CourseResponse {
     private String courseCode;
     private String courseTitle;
     private Integer noOfCredits;
-    private Semester semesterNo;
+    private SemesterStatus semesterStatus;
 
     public static CourseResponse from (Course course) {
         CourseResponse courseResponse = new CourseResponse();

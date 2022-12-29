@@ -6,15 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class LetterGradePoint {
-
+@Table(name = "COURSE_WISE_RESULT")
+public class IIT_Result {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "LETTER_GRADE_POINT_ID", nullable = false)
+    @Column(name = "COURSE_WISE_RESULT_ID", nullable = false)
     private Long id;
+    @OneToOne
+    @JoinColumn(name = "COURSE_ID")
+    private Course course;
+    @Column(name = "MARKS_OBTAINED")
+    private Integer marksObtained;
 
     @Column(name = "LETTER_GRADE")
     private String letterGrade;

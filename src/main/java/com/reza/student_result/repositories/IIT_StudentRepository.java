@@ -1,7 +1,7 @@
 package com.reza.student_result.repositories;
 
 import com.reza.student_result.entities.IIT_Student;
-import com.reza.student_result.enums.StudentStatus;
+import com.reza.student_result.enums.SemesterStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,5 +34,5 @@ public interface IIT_StudentRepository extends JpaRepository<IIT_Student, Long> 
             "(iitStd.recordStatus <> 'DELETED')"
     )
     Page searchIIT_StudentInDB(Long roll, String name, String studentEmail, Integer passingYear,
-                               StudentStatus semesterStatus, Double cgpa, Pageable pageable);
+                               SemesterStatus semesterStatus, Double cgpa, Pageable pageable);
 }

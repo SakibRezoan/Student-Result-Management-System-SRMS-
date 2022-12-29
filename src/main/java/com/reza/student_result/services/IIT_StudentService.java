@@ -6,7 +6,6 @@ import com.reza.student_result.requests.IIT_StudentRequest;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 @Data
 @RequiredArgsConstructor

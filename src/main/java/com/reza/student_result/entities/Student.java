@@ -34,7 +34,6 @@ public class Student extends BaseEntity{
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "student_id")
     private List<Enclosure> enclosures;
-
     public void addEnclosures(List<Enclosure> enclosure) {
         if (this.enclosures == null) {
             this.enclosures = new ArrayList<>();

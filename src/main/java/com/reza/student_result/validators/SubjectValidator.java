@@ -42,12 +42,6 @@ public class SubjectValidator implements Validator {
                 errors.rejectValue("subjectNameBn", "500", ALREADY_EXIST);
             }
         }
-        if (isNotEmpty(request.getId())) {
-            Optional<Subject> subject = subjectRepository.findById(request.getId());
-            if (subject.isPresent()) {
-                errors.rejectValue("id", "500", ALREADY_EXIST);
-            }
-        }
 
 
     }

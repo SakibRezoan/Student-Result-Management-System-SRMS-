@@ -52,7 +52,6 @@ public class ResponseBuilder implements Response {
         return response;
 
     }
-
     public static ResponseBuilder error(Object errors) {
         ResponseBuilder response = new ResponseBuilder(ResponseType.ERROR);
         response.errors = errors;

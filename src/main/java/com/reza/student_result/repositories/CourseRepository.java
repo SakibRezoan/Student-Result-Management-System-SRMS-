@@ -19,6 +19,10 @@ public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecif
             "(c.id = :id) AND (c.recordStatus <> 'DELETED')"
     )
     Optional <Course> findCourseById(Long id);
+    @Query("SELECT c FROM Course c WHERE " +
+            "(c.id = :id) AND (c.recordStatus <> 'DELETED')"
+    )
+    Course findCourseByIdNotOptional(Long id);
     Optional <Course> findById(Long id);
 
     @Query("SELECT c FROM Course c WHERE " +

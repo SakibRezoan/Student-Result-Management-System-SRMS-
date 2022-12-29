@@ -1,6 +1,6 @@
 package com.reza.student_result.entities;
 
-import com.reza.student_result.enums.Semester;
+import com.reza.student_result.enums.SemesterStatus;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +22,7 @@ public class Course extends BaseEntity {
     private String courseTitle;
     @Column(name = "NO_OF_CREDITS", nullable = false)
     private Integer noOfCredits;
-    @Column(name = "SEMESTER_NO", nullable = false)
-    private Semester semesterNo;
+    @Column(name = "SEMESTER_STATUS")
+    private SemesterStatus semesterStatus;
 
 }

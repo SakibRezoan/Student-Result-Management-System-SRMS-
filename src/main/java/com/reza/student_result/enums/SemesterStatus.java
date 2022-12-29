@@ -1,6 +1,8 @@
 package com.reza.student_result.enums;
 
-public enum Semester {
+
+public enum SemesterStatus {
+    DROPPED("DROPPED"),
     FIRST_SEMESTER("FIRST_SEMESTER"),
     SECOND_SEMESTER("SECOND_SEMESTER"),
     THIRD_SEMESTER("THIRD_SEMESTER"),
@@ -9,13 +11,15 @@ public enum Semester {
     SIXTH_SEMESTER("SIXTH_SEMESTER"),
     SEVENTH_SEMESTER("SEVENTH_SEMESTER"),
     EIGHTH_SEMESTER("EIGHTH_SEMESTER"),
+    PASSED("PASSED")
     ;
-    private final String semesterNo;
+    private final String semesterStatus;
 
-    Semester(String semesterNo) {
-        this.semesterNo = semesterNo;
+    SemesterStatus(String semesterStatus) {
+        this.semesterStatus = semesterStatus;
     }
-    public String getSemesterNo() {
-        return semesterNo;
+
+    public String getSemesterStatus() {
+        return semesterStatus;
     }
 }
