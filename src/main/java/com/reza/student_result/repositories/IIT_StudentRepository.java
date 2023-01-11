@@ -35,4 +35,5 @@ public interface IIT_StudentRepository extends JpaRepository<IIT_Student, Long> 
     )
     Page searchIIT_StudentInDB(Long roll, String name, String studentEmail, Integer passingYear,
                                SemesterStatus semesterStatus, Double cgpa, Pageable pageable);
+
 }

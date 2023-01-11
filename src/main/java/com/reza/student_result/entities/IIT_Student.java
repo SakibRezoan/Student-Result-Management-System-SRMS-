@@ -50,7 +50,6 @@ public class IIT_Student extends BaseEntity{
         this.iitStudentEnclosures.addAll(iitStudentEnclosures);
     }
 
-
     public void addResults(List<IIT_Result> iitResults) {
         if (this.iitResults == null) {
             this.iitResults = new ArrayList<>();

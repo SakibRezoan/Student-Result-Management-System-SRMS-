@@ -5,16 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "COURSE_WISE_RESULT")
-public class IIT_Result {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "COURSE_WISE_RESULT_ID", nullable = false)
-    private Long id;
+@Table(name = "IIT_RESULT")
+public class IIT_Result implements Serializable {
+    @EmbeddedId
+    @Column(name = "IIT_RESULT_ID", nullable = false)
+    private IIT_Result_PK iitResultId;
+
     @OneToOne
     @JoinColumn(name = "COURSE_ID")
     private Course course;

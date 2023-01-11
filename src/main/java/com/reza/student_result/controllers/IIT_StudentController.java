@@ -7,7 +7,6 @@ import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.helper.IIT_StudentHelper;
 import com.reza.student_result.requests.IIT_StudentRequest;
 import com.reza.student_result.response.IIT_StudentResponse;
-import com.reza.student_result.services.impl.CourseServiceImpl;
 import com.reza.student_result.services.impl.IIT_StudentServiceImpl;
 import com.reza.student_result.utils.CommonDataHelper;
 import com.reza.student_result.utils.PaginatedResponse;
@@ -23,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -35,17 +35,13 @@ import static com.reza.student_result.exceptions.ApiError.fieldError;
 import static com.reza.student_result.utils.ResponseBuilder.*;
 import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/iit-student-management")
 public class IIT_StudentController {
     private final IIT_StudentServiceImpl iitStudentServiceImpl;
-
-    private final CourseServiceImpl courseServiceImpl;
     private final IIT_StudentValidator iitStudentValidator;
     private final IIT_StudentHelper iitStudentHelper;
-
     private final CommonDataHelper helper;
 
     @GetMapping("/")
@@ -56,6 +52,7 @@ public class IIT_StudentController {
 
     //Register IIT_Student
     @PostMapping("/teacher/add-new-iit-student")
+    @RolesAllowed("Teacher")
     @Operation(summary = "Add new IIT_Student", description = "Add new IIT_Student")
     public ResponseEntity<JSONObject> addNewIitStudent(@Valid @RequestBody IIT_StudentRequest iit_studentRequest, BindingResult bindingResult) {
 
@@ -71,6 +68,7 @@ public class IIT_StudentController {
 
     //Find IIT Student by id
     @GetMapping("/teacher/find-student/{id}")
+//    @RolesAllowed("Teacher")
     @Operation(summary = "Find a student", description = "Find a student by id")
     public ResponseEntity<JSONObject> findStudentById(@PathVariable Long id) {
         Optional<IIT_StudentResponse> response = Optional.ofNullable(iitStudentServiceImpl.findStudentById(id)
@@ -81,6 +79,7 @@ public class IIT_StudentController {
     }
     //Update IIT Student
     @PutMapping("/teacher/update-iit-student")
+//    @RolesAllowed("Teacher")
     @Operation(summary = "Update IIT Student", description = "Update existing iit student")
 
     public ResponseEntity<JSONObject> updateStudent(@RequestBody IIT_StudentRequest request, BindingResult bindingResult) {
@@ -95,6 +94,7 @@ public class IIT_StudentController {
 
     //Update Record Status of IIT Student
     @PutMapping("/change-record-status/{id}/{status}")
+//    @RolesAllowed("Teacher")
     @Operation(summary = "Change record status of a iit student", description =
             "Change record status of a iit student with parameter id and status")
     public ResponseEntity<JSONObject> changeRecordStatus(@PathVariable Long id, @PathVariable RecordStatus status) {
@@ -105,6 +105,7 @@ public class IIT_StudentController {
 
     //Get Paginated List of Students
     @GetMapping("/teacher/student-list")
+//    @RolesAllowed("Teacher")
     @Operation(summary = "Fetch all students", description =
             "Fetch all students with page, size, sortBy, roll, name, email, passingYear, semesterStatus, cgpa")
     public ResponseEntity<JSONObject> getList(
@@ -137,6 +138,7 @@ public class IIT_StudentController {
 
     //Teacher Upload Results
     @PutMapping("/teacher/upload-iit-student-result/{studentId}")
+//    @RolesAllowed("Teacher")
     @Operation(summary = "Upload IIT Student Result", description = "Upload course wise result of a IIT Student")
 
     public ResponseEntity<JSONObject> uploadResult(@PathVariable @NotNull Long studentId ,
@@ -151,8 +153,9 @@ public class IIT_StudentController {
 
         iitStudent = iitStudentHelper.saveCourseResult(iitStudent, courseId, marksObtained );
 
-        iitStudentServiceImpl.saveResults(iitStudent);
-        return ok(success(iitStudent, IIT_STUDENT_RESULT_UPLOAD).getJson());
+        iitStudent = iitStudentServiceImpl.saveResults(iitStudent);
+
+       return ok(success(iitStudent, IIT_STUDENT_RESULT_UPLOAD).getJson());
     }
 
 

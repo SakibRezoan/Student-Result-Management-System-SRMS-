@@ -32,6 +32,7 @@ public class IIT_StudentHelper {
                 throw new RuntimeException("Marks should be 0 to 100");
             }
         }
+
     }
     public IIT_Student saveCourseResult(IIT_Student iitStudent, Long courseId, Integer marksObtained) {
         List<IIT_Result> iitResults = new ArrayList<>();
@@ -87,7 +88,6 @@ public class IIT_StudentHelper {
 
         iitResults.add(iitResult);
         iitStudent.addResults(iitResults);
-
         return iitStudent;
 
     }
