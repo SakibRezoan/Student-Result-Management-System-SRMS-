@@ -1,7 +1,6 @@
-package com.reza.student_result.requests;
+package com.reza.student_result.dtos;
 
-import com.reza.student_result.entities.IIT_Result;
-import com.reza.student_result.entities.IIT_Student;
+import com.reza.student_result.entities.Student;
 import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.enums.SemesterStatus;
 import lombok.AllArgsConstructor;
@@ -15,10 +14,10 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class IIT_StudentRequest {
+public class StudentDto {
     private Long id;
     @NotNull
-    private Long roll;
+    private Integer roll;
     @NotNull
     private String name;
     @Email
@@ -26,14 +25,13 @@ public class IIT_StudentRequest {
     private Integer passingYear;
     private SemesterStatus semesterStatus;
     private Double cgpa;
-    private IIT_Result iitResult;
 
-    public void update(IIT_StudentRequest IITStudentRequest, IIT_Student IITStudent) {
+    public void update(StudentDto IITStudentRequest, Student IITStudent) {
         BeanUtils.copyProperties(IITStudentRequest, IITStudent);
 
     }
-    public IIT_Student to(IIT_StudentRequest iitStudentRequest) {
-        IIT_Student iitStudent = new IIT_Student();
+    public Student to(StudentDto iitStudentRequest) {
+        Student iitStudent = new Student();
         BeanUtils.copyProperties(iitStudentRequest, iitStudent);
         iitStudent.setRecordStatus(RecordStatus.ACTIVE);
         return iitStudent;

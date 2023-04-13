@@ -13,13 +13,13 @@ public enum SemesterStatus {
     EIGHTH_SEMESTER("EIGHTH_SEMESTER"),
     PASSED("PASSED")
     ;
-    private final String semesterStatus;
+    private final String label;
 
-    SemesterStatus(String semesterStatus) {
-        this.semesterStatus = semesterStatus;
+    SemesterStatus(String label) {
+        this.label = label;
     }
 
-    public String getSemesterStatus() {
-        return semesterStatus;
+    public String getLabel() {
+        return label;
     }
 }

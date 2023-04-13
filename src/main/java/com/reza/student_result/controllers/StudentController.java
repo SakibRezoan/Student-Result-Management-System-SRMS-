@@ -1,18 +1,17 @@
 package com.reza.student_result.controllers;
 
-import com.reza.student_result.entities.IIT_Student;
+import com.reza.student_result.entities.Student;
 import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.enums.SemesterStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
-import com.reza.student_result.helper.IIT_StudentHelper;
-import com.reza.student_result.requests.IIT_StudentRequest;
-import com.reza.student_result.response.IIT_StudentResponse;
-import com.reza.student_result.services.impl.IIT_StudentServiceImpl;
+import com.reza.student_result.helper.StudentHelper;
+import com.reza.student_result.dtos.StudentDto;
+import com.reza.student_result.response.StudentResponse;
+import com.reza.student_result.services.implementations.StudentServiceImplementation;
 import com.reza.student_result.utils.CommonDataHelper;
 import com.reza.student_result.utils.PaginatedResponse;
-import com.reza.student_result.validators.IIT_StudentValidator;
+import com.reza.student_result.validators.StudentValidator;
 
-import io.swagger.v3.oas.annotations.Operation;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +21,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -37,33 +35,30 @@ import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/iit-student-management")
-public class IIT_StudentController {
-    private final IIT_StudentServiceImpl iitStudentServiceImpl;
-    private final IIT_StudentValidator iitStudentValidator;
-    private final IIT_StudentHelper iitStudentHelper;
+@RequestMapping("api/student")
+public class StudentController {
+    private final StudentServiceImplementation iitStudentServiceImpl;
+    private final StudentValidator iitStudentValidator;
+    private final StudentHelper iitStudentHelper;
     private final CommonDataHelper helper;
 
     @GetMapping("/")
-    @Operation(summary = "Welcome Message", description = "Welcome Message")
     private String welcome() {
         return "Welcome to IIT Student Management System";
     }
 
-    //Register IIT_Student
-    @PostMapping("/teacher/add-new-iit-student")
-    @RolesAllowed("Teacher")
-    @Operation(summary = "Add new IIT_Student", description = "Add new IIT_Student")
-    public ResponseEntity<JSONObject> addNewIitStudent(@Valid @RequestBody IIT_StudentRequest iit_studentRequest, BindingResult bindingResult) {
+    //Register Student
+    @PostMapping("/teacher/add-new-student")
+    public ResponseEntity<JSONObject> addNewStudent(@Valid @RequestBody StudentDto studentDto, BindingResult bindingResult) {
 
-        ValidationUtils.invokeValidator(iitStudentValidator, iit_studentRequest, bindingResult);
+        ValidationUtils.invokeValidator(iitStudentValidator, studentDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return badRequest().body(error(fieldError(bindingResult)).getJson());
         }
 
-        IIT_Student iitStudent = iitStudentServiceImpl.save(iit_studentRequest);
-        return ok(success(IIT_StudentResponse.from(iitStudent), IIT_STUDENT_SAVE).getJson());
+        Student student = iitStudentServiceImpl.save(studentDto);
+        return ok(success(StudentResponse.from(student), STUDENT_SAVE).getJson());
     }
 
     //Find IIT Student by id
@@ -71,8 +66,8 @@ public class IIT_StudentController {
 //    @RolesAllowed("Teacher")
     @Operation(summary = "Find a student", description = "Find a student by id")
     public ResponseEntity<JSONObject> findStudentById(@PathVariable Long id) {
-        Optional<IIT_StudentResponse> response = Optional.ofNullable(iitStudentServiceImpl.findStudentById(id)
-                .map(IIT_StudentResponse::from)
+        Optional<StudentResponse> response = Optional.ofNullable(iitStudentServiceImpl.findStudentById(id)
+                .map(StudentResponse::from)
                 .orElseThrow(ResourceNotFoundException::new));
 
         return ok(success(response).getJson());
@@ -82,14 +77,14 @@ public class IIT_StudentController {
 //    @RolesAllowed("Teacher")
     @Operation(summary = "Update IIT Student", description = "Update existing iit student")
 
-    public ResponseEntity<JSONObject> updateStudent(@RequestBody IIT_StudentRequest request, BindingResult bindingResult) {
+    public ResponseEntity<JSONObject> updateStudent(@RequestBody StudentDto request, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return badRequest().body(error(fieldError(bindingResult)).getJson());
         }
 
-        IIT_Student iitStudent = iitStudentServiceImpl.update(request);
-        return ok(success(IIT_StudentResponse.from(iitStudent), IIT_STUDENT_UPDATE).getJson());
+        Student iitStudent = iitStudentServiceImpl.update(request);
+        return ok(success(StudentResponse.from(iitStudent), IIT_STUDENT_UPDATE).getJson());
     }
 
     //Update Record Status of IIT Student
@@ -99,8 +94,8 @@ public class IIT_StudentController {
             "Change record status of a iit student with parameter id and status")
     public ResponseEntity<JSONObject> changeRecordStatus(@PathVariable Long id, @PathVariable RecordStatus status) {
 
-        IIT_Student iitStudent = iitStudentServiceImpl.update(id, status);
-        return ok(success(IIT_StudentResponse.from(iitStudent), RECORD_STATUS_UPDATE).getJson());
+        Student iitStudent = iitStudentServiceImpl.update(id, status);
+        return ok(success(StudentResponse.from(iitStudent), RECORD_STATUS_UPDATE).getJson());
     }
 
     //Get Paginated List of Students
@@ -127,9 +122,9 @@ public class IIT_StudentController {
         Map<String,Object> iitStudentMappedSearchResult = iitStudentServiceImpl.search(
                 roll, name, studentEmail, passingYear, semesterStatus, cgpa,
                 page, size, sortBy);
-        List<IIT_Student> responses =(List<IIT_Student>) iitStudentMappedSearchResult.get("lists");
+        List<Student> responses =(List<Student>) iitStudentMappedSearchResult.get("lists");
 
-        List<IIT_StudentResponse> customResponse = responses.stream().map(IIT_StudentResponse::from).
+        List<StudentResponse> customResponse = responses.stream().map(StudentResponse::from).
                 collect(Collectors.toList());
         helper.getCommonData(page,size, iitStudentMappedSearchResult, paginatedResponse, customResponse);
 
@@ -145,7 +140,7 @@ public class IIT_StudentController {
                                                    @RequestParam(value = "courseId") Long courseId,
                                                    @RequestParam(value = "marksObtained") Integer marksObtained) {
 
-        IIT_Student iitStudent = iitStudentServiceImpl.findStudentById(studentId)
+        Student iitStudent = iitStudentServiceImpl.findStudentById(studentId)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("IIT Student was not found with the id = {%s}" + studentId)
                 );

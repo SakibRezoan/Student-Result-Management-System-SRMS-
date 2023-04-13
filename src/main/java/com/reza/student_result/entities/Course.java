@@ -1,10 +1,11 @@
 package com.reza.student_result.entities;
 
 import com.reza.student_result.enums.SemesterStatus;
-import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Data
 @Entity

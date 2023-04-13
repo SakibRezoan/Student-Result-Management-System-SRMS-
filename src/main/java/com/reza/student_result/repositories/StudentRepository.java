@@ -1,32 +1,39 @@
 package com.reza.student_result.repositories;
 
 import com.reza.student_result.entities.Student;
+import com.reza.student_result.enums.SemesterStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
 import java.util.Optional;
 
 @Repository
-public interface StudentRepository extends JpaRepository <Student, Long> {
-    @Query("SELECT std FROM Student std WHERE " +
-            "(std.id = :id) AND (std.recordStatus <> 'DELETED')"
+public interface StudentRepository extends JpaRepository<Student, Long> {
+    @Query("SELECT iitStd FROM Student iitStd WHERE " +
+            "(iitStd.roll = :roll) AND (iitStd.recordStatus <> 'DELETED')"
+    )
+    Optional<Student> findByRoll(Integer roll);
+    @Query("SELECT iitStd FROM Student iitStd WHERE " +
+            "(iitStd.id = :id) AND (iitStd.recordStatus <> 'DELETED')"
     )
     Optional<Student> findStudentById(Long id);
-
+    @Query("SELECT iitStd FROM Student iitStd WHERE " +
+            "(iitStd.id = :id)"
+    )
     Optional<Student> findById(Long id);
-    @Query("SELECT std FROM Student std WHERE " +
-            "(std.studentRoll = :studentRoll) AND (std.recordStatus <> 'DELETED')"
+    @Query("SELECT iitStd FROM Student iitStd WHERE " +
+            "(:roll IS NULL OR iitStd.roll = :roll) AND" +
+            "(:name IS NULL OR LOWER(iitStd.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND" +
+            "(:studentEmail IS NULL OR LOWER(iitStd.studentEmail) LIKE LOWER(CONCAT('%', :studentEmail, '%'))) AND" +
+            "(:passingYear IS NULL OR iitStd.passingYear = :passingYear ) AND" +
+            "(:semesterStatus IS NULL OR LOWER(iitStd.semesterStatus) LIKE LOWER(CONCAT('%', :semesterStatus, '%'))) AND"+
+            "(:cgpa IS NULL OR iitStd.cgpa = :cgpa) AND"+
+            "(iitStd.recordStatus <> 'DELETED')"
     )
-    Optional<Student> findByStudentRoll(Long studentRoll);
+    Page searchIIT_StudentInDB(Long roll, String name, String studentEmail, Integer passingYear,
+                               SemesterStatus semesterStatus, Double cgpa, Pageable pageable);
 
-    @Query("SELECT std FROM Student std WHERE " +
-            "(:studentRoll IS NULL OR std.studentRoll = :studentRoll) AND" +
-            "(:studentName IS NULL OR LOWER(std.studentName) LIKE LOWER(CONCAT('%', :studentName, '%'))) AND" +
-            "(:studentEmail IS NULL OR LOWER(std.studentEmail) LIKE LOWER(CONCAT('%', :studentEmail, '%'))) AND" +
-            "(:studentResult IS NULL OR LOWER(std.studentResult) LIKE LOWER(CONCAT('%', :studentResult, '%'))) AND" +
-            "(std.recordStatus <> 'DELETED')"
-    )
-    Page<Student> searchStudentInDB(Long studentRoll, String studentName, String studentEmail, String studentResult, Pageable pageable);
 }

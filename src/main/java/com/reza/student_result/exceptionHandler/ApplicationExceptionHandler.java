@@ -1,4 +1,4 @@
-package com.reza.student_result.advices;
+package com.reza.student_result.exceptionHandler;
 
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;

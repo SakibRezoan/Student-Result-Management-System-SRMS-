@@ -15,37 +15,33 @@ public class StringUtils {
         return Objects.nonNull(str) && str.trim().length() > 0;
     }
 
-    public static boolean nonNull(Object boj) {
-        return Objects.nonNull(boj);
+    public static boolean nonNull(Object object) {
+        return Objects.nonNull(object);
     }
-
+    public static boolean isNull(Object object) {
+        return Objects.isNull(object);
+    }
     public static boolean isNotEmpty(Integer integer) {
         return Objects.nonNull(integer) && integer > 0;
     }
-
     public static boolean isEmpty(String str) {
         return !isNotEmpty(str);
     }
-
     public static boolean isEmpty(Integer integer) {
         return !isNotEmpty(integer);
     }
     public static boolean isEmpty(Long ln) {
         return !isNotEmpty(ln);
     }
-
     public static boolean isEmptyArr(Set<?> strArr) {
         return strArr.size() == 0;
     }
-
     public static boolean isNumericString(String code) {
         return code.matches("[0-9]+");
     }
-
     public static boolean isAnyEmpty(String... strings) {
         return Arrays.stream(strings).anyMatch(StringUtils::isEmpty);
     }
-
     public static boolean isAllNotEmpty(String... strings) {
         return Arrays.stream(strings).noneMatch(StringUtils::isEmpty);
     }
@@ -64,13 +60,8 @@ public class StringUtils {
         });
         return sb.toString();
     }
-
     public static String booleanToStr(Boolean bol) {
         return String.valueOf(bol);
-    }
-
-    public static boolean isNotEmpty(Object obj) {
-        return Objects.nonNull(obj);
     }
 
     public static String trim(String str) {
@@ -79,13 +70,6 @@ public class StringUtils {
 
     public static String objectToJson(Object obj) {
         return new Gson().toJson(obj);
-    }
-
-    public static String toJson(Object obj) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY)
-                .create();
-        return gson.toJson(obj);
     }
 
     public static String randomString() {

@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
@@ -26,30 +27,11 @@ dependencies {
 	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
 	runtimeOnly 'mysql:mysql-connector-java'
 
-	//Swagger
-	implementation "io.springfox:springfox-boot-starter:3.0.0"
-	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
-	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
-	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.0.3'
-
-	implementation 'com.google.code.gson:gson:2.9.0'
+	implementation 'com.google.code.gson:gson:2.10.1'
 	implementation "com.googlecode.json-simple:json-simple:1.1.1"
 	implementation 'javax.validation:validation-api:2.0.1.Final'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.apache.poi:poi:5.2.2'
-	implementation 'com.github.ozlerhakan:poiji:3.1.7'
-	implementation 'commons-fileupload:commons-fileupload:1.4'
-	implementation 'org.jboss.resteasy:resteasy-client:3.0.14.Final'
-	implementation 'org.jboss.resteasy:resteasy-jaxrs:3.12.0.Final'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	implementation 'commons-net:commons-net:3.6'
 	implementation 'org.springframework.boot:spring-boot-starter-test'
-	//security
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
-//	implementation group: 'org.keycloak', name: 'keycloak-spring-boot-2-starter', version: '4.0.0.Final'
-//	implementation group: 'org.keycloak', name: 'keycloak-spring-security-adapter', version: '16.1.0'
-//	implementation group: 'org.keycloak.bom', name: 'keycloak-adapter-bom', version: '9.0.0', ext: 'pom'
 
 }
 

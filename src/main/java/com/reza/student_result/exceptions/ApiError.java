@@ -12,7 +12,6 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 public class ApiError implements Serializable {
-    private static final Long serialVersionUID = 1L;
 
     public static Map<String, String> fieldError(BindingResult bindingResult) {
 

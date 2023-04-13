@@ -1,13 +1,12 @@
-package com.reza.student_result.services.impl;
+package com.reza.student_result.services.implementations;
 
-import com.reza.student_result.entities.IIT_Student;
 import com.reza.student_result.entities.Student;
 import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.enums.SemesterStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
-import com.reza.student_result.repositories.IIT_StudentRepository;
-import com.reza.student_result.requests.IIT_StudentRequest;
-import com.reza.student_result.services.IIT_StudentService;
+import com.reza.student_result.repositories.StudentRepository;
+import com.reza.student_result.dtos.StudentDto;
+import com.reza.student_result.services.StudentService;
 import com.reza.student_result.utils.ServiceHelper;
 import org.springframework.stereotype.Service;
 
@@ -16,46 +15,46 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class IIT_StudentServiceImpl extends IIT_StudentService {
+public class StudentServiceImplementation extends StudentService {
 
-    public IIT_StudentServiceImpl(IIT_StudentRepository iitStudentRepository) {
+    public StudentServiceImplementation(StudentRepository iitStudentRepository) {
         super(iitStudentRepository);
     }
 
     @Override
     @Transactional
-    public IIT_Student save(IIT_StudentRequest iitStudentRequest) {
-        IIT_Student iitStudent = iitStudentRequest.to(iitStudentRequest);
+    public Student save(StudentDto iitStudentRequest) {
+        Student iitStudent = iitStudentRequest.to(iitStudentRequest);
         return iitStudentRepository.save(iitStudent);
     }
     @Override
-    public Optional<IIT_Student> findByRoll(Long roll) {
+    public Optional<Student> findByRoll(Integer roll) {
         return iitStudentRepository.findByRoll(roll);
     }
     @Override
-    public Optional<IIT_Student> findStudentById(Long id) {
-        Optional<IIT_Student> iitStudent = iitStudentRepository.findStudentById(id);
+    public Optional<Student> findStudentById(Long id) {
+        Optional<Student> iitStudent = iitStudentRepository.findStudentById(id);
         if (iitStudent.isEmpty()) {
             throw new ResourceNotFoundException(String.format("Student was not found for parameter {id = %s}", id));
         }
         return iitStudent;
     }
     @Override
-    public Optional<IIT_Student> findById(Long id) {
-        Optional<IIT_Student> iitStudent = iitStudentRepository.findById(id);
+    public Optional<Student> findById(Long id) {
+        Optional<Student> iitStudent = iitStudentRepository.findById(id);
         if (iitStudent.isEmpty()) {
             throw new ResourceNotFoundException(String.format("Student was not found for parameter {id = %s}", id));
         }
         return iitStudent;
     }
-    public IIT_Student update(IIT_StudentRequest request) {
-        Optional<IIT_Student> iitStudent = findStudentById(request.getId());
+    public Student update(StudentDto request) {
+        Optional<Student> iitStudent = findStudentById(request.getId());
         request.update(request, iitStudent.get());
         return iitStudentRepository.save(iitStudent.get());
 
     }
-    public IIT_Student update(Long id, RecordStatus status) {
-        Optional<IIT_Student> iitStudent = findById(id);
+    public Student update(Long id, RecordStatus status) {
+        Optional<Student> iitStudent = findById(id);
         iitStudent.get().setRecordStatus(status);
         return iitStudentRepository.save(iitStudent.get());
     }
@@ -69,7 +68,7 @@ public class IIT_StudentServiceImpl extends IIT_StudentService {
         );
     }
     @Transactional
-    public IIT_Student saveResults(IIT_Student iitStudent) {
+    public Student saveResults(Student iitStudent) {
         return iitStudentRepository.save(iitStudent);
     }
 }
