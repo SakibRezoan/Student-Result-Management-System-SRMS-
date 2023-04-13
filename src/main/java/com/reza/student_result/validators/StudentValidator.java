@@ -1,8 +1,8 @@
 package com.reza.student_result.validators;
 
-import com.reza.student_result.entities.Student;
 import com.reza.student_result.dtos.StudentDto;
-import com.reza.student_result.services.implementations.StudentServiceImplementation;
+import com.reza.student_result.entities.Student;
+import com.reza.student_result.services.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -16,7 +16,7 @@ import static com.reza.student_result.utils.StringUtils.isNotEmpty;
 @Component
 @RequiredArgsConstructor
 public class StudentValidator implements Validator {
-    private final StudentServiceImplementation studentServiceImplementation;
+    private final StudentService studentService;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -25,11 +25,11 @@ public class StudentValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        StudentDto dto = (StudentDto) target;
+        StudentDto studentDto = (StudentDto) target;
 
-        if (isNotEmpty(dto.getRoll())) {
-            Optional<Student> iitStudent = studentServiceImplementation.findByRoll(dto.getRoll());
-            if (iitStudent.isPresent()) {
+        if (isNotEmpty(studentDto.getRoll())) {
+            Optional<Student> student = studentService.findByRoll(studentDto.getRoll());
+            if (student.isPresent()) {
                 errors.rejectValue("roll", "500", ALREADY_EXIST);
             }
         }

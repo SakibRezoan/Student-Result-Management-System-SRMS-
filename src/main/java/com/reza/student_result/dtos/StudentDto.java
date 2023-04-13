@@ -10,11 +10,12 @@ import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentDto {
+public class StudentDto implements Serializable {
     private Long id;
     @NotNull
     private Integer roll;
@@ -26,15 +27,14 @@ public class StudentDto {
     private SemesterStatus semesterStatus;
     private Double cgpa;
 
-    public void update(StudentDto IITStudentRequest, Student IITStudent) {
-        BeanUtils.copyProperties(IITStudentRequest, IITStudent);
-
-    }
-    public Student to(StudentDto iitStudentRequest) {
-        Student iitStudent = new Student();
-        BeanUtils.copyProperties(iitStudentRequest, iitStudent);
-        iitStudent.setRecordStatus(RecordStatus.ACTIVE);
-        return iitStudent;
+    public void update(StudentDto dto, Student student) {
+        BeanUtils.copyProperties(dto, student);
     }
 
+    public Student toEntity(StudentDto dto) {
+        Student student = new Student();
+        BeanUtils.copyProperties(dto, student);
+        student.setRecordStatus(RecordStatus.ACTIVE);
+        return student;
+    }
 }

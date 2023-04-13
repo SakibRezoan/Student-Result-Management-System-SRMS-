@@ -23,7 +23,8 @@ public class CourseDto implements Serializable {
     public void update(CourseDto courseDto, Course course) {
         BeanUtils.copyProperties(courseDto, course);
     }
-    public Course to(CourseDto courseDto) {
+
+    public Course toEntity(CourseDto courseDto) {
         Course course = new Course();
         BeanUtils.copyProperties(courseDto, course);
         course.setRecordStatus(RecordStatus.ACTIVE);

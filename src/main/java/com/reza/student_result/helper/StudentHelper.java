@@ -3,7 +3,7 @@
 //import com.reza.student_result.entities.Course;
 //import com.reza.student_result.entities.Student;
 //import com.reza.student_result.exceptions.ResourceNotFoundException;
-//import com.reza.student_result.services.implementations.CourseServiceImplementation;
+//import com.reza.student_result.services.CourseService;
 //
 //import lombok.RequiredArgsConstructor;
 //
@@ -17,7 +17,7 @@
 //@Component
 //@RequiredArgsConstructor
 //public class StudentHelper {
-//    private final CourseServiceImplementation courseServiceImplementation;
+//    private final CourseService courseServiceImplementation;
 //
 //    public void validateCourse(Long courseId, Integer marksObtained) {
 //        if (isNotEmpty(courseId)) {

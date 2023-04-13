@@ -1,7 +1,6 @@
 package com.reza.student_result.utils;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,40 +10,47 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class StringUtils {
 
-    public static boolean isNotEmpty(String str) {
-        return Objects.nonNull(str) && str.trim().length() > 0;
-    }
 
     public static boolean nonNull(Object object) {
         return Objects.nonNull(object);
     }
+
     public static boolean isNull(Object object) {
         return Objects.isNull(object);
     }
+
+    public static boolean isNotEmpty(String str) {
+        return Objects.nonNull(str) && str.trim().length() > 0;
+    }
+
     public static boolean isNotEmpty(Integer integer) {
         return Objects.nonNull(integer) && integer > 0;
     }
+
     public static boolean isEmpty(String str) {
         return !isNotEmpty(str);
     }
+
     public static boolean isEmpty(Integer integer) {
         return !isNotEmpty(integer);
     }
-    public static boolean isEmpty(Long ln) {
-        return !isNotEmpty(ln);
-    }
+
     public static boolean isEmptyArr(Set<?> strArr) {
         return strArr.size() == 0;
     }
+
     public static boolean isNumericString(String code) {
         return code.matches("[0-9]+");
     }
+
     public static boolean isAnyEmpty(String... strings) {
         return Arrays.stream(strings).anyMatch(StringUtils::isEmpty);
     }
+
     public static boolean isAllNotEmpty(String... strings) {
         return Arrays.stream(strings).noneMatch(StringUtils::isEmpty);
     }
+
     public static String joinWithDelimiter(String delimiter, String... values) {
 
         List<String> elements = Arrays.asList(values);
@@ -60,6 +66,7 @@ public class StringUtils {
         });
         return sb.toString();
     }
+
     public static String booleanToStr(Boolean bol) {
         return String.valueOf(bol);
     }

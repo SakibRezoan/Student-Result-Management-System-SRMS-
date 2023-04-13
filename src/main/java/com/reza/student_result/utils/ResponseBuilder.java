@@ -76,7 +76,7 @@ public class ResponseBuilder implements Response {
                 maps.put("status", status);
                 maps.put("data", data);
                 maps.put("meta", meta);
-                maps.put("message",message);
+                maps.put("message", message);
             case ERROR:
                 maps.put("status", status);
                 maps.put("error", errors);

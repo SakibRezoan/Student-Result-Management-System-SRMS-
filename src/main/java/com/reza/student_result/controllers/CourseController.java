@@ -5,7 +5,7 @@ import com.reza.student_result.entities.Course;
 import com.reza.student_result.enums.RecordStatus;
 import com.reza.student_result.exceptions.ResourceNotFoundException;
 import com.reza.student_result.response.CourseResponse;
-import com.reza.student_result.services.implementations.CourseServiceImplementation;
+import com.reza.student_result.services.CourseService;
 import com.reza.student_result.utils.CommonDataHelper;
 import com.reza.student_result.utils.PaginatedResponse;
 import com.reza.student_result.validators.CourseValidator;
@@ -33,7 +33,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping("api/course")
 public class CourseController {
 
-    private final CourseServiceImplementation courseServiceImplementation;
+    private final CourseService courseService;
     private final CourseValidator validator;
     private final CommonDataHelper helper;
 
@@ -45,7 +45,7 @@ public class CourseController {
     /*    ****Teacher****   */
 
     //Add Course
-    @PostMapping("/teacher/add-new-course")
+    @PostMapping("/add-new-course")
     public ResponseEntity<JSONObject> save(@Valid @RequestBody CourseDto courseDto, BindingResult bindingResult) {
 
         ValidationUtils.invokeValidator(validator, courseDto, bindingResult);
@@ -54,15 +54,15 @@ public class CourseController {
             return badRequest().body(error(fieldError(bindingResult)).getJson());
         }
 
-        Course course = courseServiceImplementation.save(courseDto);
+        Course course = courseService.save(courseDto);
         return ok(success(CourseResponse.from(course), COURSE_SAVE).getJson());
     }
 
     //Find Course by id
-    @GetMapping("/teacher/find-course/{id}")
+    @GetMapping("/find-course/{id}")
     public ResponseEntity<JSONObject> findById(@PathVariable Long id) {
 
-        Optional<CourseResponse> response = Optional.ofNullable(courseServiceImplementation.findCourseById(id)
+        Optional<CourseResponse> response = Optional.ofNullable(courseService.findCourseById(id)
                 .map(CourseResponse::from)
                 .orElseThrow(ResourceNotFoundException::new));
 
@@ -70,7 +70,7 @@ public class CourseController {
     }
 
     //Update Course
-    @PutMapping("/teacher/update-course")
+    @PutMapping("/update-course")
 
     public ResponseEntity<JSONObject> update(@Valid @RequestBody CourseDto request, BindingResult bindingResult) {
 
@@ -78,15 +78,15 @@ public class CourseController {
             return badRequest().body(error(fieldError(bindingResult)).getJson());
         }
 
-        Course course = courseServiceImplementation.update(request);
+        Course course = courseService.update(request);
         return ok(success(CourseResponse.from(course), COURSE_UPDATE).getJson());
     }
 
-    //Update Record Status of Course
+    //Change Record Status of Course
     @PutMapping("/change-record-status/{id}/{status}")
     public ResponseEntity<JSONObject> changeRecordStatus(@PathVariable Long id, @PathVariable RecordStatus status) {
 
-        Course course = courseServiceImplementation.update(id, status);
+        Course course = courseService.update(id, status);
         return ok(success(CourseResponse.from(course), RECORD_STATUS_UPDATE).getJson());
     }
 
@@ -103,7 +103,7 @@ public class CourseController {
 
         PaginatedResponse paginatedResponse = new PaginatedResponse();
 
-        Map<String, Object> courseMappedSearchResult = courseServiceImplementation.searchCourse(courseCode, courseTitle,
+        Map<String, Object> courseMappedSearchResult = courseService.searchCourse(courseCode, courseTitle,
                 page, size, sortBy);
         List<Course> responses = (List<Course>) courseMappedSearchResult.get("lists");
 
