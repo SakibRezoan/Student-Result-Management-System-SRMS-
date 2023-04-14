@@ -13,7 +13,7 @@
 #    init:
 #      mode: always
 #  application:
-#    name: StudentResultApplication
+#    name: StudentResultManagementSystem
 #  jackson:
 #    date-format: yyyy-MM-dd
 #    time-zone: IST
