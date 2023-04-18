@@ -34,7 +34,7 @@ import static org.springframework.http.ResponseEntity.ok;
 public class CourseController {
 
     private final CourseService courseService;
-    private final CourseValidator validator;
+    private final CourseValidator courseValidator;
     private final CommonDataHelper helper;
 
     @GetMapping("/")
@@ -47,7 +47,7 @@ public class CourseController {
     @PostMapping("/add-new-course")
     public ResponseEntity<JSONObject> save(@Valid @RequestBody CourseDto courseDto, BindingResult bindingResult) {
 
-        ValidationUtils.invokeValidator(validator, courseDto, bindingResult);
+        ValidationUtils.invokeValidator(courseValidator, courseDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return badRequest().body(error(fieldError(bindingResult)).getJson());

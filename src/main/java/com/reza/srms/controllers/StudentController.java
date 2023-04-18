@@ -40,12 +40,12 @@ public class StudentController {
 
     @GetMapping("/")
     private String welcome() {
-        return "Welcome to IIT Student Management System";
+        return "Welcome to Student Management System";
     }
 
     //Register Student
-    @PostMapping("/add-new-student")
-    public ResponseEntity<JSONObject> addNewStudent(@Valid @RequestBody StudentDto studentDto, BindingResult bindingResult) {
+    @PostMapping("/add")
+    public ResponseEntity<JSONObject> add(@Valid @RequestBody StudentDto studentDto, BindingResult bindingResult) {
 
         ValidationUtils.invokeValidator(studentValidator, studentDto, bindingResult);
 
@@ -58,8 +58,8 @@ public class StudentController {
     }
 
     //Find Student by id
-    @GetMapping("/find-student/{id}")
-    public ResponseEntity<JSONObject> findStudentById(@PathVariable Long id) {
+    @GetMapping("/find/{id}")
+    public ResponseEntity<JSONObject> findById(@PathVariable Long id) {
         Optional<StudentResponse> response = Optional.ofNullable(studentService.findStudentById(id)
                 .map(StudentResponse::from)
                 .orElseThrow(ResourceNotFoundException::new));
@@ -68,7 +68,7 @@ public class StudentController {
     }
 
     //Update IIT Student
-    @PutMapping("/update-student")
+    @PutMapping("/update")
 
     public ResponseEntity<JSONObject> updateStudent(@RequestBody StudentDto request, BindingResult bindingResult) {
 
@@ -77,6 +77,7 @@ public class StudentController {
         }
 
         Student student = studentService.update(request);
+
         return ok(success(StudentResponse.from(student), STUDENT_UPDATE).getJson());
     }
 
