@@ -4,7 +4,7 @@ import com.reza.srms.dtos.CourseDto;
 import com.reza.srms.entities.Course;
 import com.reza.srms.enums.RecordStatus;
 import com.reza.srms.exceptions.ResourceNotFoundException;
-import com.reza.srms.response.CourseResponse;
+import com.reza.srms.responses.CourseResponse;
 import com.reza.srms.services.CourseService;
 import com.reza.srms.utils.CommonDataHelper;
 import com.reza.srms.utils.PaginatedResponse;

@@ -4,7 +4,6 @@ import com.reza.srms.dtos.StudentDto;
 import com.reza.srms.entities.Student;
 import com.reza.srms.enums.RecordStatus;
 import com.reza.srms.enums.SemesterStatus;
-import com.reza.srms.exceptions.ResourceNotFoundException;
 import com.reza.srms.repositories.StudentRepository;
 import com.reza.srms.utils.ServiceHelper;
 import lombok.RequiredArgsConstructor;
@@ -30,26 +29,15 @@ public class StudentService {
         return studentRepository.findByRoll(roll);
     }
 
-    public Optional<Student> findStudentById(Long id) {
-        Optional<Student> student = studentRepository.findStudentById(id);
-        if (student.isEmpty()) {
-            throw new ResourceNotFoundException(String.format("Student was not found for parameter {id = %s}", id));
-        }
-        return student;
-    }
-
     public Optional<Student> findById(Long id) {
-        Optional<Student> student = studentRepository.findById(id);
-        if (student.isEmpty()) {
-            throw new ResourceNotFoundException(String.format("Student was not found for parameter {id = %s}", id));
-        }
-        return student;
+        return studentRepository.findByIdAndRecordStatusNot(id, RecordStatus.DELETED);
     }
+    @Transactional
+    public Student update(StudentDto dto, Student student) {
 
-    public Student update(StudentDto request) {
-        Optional<Student> student = findStudentById(request.getId());
-        request.update(request, student.get());
-        return studentRepository.save(student.get());
+        dto.update(dto, student);
+
+        return studentRepository.save(student);
 
     }
 
@@ -59,10 +47,10 @@ public class StudentService {
         return studentRepository.save(student.get());
     }
 
-    public Map<String, Object> search(Long roll, String name, String studentEmail, Integer passingYear, SemesterStatus semesterStatus, Double cgpa, Integer page, Integer size, String sortBy) {
+    public Map<String, Object> search(Long roll, String name, String email, Integer passingYear, SemesterStatus semesterStatus, Float cgpa, Integer page, Integer size, String sortBy) {
         ServiceHelper helper = new ServiceHelper<>(Student.class);
         return helper.getList(
-                studentRepository.searchIIT_StudentInDB(roll, name, studentEmail, passingYear, semesterStatus, cgpa,
+                studentRepository.searchStudent(roll, name, email, passingYear, semesterStatus, cgpa,
                         helper.getPageable(sortBy, page, size)),
                 page,
                 size
@@ -72,5 +60,10 @@ public class StudentService {
     @Transactional
     public Student saveResults(Student iitStudent) {
         return studentRepository.save(iitStudent);
+    }
+
+    public Student updateRecordStatus(Student student, RecordStatus status) {
+        student.setRecordStatus(status);
+        return studentRepository.save(student);
     }
 }

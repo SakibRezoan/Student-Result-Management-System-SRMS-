@@ -34,7 +34,7 @@ public class Student extends BaseEntity {
     @Column(name = "student_name_bn", columnDefinition = "nvarchar(50)", nullable = false)
     private String nameBn;
     @Column(name = "student_email")
-    private String studentEmail;
+    private String email;
     @Column(name = "passing_year")
     private Integer passingYear;
 

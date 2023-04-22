@@ -4,8 +4,7 @@ import com.reza.srms.dtos.StudentDto;
 import com.reza.srms.entities.Student;
 import com.reza.srms.enums.RecordStatus;
 import com.reza.srms.enums.SemesterStatus;
-import com.reza.srms.exceptions.ResourceNotFoundException;
-import com.reza.srms.response.StudentResponse;
+import com.reza.srms.responses.StudentResponse;
 import com.reza.srms.services.StudentService;
 import com.reza.srms.utils.CommonDataHelper;
 import com.reza.srms.utils.PaginatedResponse;
@@ -54,39 +53,49 @@ public class StudentController {
         }
 
         Student student = studentService.save(studentDto);
-        return ok(success(StudentResponse.from(student), STUDENT_SAVE).getJson());
+        return ok(success(StudentResponse.makeResponse(student), STUDENT_SAVE).getJson());
     }
 
     //Find Student by id
     @GetMapping("/find/{id}")
     public ResponseEntity<JSONObject> findById(@PathVariable Long id) {
-        Optional<StudentResponse> response = Optional.ofNullable(studentService.findStudentById(id)
-                .map(StudentResponse::from)
-                .orElseThrow(ResourceNotFoundException::new));
 
-        return ok(success(response).getJson());
+        Optional<Student> student = studentService.findById(id);
+        if (student.isEmpty())
+            return badRequest().body(error(404, "Student not found with id: " + id).getJson());
+
+        return ok(success(StudentResponse.makeResponse(student.get())).getJson());
     }
 
     //Update IIT Student
     @PutMapping("/update")
 
-    public ResponseEntity<JSONObject> updateStudent(@RequestBody StudentDto request, BindingResult bindingResult) {
+    public ResponseEntity<JSONObject> updateStudent(@RequestBody StudentDto dto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return badRequest().body(error(fieldError(bindingResult)).getJson());
         }
+        Optional<Student> student = studentService.findById(dto.getId());
+        if (student.isEmpty())
+            return badRequest().body(error(404, "Student not found with id: " + dto.getId()).getJson());
 
-        Student student = studentService.update(request);
 
-        return ok(success(StudentResponse.from(student), STUDENT_UPDATE).getJson());
+        Student updatedStudent = studentService.update(dto, student.get());
+
+        return ok(success(StudentResponse.makeResponse(updatedStudent), STUDENT_UPDATE).getJson());
     }
 
     //Update Record Status of Student
     @PutMapping("/change-record-status/{id}/{status}")
     public ResponseEntity<JSONObject> changeRecordStatus(@PathVariable Long id, @PathVariable RecordStatus status) {
 
-        Student student = studentService.update(id, status);
-        return ok(success(StudentResponse.from(student), RECORD_STATUS_UPDATE).getJson());
+        Optional<Student> student = studentService.findById(id);
+        if (student.isEmpty())
+            return badRequest().body(error(404, "Student not found with id: " + id).getJson());
+
+        Student updatedStudent = studentService.updateRecordStatus(student.get(), status);
+
+        return ok(success(null, RECORD_STATUS_UPDATE).getJson());
     }
 
     //Get Paginated List of Students
@@ -97,10 +106,10 @@ public class StudentController {
             @RequestParam(value = "sortBy", defaultValue = "") String sortBy,
             @RequestParam(value = "roll", defaultValue = "") Long roll,
             @RequestParam(value = "name", defaultValue = "") String name,
-            @RequestParam(value = "studentEmail", defaultValue = "") String studentEmail,
+            @RequestParam(value = "email", defaultValue = "") String email,
             @RequestParam(value = "passingYear", defaultValue = "") Integer passingYear,
             @RequestParam(value = "semesterStatus", defaultValue = "") SemesterStatus semesterStatus,
-            @RequestParam(value = "cgpa", defaultValue = "") Double cgpa
+            @RequestParam(value = "cgpa", defaultValue = "") Float cgpa
 
     ) {
         commonDataHelper.setPageSize(page, size);
@@ -108,11 +117,11 @@ public class StudentController {
         PaginatedResponse paginatedResponse = new PaginatedResponse();
 
         Map<String, Object> searchResult = studentService.search(
-                roll, name, studentEmail, passingYear, semesterStatus, cgpa,
+                roll, name, email, passingYear, semesterStatus, cgpa,
                 page, size, sortBy);
         List<Student> responses = (List<Student>) searchResult.get("lists");
 
-        List<StudentResponse> customResponse = responses.stream().map(StudentResponse::from).
+        List<StudentResponse> customResponse = responses.stream().map(StudentResponse::makeResponse).
                 collect(Collectors.toList());
         commonDataHelper.getCommonData(page, size, searchResult, paginatedResponse, customResponse);
 

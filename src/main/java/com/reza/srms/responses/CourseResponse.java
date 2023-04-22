@@ -1,4 +1,4 @@
-package com.reza.srms.response;
+package com.reza.srms.responses;
 
 import com.reza.srms.entities.Course;
 import com.reza.srms.enums.SemesterStatus;
