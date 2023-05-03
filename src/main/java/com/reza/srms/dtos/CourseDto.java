@@ -1,7 +1,6 @@
 package com.reza.srms.dtos;
 
 import com.reza.srms.entities.Course;
-import com.reza.srms.enums.RecordStatus;
 import com.reza.srms.enums.SemesterStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,14 +19,25 @@ public class CourseDto implements Serializable {
     private Integer noOfCredits;
     private SemesterStatus semesterStatus;
 
-    public void update(CourseDto courseDto, Course course) {
-        BeanUtils.copyProperties(courseDto, course);
+    public void update(Course course) {
+        course.setCourseCode(courseCode);
+        course.setCourseTitle(courseTitle);
+        course.setNoOfCredits(noOfCredits);
+        course.setSemesterStatus(semesterStatus);
     }
 
-    public Course toEntity(CourseDto courseDto) {
+    public Course toEntity() {
         Course course = new Course();
-        BeanUtils.copyProperties(courseDto, course);
-        course.setRecordStatus(RecordStatus.ACTIVE);
+        course.setCourseCode(courseCode);
+        course.setCourseTitle(courseTitle);
+        course.setNoOfCredits(noOfCredits);
+        course.setSemesterStatus(semesterStatus);
         return course;
+    }
+    public void toEntity(Course course) {
+        course.setCourseCode(courseCode);
+        course.setCourseTitle(courseTitle);
+        course.setNoOfCredits(noOfCredits);
+        course.setSemesterStatus(semesterStatus);
     }
 }

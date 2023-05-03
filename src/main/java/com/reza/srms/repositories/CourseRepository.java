@@ -1,6 +1,7 @@
 package com.reza.srms.repositories;
 
 import com.reza.srms.entities.Course;
+import com.reza.srms.enums.RecordStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,15 +16,6 @@ public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecif
             "(LOWER(c.courseCode) = LOWER(:courseCode)) AND (c.recordStatus <> 'DELETED')"
     )
     Optional<Course> findByCourseCode(String courseCode);
-    @Query("SELECT c FROM Course c WHERE " +
-            "(c.id = :id) AND (c.recordStatus <> 'DELETED')"
-    )
-    Optional <Course> findCourseById(Long id);
-    @Query("SELECT c FROM Course c WHERE " +
-            "(c.id = :id) AND (c.recordStatus <> 'DELETED')"
-    )
-    Course findCourseByIdNotOptional(Long id);
-    Optional <Course> findById(Long id);
 
     @Query("SELECT c FROM Course c WHERE " +
             "(LOWER(c.courseTitle) = LOWER(:courseTitle)) AND (c.recordStatus <> 'DELETED')"
@@ -36,4 +28,6 @@ public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecif
             "(c.recordStatus <> 'DELETED')"
     )
     Page<Course> searchCourse(String courseCode, String courseTitle, Pageable pageable);
+
+    Optional<Course> findByIdAndRecordStatusNot(Long id, RecordStatus deleted);
 }

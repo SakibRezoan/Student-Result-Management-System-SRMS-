@@ -4,7 +4,7 @@ import com.reza.srms.entities.Course;
 import com.reza.srms.enums.SemesterStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
+
 @Data
 @NoArgsConstructor
 public class CourseResponse {
@@ -14,9 +14,12 @@ public class CourseResponse {
     private Integer noOfCredits;
     private SemesterStatus semesterStatus;
 
-    public static CourseResponse from (Course course) {
-        CourseResponse courseResponse = new CourseResponse();
-        BeanUtils.copyProperties(course,courseResponse);
-        return courseResponse;
+    public static CourseResponse makeResponse(Course course) {
+        CourseResponse response = new CourseResponse();
+        response.setId(course.getId());
+        response.setCourseCode(course.getCourseCode());
+        response.setCourseTitle(course.getCourseTitle());
+        response.setSemesterStatus(course.getSemesterStatus());
+        return response;
     }
 }

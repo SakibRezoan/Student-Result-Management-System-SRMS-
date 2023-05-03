@@ -2,7 +2,6 @@ package com.reza.srms.controllers;
 
 import com.reza.srms.dtos.CourseDto;
 import com.reza.srms.entities.Course;
-import com.reza.srms.enums.RecordStatus;
 import com.reza.srms.exceptions.ResourceNotFoundException;
 import com.reza.srms.responses.CourseResponse;
 import com.reza.srms.services.CourseService;
@@ -22,7 +21,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.reza.srms.constant.MessageConstants.*;
+import static com.reza.srms.constant.MessageConstants.COURSE_SAVE;
+import static com.reza.srms.constant.MessageConstants.COURSE_UPDATE;
 import static com.reza.srms.exceptions.ApiError.fieldError;
 import static com.reza.srms.utils.ResponseBuilder.*;
 import static org.springframework.http.ResponseEntity.badRequest;
@@ -44,7 +44,7 @@ public class CourseController {
 
     /*    ****Teacher****   */
     //Add Course
-    @PostMapping("/add-new-course")
+    @PostMapping("/add")
     public ResponseEntity<JSONObject> save(@Valid @RequestBody CourseDto courseDto, BindingResult bindingResult) {
 
         ValidationUtils.invokeValidator(courseValidator, courseDto, bindingResult);
@@ -52,9 +52,9 @@ public class CourseController {
         if (bindingResult.hasErrors()) {
             return badRequest().body(error(fieldError(bindingResult)).getJson());
         }
-
         Course course = courseService.save(courseDto);
-        return ok(success(CourseResponse.from(course), COURSE_SAVE).getJson());
+
+        return ok(success(CourseResponse.makeResponse(course), COURSE_SAVE).getJson());
     }
 
     //Find Course by id
@@ -62,34 +62,40 @@ public class CourseController {
     public ResponseEntity<JSONObject> findById(@PathVariable Long id) {
 
         Optional<CourseResponse> response = Optional.ofNullable(courseService.findCourseById(id)
-                .map(CourseResponse::from)
+                .map(CourseResponse::makeResponse)
                 .orElseThrow(ResourceNotFoundException::new));
 
         return ok(success(response).getJson());
     }
 
     //Update Course
-    @PutMapping("/update-course")
+    @PutMapping("/update")
 
-    public ResponseEntity<JSONObject> update(@Valid @RequestBody CourseDto request, BindingResult bindingResult) {
+    public ResponseEntity<JSONObject> update(@Valid @RequestBody CourseDto dto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return badRequest().body(error(fieldError(bindingResult)).getJson());
+
         }
-        Course course = courseService.update(request);
-        return ok(success(CourseResponse.from(course), COURSE_UPDATE).getJson());
+        Optional<Course> course = courseService.findCourseById(dto.getId());
+        if (course.isEmpty())
+            return badRequest().body(error(null, "Course not found with id: " + dto.getId()).getJson());
+
+        Course updatedCourse = courseService.update(course.get(), dto);
+
+        return ok(success(CourseResponse.makeResponse(updatedCourse), COURSE_UPDATE).getJson());
     }
 
-    //Change Record Status of Course
-    @PutMapping("/change-record-status/{id}/{status}")
-    public ResponseEntity<JSONObject> changeRecordStatus(@PathVariable Long id, @PathVariable RecordStatus status) {
-
-        Course course = courseService.update(id, status);
-        return ok(success(CourseResponse.from(course), RECORD_STATUS_UPDATE).getJson());
-    }
+//    //Change Record Status of Course
+//    @PutMapping("/change-record-status/{id}/{status}")
+//    public ResponseEntity<JSONObject> changeRecordStatus(@PathVariable Long id, @PathVariable RecordStatus status) {
+//
+//        Course course = courseService.update(id, status);
+//        return ok(success(CourseResponse.from(course), RECORD_STATUS_UPDATE).getJson());
+//    }
 
     //Get Paginated List of Courses
-    @GetMapping("/teacher/course-list")
+    @GetMapping("/list")
     public ResponseEntity<JSONObject> getList(
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "size", defaultValue = "10") Integer size,
@@ -105,7 +111,7 @@ public class CourseController {
                 page, size, sortBy);
         List<Course> responses = (List<Course>) courseMappedSearchResult.get("lists");
 
-        List<CourseResponse> customResponse = responses.stream().map(CourseResponse::from).
+        List<CourseResponse> customResponse = responses.stream().map(CourseResponse::makeResponse).
                 collect(Collectors.toList());
         helper.getCommonData(page, size, courseMappedSearchResult, paginatedResponse, customResponse);
 

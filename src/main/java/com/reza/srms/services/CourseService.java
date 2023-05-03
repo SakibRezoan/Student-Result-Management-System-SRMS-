@@ -23,7 +23,7 @@ public class CourseService {
 
     @Transactional
     public Course save(CourseDto courseDto) {
-        Course course = courseDto.toEntity(courseDto);
+        Course course = courseDto.toEntity();
         return courseRepository.save(course);
     }
 
@@ -31,25 +31,21 @@ public class CourseService {
         return courseRepository.findByCourseCode(courseCode);
     }
 
-    public Course update(CourseDto request) {
-        Optional<Course> course = findCourseById(request.getId());
-        request.update(request, course.get());
-        return courseRepository.save(course.get());
+    public Course update(Course course, CourseDto dto) {
 
+        dto.update(course);
+
+        return courseRepository.save(course);
     }
 
-    public Course update(Long id, RecordStatus status) {
-        Optional<Course> course = findById(id);
-        course.get().setRecordStatus(status);
-        return courseRepository.save(course.get());
-    }
+//    public Course update(Long id, RecordStatus status) {
+//        Optional<Course> course = findById(id);
+//        course.get().setRecordStatus(status);
+//        return courseRepository.save(course.get());
+//    }
 
     public Optional<Course> findCourseById(Long id) {
-        Optional<Course> course = courseRepository.findCourseById(id);
-        if (course.isEmpty()) {
-            throw new ResourceNotFoundException(String.format("Course was not found for parameter {id = %s}", id));
-        }
-        return course;
+        return courseRepository.findByIdAndRecordStatusNot(id, RecordStatus.DELETED);
     }
 
     public Optional<Course> findById(Long id) {
