@@ -15,8 +15,8 @@ import static com.reza.srms.utils.StringUtils.isNotEmpty;
 @Component
 @RequiredArgsConstructor
 public class CourseValidator implements Validator {
-    private final CourseService courseService;
 
+    private final CourseService courseService;
     @Override
     public boolean supports(Class<?> clazz) {
         return CourseDto.class.isAssignableFrom(clazz);

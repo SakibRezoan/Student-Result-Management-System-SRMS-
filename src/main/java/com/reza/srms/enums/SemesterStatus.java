@@ -2,17 +2,16 @@ package com.reza.srms.enums;
 
 
 public enum SemesterStatus {
-    DROPPED("DROPPED"),
-    FIRST_SEMESTER("FIRST_SEMESTER"),
-    SECOND_SEMESTER("SECOND_SEMESTER"),
-    THIRD_SEMESTER("THIRD_SEMESTER"),
-    FOURTH_SEMESTER("FOURTH_SEMESTER"),
-    FIFTH_SEMESTER("FIFTH_SEMESTER"),
-    SIXTH_SEMESTER("SIXTH_SEMESTER"),
-    SEVENTH_SEMESTER("SEVENTH_SEMESTER"),
-    EIGHTH_SEMESTER("EIGHTH_SEMESTER"),
-    PASSED("PASSED")
-    ;
+    DROPPED("Dropped"),
+    FIRST_SEMESTER("First Semester"),
+    SECOND_SEMESTER("Second Semester"),
+    THIRD_SEMESTER("Third Semester"),
+    FOURTH_SEMESTER("Fourth Semester"),
+    FIFTH_SEMESTER("Fifth Semester"),
+    SIXTH_SEMESTER("Sixth Semester"),
+    SEVENTH_SEMESTER("Seventh Semester"),
+    EIGHTH_SEMESTER("Eighth Semester"),
+    PASSED("Passed");
     private final String label;
 
     SemesterStatus(String label) {

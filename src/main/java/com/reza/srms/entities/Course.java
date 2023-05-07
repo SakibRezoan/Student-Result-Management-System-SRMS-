@@ -1,6 +1,5 @@
 package com.reza.srms.entities;
 
-import com.reza.srms.enums.SemesterStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -23,13 +23,17 @@ public class Course extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id", nullable = false)
     private Long id;
-    @Column(name = "course_code", nullable = false)
+
+    @NotBlank
+    @Column(name = "course_code", nullable = false, length = 10)
     private String courseCode;
-    @Column(name = "course_title", nullable = false)
+
+    @NotBlank
+    @Column(name = "course_title", nullable = false, length = 50)
     private String courseTitle;
+
+    @NotBlank
     @Column(name = "no_of_credits", nullable = false)
     private Integer noOfCredits;
-    @Column(name = "semester_status")
-    private SemesterStatus semesterStatus;
 
 }

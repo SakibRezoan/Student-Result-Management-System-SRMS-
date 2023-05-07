@@ -9,6 +9,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,25 +28,34 @@ public class Student extends BaseEntity {
     @Column(name = "student_id", nullable = false)
     private Long id;
 
+    @NotBlank
     @Column(name = "student_roll", nullable = false)
-    private Integer roll;
+    private String roll;
+
     @Column(name = "student_name", length = 50, nullable = false)
     private String name;
+
     @Column(name = "student_name_bn", columnDefinition = "nvarchar(50)", nullable = false)
     private String nameBn;
+
     @Column(name = "student_email")
     private String email;
+
+    @Column(name = "student_mobile")
+    private String mobile;
+
     @Column(name = "passing_year")
     private Integer passingYear;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "semester_status")
     private SemesterStatus semesterStatus;
+
     @Column(name = "cgpa")
     private Double cgpa;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "student")
     private List<CourseWiseResult> courseWiseResultList;
-
 
     public void addCourseWiseResults(List<CourseWiseResult> courseWiseResultList) {
         if (this.courseWiseResultList == null) {

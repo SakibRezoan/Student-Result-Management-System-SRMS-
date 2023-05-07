@@ -1,7 +1,6 @@
 package com.reza.srms.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.reza.srms.enums.RecordStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,10 +26,7 @@ public class BaseEntity implements Serializable {
     @JsonIgnore
     @Column(name = "record_version")
     private Integer recordVersion;
-    @JsonIgnore
-    @Enumerated(EnumType.STRING)
-    @Column(name = "record_status", length = 10)
-    private RecordStatus recordStatus;
+
     @JsonIgnore
     @Column(name = "created_by")
     private Long createdBy;

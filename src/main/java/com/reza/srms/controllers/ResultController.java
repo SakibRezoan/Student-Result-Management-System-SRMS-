@@ -1,15 +1,14 @@
 package com.reza.srms.controllers;
 
-import com.reza.srms.services.StudentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/result")
+@RequestMapping("api/v1/result")
+@Tag(name = "Result Controller", description = "Result API")
 public class ResultController {
-    private final StudentService studentService;
-
 
 }
