@@ -9,10 +9,16 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class CourseWiseResultResponse implements Serializable {
+
     private Long id;
     private Long courseId;
+
     private Float obtainedMarks;
+
     private Float gpa;
+
+    private String grade;
+
     private Long studentId;
 
     public static CourseWiseResultResponse makeResponse(CourseWiseResult courseWiseResult) {
@@ -21,6 +27,7 @@ public class CourseWiseResultResponse implements Serializable {
         response.setCourseId(courseWiseResult.getCourse().getId());
         response.setObtainedMarks(courseWiseResult.getObtainedMarks());
         response.setGpa(courseWiseResult.getGpa());
+        response.setGrade(courseWiseResult.getGrade());
         response.setStudentId(courseWiseResult.getStudent().getId());
         return response;
     }

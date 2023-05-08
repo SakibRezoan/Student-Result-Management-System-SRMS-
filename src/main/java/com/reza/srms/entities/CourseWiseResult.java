@@ -18,21 +18,27 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "course_wise_result")
 @EqualsAndHashCode(callSuper = false, exclude = "student")
-public class CourseWiseResult extends BaseEntity{
+public class CourseWiseResult extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_wise_result_id", nullable = false)
     private Long id;
-    @OneToOne
-    @JoinColumn(name = "course_id", referencedColumnName="course_id")
-    private Course course;
-    @Column(name = "obtained_marks", nullable = false)
-    private Float obtainedMarks;
-    @Column(name = "gpa")
-    private Float gpa;
+
     @JsonIgnore
-    @ManyToOne(optional=false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", referencedColumnName="student_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", referencedColumnName = "student_id")
     private Student student;
 
+    @OneToOne
+    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
+    private Course course;
+
+    @Column(name = "obtained_marks", nullable = false, precision = 2, scale = 100)
+    private Float obtainedMarks;
+
+    @Column(name = "gpa", precision = 2, scale = 4)
+    private Float gpa;
+
+    @Column(name = "grade", length = 2)
+    private String grade;
 }
