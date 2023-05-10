@@ -41,13 +41,6 @@ public class StudentController {
 
     private final CommonDataHelper commonDataHelper;
 
-    @GetMapping("/")
-    @Operation(summary = "Will show a welcome message", description = "Will show a welcome message", tags = {"welcome"})
-    @ApiResponse(responseCode = "200", description = "successful operation")
-    private String welcome() {
-        return "Welcome to Student Management System";
-    }
-
     @PostMapping("/save")
     @Operation(summary = "Register a new student", description = "Register a new student", tags = {"addStudent"})
     @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = StudentResponse.class)))

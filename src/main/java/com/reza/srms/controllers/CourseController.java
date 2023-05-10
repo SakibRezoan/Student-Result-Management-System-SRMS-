@@ -38,14 +38,14 @@ public class CourseController {
 
     private final CourseValidator courseValidator;
 
-    private final CommonDataHelper helper;
+    private final CommonDataHelper commonDataHelper;
 
-    @GetMapping("/")
-    @Operation(summary = "Will show a welcome message", description = "Will show a welcome message", tags = {"welcome"})
-    @ApiResponse(responseCode = "200", description = "successful operation")
-    private String welcome() {
-        return "Welcome to Course Management System";
-    }
+//    @GetMapping("/")
+//    @Operation(summary = "Will show a welcome message", description = "Will show a welcome message", tags = {"welcome"})
+//    @ApiResponse(responseCode = "200", description = "successful operation")
+//    private String welcome() {
+//        return "Welcome to Course Management System";
+//    }
 
     @PostMapping("/save")
     @Operation(summary = "Add new course", description = "Add a new course", tags = {"addCourse"})
