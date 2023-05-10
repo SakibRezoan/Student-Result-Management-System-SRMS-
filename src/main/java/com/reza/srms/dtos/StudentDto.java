@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
@@ -15,8 +17,10 @@ public class StudentDto implements Serializable {
 
     private Long id;
 
+    @NotNull
     private String roll;
 
+    @NotNull
     private String name;
 
     private String nameBn;

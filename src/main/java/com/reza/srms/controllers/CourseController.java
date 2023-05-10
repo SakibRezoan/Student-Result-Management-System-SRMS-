@@ -5,6 +5,7 @@ import com.reza.srms.entities.Course;
 import com.reza.srms.responses.CourseResponse;
 import com.reza.srms.services.CourseService;
 import com.reza.srms.utils.CommonDataHelper;
+import com.reza.srms.utils.PaginatedResponse;
 import com.reza.srms.validators.CourseValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,12 +20,14 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.reza.srms.constant.MessageConstants.*;
 import static com.reza.srms.exceptions.ApiError.fieldError;
-import static com.reza.srms.utils.ResponseBuilder.error;
-import static com.reza.srms.utils.ResponseBuilder.success;
+import static com.reza.srms.utils.ResponseBuilder.*;
 import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -108,27 +111,26 @@ public class CourseController {
 
         return ok(success(null, COURSE_DELETE).getJson());
     }
-//    @GetMapping("/list")
-//    public ResponseEntity<JSONObject> getList(
-//            @RequestParam(value = "page", defaultValue = "1") Integer page,
-//            @RequestParam(value = "size", defaultValue = "10") Integer size,
-//            @RequestParam(value = "sortBy", defaultValue = "") String sortBy,
-//            @RequestParam(value = "courseCode", defaultValue = "") String courseCode,
-//            @RequestParam(value = "courseTitle", defaultValue = "") String courseTitle
-//    ) {
-//        helper.setPageSize(page, size);
-//
-//        PaginatedResponse paginatedResponse = new PaginatedResponse();
-//
-//        Map<String, Object> courseMappedSearchResult = courseService.getList(courseCode, courseTitle,
-//                page, size, sortBy);
-//        List<Course> responses = (List<Course>) courseMappedSearchResult.get("lists");
-//
-//        List<CourseResponse> customResponse = responses.stream().map(CourseResponse::makeResponse).
-//                collect(Collectors.toList());
-//        helper.getCommonData(page, size, courseMappedSearchResult, paginatedResponse, customResponse);
-//
-//        return ok(paginatedSuccess(paginatedResponse).getJson());
-//    }
+
+    @GetMapping("/list")
+    public ResponseEntity<JSONObject> getList(
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "search", defaultValue = "") String search
+    ) {
+        commonDataHelper.setPageSize(page, size);
+
+        PaginatedResponse paginatedResponse = new PaginatedResponse();
+
+        Map<String, Object> courseMappedSearchResult = courseService.getList(search,
+                page, size);
+        List<Course> responses = (List<Course>) courseMappedSearchResult.get("lists");
+
+        List<CourseResponse> customResponse = responses.stream().map(CourseResponse::makeResponse).
+                collect(Collectors.toList());
+        commonDataHelper.getCommonData(page, size, courseMappedSearchResult, paginatedResponse, customResponse);
+
+        return ok(paginatedSuccess(paginatedResponse).getJson());
+    }
 
 }

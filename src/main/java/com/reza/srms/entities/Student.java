@@ -28,7 +28,6 @@ public class Student extends BaseEntity {
     @Column(name = "student_id", nullable = false)
     private Long id;
 
-    @NotBlank
     @Column(name = "student_roll", nullable = false)
     private String roll;
 

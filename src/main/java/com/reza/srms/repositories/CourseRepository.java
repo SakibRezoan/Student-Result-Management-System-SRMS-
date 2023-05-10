@@ -1,8 +1,11 @@
 package com.reza.srms.repositories;
 
 import com.reza.srms.entities.Course;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -13,10 +16,26 @@ public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecif
 
     Optional<Course> findByCourseTitle(String courseTitle);
 
-//    @Query("SELECT c FROM Course c WHERE " +
-//            "(LOWER(c.courseCode) LIKE LOWER(CONCAT('%', :courseCode, '%'))) AND " +
-//            "(LOWER(c.courseTitle) LIKE LOWER(CONCAT('%', :courseTitle, '%'))) AND " +
-//            "(c.recordStatus <> 'DELETED')"
-//    )
-//    Page<Course> searchCourse(String courseCode, String courseTitle, Pageable pageable);
+    @Query(value = """
+            SELECT c.* FROM course AS c
+                WHERE
+                (:search IS NULL OR :search = '') OR
+                (	
+                	LOWER(c.course_code) LIKE LOWER(CONCAT('%', :search, '%')) OR
+                    LOWER(c.course_title) LIKE LOWER(CONCAT('%', :search, '%'))
+                )
+            ORDER BY c.course_id DESC
+            """,
+            nativeQuery = true,
+            countQuery = """
+                        SELECT COUNT(c.course_id) FROM SRMS.course AS c
+                        WHERE
+                        (:search IS NULL OR :search = '') OR
+                        (	
+                        	LOWER(c.course_code) LIKE LOWER(CONCAT('%', :search, '%')) OR
+                            LOWER(c.course_title) LIKE LOWER(CONCAT('%', :search, '%'))
+                        )
+                    """
+    )
+    Page<Course> getList(String search, Pageable pageable);
 }

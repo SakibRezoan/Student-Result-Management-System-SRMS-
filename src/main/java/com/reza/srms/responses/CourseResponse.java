@@ -20,6 +20,7 @@ public class CourseResponse {
         response.setId(course.getId());
         response.setCourseCode(course.getCourseCode());
         response.setCourseTitle(course.getCourseTitle());
+        response.setNoOfCredits(course.getNoOfCredits());
         return response;
     }
 }

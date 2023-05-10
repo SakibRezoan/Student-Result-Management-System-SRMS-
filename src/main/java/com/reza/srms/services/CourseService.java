@@ -3,11 +3,13 @@ package com.reza.srms.services;
 import com.reza.srms.dtos.CourseDto;
 import com.reza.srms.entities.Course;
 import com.reza.srms.repositories.CourseRepository;
+import com.reza.srms.utils.ServiceHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -40,20 +42,18 @@ public class CourseService {
         return courseRepository.findByCourseTitle(courseTitle);
     }
 
-//    public Map<String, Object> searchCourse(String courseCode, String courseTitle,
-//                                            Integer page, Integer size, String sortBy) {
-//        ServiceHelper<Course> helper = new ServiceHelper<>(Course.class);
-//        return helper.getList(
-//                courseRepository.searchCourse(courseCode, courseTitle,
-//                        helper.getPageable(sortBy, page, size)),
-//                page,
-//                size
-//        );
-//    }
-
     @Transactional
     public void delete(Course course) {
         courseRepository.delete(course);
     }
 
+    public Map<String, Object> getList(String search, Integer page, Integer size) {
+        ServiceHelper<Course> helper = new ServiceHelper<>(Course.class);
+        return helper.getList(
+                courseRepository.getList(search,
+                        helper.getPageable("", page, size)),
+                page,
+                size
+        );
+    }
 }
