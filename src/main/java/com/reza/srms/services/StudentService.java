@@ -4,10 +4,13 @@ import com.reza.srms.dtos.StudentDto;
 import com.reza.srms.entities.Student;
 import com.reza.srms.enums.SemesterStatus;
 import com.reza.srms.repositories.StudentRepository;
+import com.reza.srms.utils.ServiceHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,8 +25,8 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
-    public Optional<Student> findByRoll(String roll) {
-        return studentRepository.findByRoll(roll.trim());
+    public Optional<Student> findByRoll(Long roll) {
+        return studentRepository.findByRoll(roll);
     }
 
     public Optional<Student> findById(Long id) {
@@ -39,16 +42,6 @@ public class StudentService {
 
     }
 
-//    public Map<String, Object> search(Long roll, String name, String email, Integer passingYear, SemesterStatus semesterStatus, Float cgpa, Integer page, Integer size, String sortBy) {
-//        ServiceHelper helper = new ServiceHelper<>(Student.class);
-//        return helper.getList(
-//                studentRepository.searchStudent(roll, name, email, passingYear, semesterStatus, cgpa,
-//                        helper.getPageable(sortBy, page, size)),
-//                page,
-//                size
-//        );
-//    }
-
     public Student changeSemesterStatus(Student student, SemesterStatus status) {
         student.setSemesterStatus(status);
         return studentRepository.save(student);
@@ -56,5 +49,19 @@ public class StudentService {
 
     public void delete(Student student) {
         studentRepository.delete(student);
+    }
+
+    public Map<String, Object> getList(SemesterStatus semesterStatus, Long roll, String search, Integer page, Integer size) {
+        ServiceHelper<Student> helper = new ServiceHelper<>(Student.class);
+        return helper.getList(
+                studentRepository.getList(semesterStatus, roll, search.trim(),
+                        helper.getPageable("", page, size)),
+                page,
+                size
+        );
+    }
+
+    public List<Student> getAll() {
+        return studentRepository.findAll();
     }
 }

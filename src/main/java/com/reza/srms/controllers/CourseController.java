@@ -43,13 +43,6 @@ public class CourseController {
 
     private final CommonDataHelper commonDataHelper;
 
-//    @GetMapping("/")
-//    @Operation(summary = "Will show a welcome message", description = "Will show a welcome message", tags = {"welcome"})
-//    @ApiResponse(responseCode = "200", description = "successful operation")
-//    private String welcome() {
-//        return "Welcome to Course Management System";
-//    }
-
     @PostMapping("/save")
     @Operation(summary = "Add new course", description = "Add a new course", tags = {"addCourse"})
     @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = CourseResponse.class)))
@@ -131,6 +124,18 @@ public class CourseController {
         commonDataHelper.getCommonData(page, size, courseMappedSearchResult, paginatedResponse, customResponse);
 
         return ok(paginatedSuccess(paginatedResponse).getJson());
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<JSONObject> getAll() {
+
+        PaginatedResponse paginatedResponse = new PaginatedResponse();
+
+        List<Course> courseList = courseService.getAll();
+
+        List<CourseResponse> responseList = courseList.stream().map(CourseResponse::makeResponse).toList();
+
+        return ok(success(responseList).getJson());
     }
 
 }

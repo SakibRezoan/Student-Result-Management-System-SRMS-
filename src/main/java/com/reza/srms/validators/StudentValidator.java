@@ -11,7 +11,6 @@ import org.springframework.validation.Validator;
 import java.util.Optional;
 
 import static com.reza.srms.constant.ValidatorConstants.ALREADY_EXIST;
-import static com.reza.srms.utils.StringUtils.isNotEmpty;
 
 @Component
 @RequiredArgsConstructor
@@ -26,12 +25,9 @@ public class StudentValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         StudentDto studentDto = (StudentDto) target;
-
-        if (isNotEmpty(studentDto.getRoll())) {
-            Optional<Student> student = studentService.findByRoll(studentDto.getRoll());
-            if (student.isPresent()) {
-                errors.rejectValue("roll", "500", ALREADY_EXIST);
-            }
+        Optional<Student> student = studentService.findByRoll(studentDto.getRoll());
+        if (student.isPresent()) {
+            errors.rejectValue("roll", "500", ALREADY_EXIST);
         }
 
     }

@@ -6,6 +6,7 @@ import com.reza.srms.enums.SemesterStatus;
 import com.reza.srms.responses.StudentResponse;
 import com.reza.srms.services.StudentService;
 import com.reza.srms.utils.CommonDataHelper;
+import com.reza.srms.utils.PaginatedResponse;
 import com.reza.srms.validators.StudentValidator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,12 +21,14 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.reza.srms.constant.MessageConstants.*;
 import static com.reza.srms.exceptions.ApiError.fieldError;
-import static com.reza.srms.utils.ResponseBuilder.error;
-import static com.reza.srms.utils.ResponseBuilder.success;
+import static com.reza.srms.utils.ResponseBuilder.*;
 import static org.springframework.http.ResponseEntity.badRequest;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -101,34 +104,39 @@ public class StudentController {
         return ok(success(StudentResponse.makeResponse(updatedStudent), SEMESTER_STATUS_UPDATE).getJson());
     }
 
-//    @GetMapping("/list")
-//    public ResponseEntity<JSONObject> getList(
-//            @RequestParam(value = "page", defaultValue = "1") Integer page,
-//            @RequestParam(value = "size", defaultValue = "10") Integer size,
-//            @RequestParam(value = "sortBy", defaultValue = "") String sortBy,
-//            @RequestParam(value = "roll", defaultValue = "") Long roll,
-//            @RequestParam(value = "name", defaultValue = "") String name,
-//            @RequestParam(value = "email", defaultValue = "") String email,
-//            @RequestParam(value = "passingYear", defaultValue = "") Integer passingYear,
-//            @RequestParam(value = "semesterStatus", defaultValue = "") SemesterStatus semesterStatus,
-//            @RequestParam(value = "cgpa", defaultValue = "") Float cgpa
-//
-//    ) {
-//        commonDataHelper.setPageSize(page, size);
-//
-//        PaginatedResponse paginatedResponse = new PaginatedResponse();
-//
-//        Map<String, Object> searchResult = studentService.search(
-//                roll, name, email, passingYear, semesterStatus, cgpa,
-//                page, size, sortBy);
-//        List<Student> responses = (List<Student>) searchResult.get("lists");
-//
-//        List<StudentResponse> customResponse = responses.stream().map(StudentResponse::makeResponse).
-//                collect(Collectors.toList());
-//        commonDataHelper.getCommonData(page, size, searchResult, paginatedResponse, customResponse);
-//
-//        return ok(paginatedSuccess(paginatedResponse).getJson());
-//    }
+    @GetMapping("/list")
+    public ResponseEntity<JSONObject> getList(
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "semesterStatus", defaultValue = "") SemesterStatus semesterStatus,
+            @RequestParam(value = "roll", defaultValue = "") Long roll,
+            @RequestParam(value = "search", defaultValue = "") String search
+    ) {
+        commonDataHelper.setPageSize(page, size);
+
+        PaginatedResponse paginatedResponse = new PaginatedResponse();
+
+        Map<String, Object> mappedResult = studentService.getList(semesterStatus, roll, search,
+                page, size);
+        List<Student> studentList = (List<Student>) mappedResult.get("lists");
+
+        List<StudentResponse> responseList = studentList.stream().map(StudentResponse::makeResponse).
+                collect(Collectors.toList());
+
+        commonDataHelper.getCommonData(page, size, mappedResult, paginatedResponse, responseList);
+
+        return ok(paginatedSuccess(paginatedResponse).getJson());
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<JSONObject> getAll() {
+
+        List<Student> studentList = studentService.getAll();
+
+        List<StudentResponse> responseList = studentList.stream().map(StudentResponse::makeResponse).toList();
+
+        return ok(success(responseList).getJson());
+    }
 
     @DeleteMapping("/delete/{id}")
     @Operation(summary = "Delete a student", description = "Delete a student by id", tags = {"deleteStudent"})

@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -18,17 +17,14 @@ public class StudentDto implements Serializable {
     private Long id;
 
     @NotNull
-    private String roll;
-
+    private Long roll;
     @NotNull
     private String name;
-
     private String nameBn;
-
     private String email;
-
     private String mobile;
-
+    @NotNull
+    private Integer batch;
     private SemesterStatus semesterStatus;
 
     public void update(Student student) {
@@ -37,6 +33,7 @@ public class StudentDto implements Serializable {
         student.setNameBn(nameBn);
         student.setEmail(email);
         student.setMobile(mobile);
+        student.setBatch(batch);
         student.setSemesterStatus(semesterStatus);
     }
 
@@ -47,6 +44,7 @@ public class StudentDto implements Serializable {
         student.setNameBn(nameBn);
         student.setEmail(email);
         student.setMobile(mobile);
+        student.setBatch(batch);
         student.setSemesterStatus(semesterStatus);
         return student;
     }

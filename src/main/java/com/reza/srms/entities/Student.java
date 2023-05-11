@@ -9,7 +9,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class Student extends BaseEntity {
     private Long id;
 
     @Column(name = "student_roll", nullable = false)
-    private String roll;
+    private Long roll;
 
     @Column(name = "student_name", length = 50, nullable = false)
     private String name;
@@ -42,6 +41,9 @@ public class Student extends BaseEntity {
 
     @Column(name = "student_mobile")
     private String mobile;
+
+    @Column(name = "batch")
+    private Integer batch;
 
     @Column(name = "passing_year")
     private Integer passingYear;

@@ -14,11 +14,12 @@ import java.util.Objects;
 @AllArgsConstructor
 public class StudentResponse {
     private Long id;
-    private String roll;
+    private Long roll;
     private String name;
     private String nameBn;
     private String email;
     private String mobile;
+    private Integer batch;
     private Integer passingYear;
     private SemesterStatus semesterStatus;
     private Double cgpa;
@@ -33,6 +34,7 @@ public class StudentResponse {
         response.setEmail(student.getEmail());
         response.setMobile(student.getMobile());
         response.setPassingYear(student.getPassingYear());
+        response.setBatch(student.getBatch());
         response.setSemesterStatus(student.getSemesterStatus());
         response.setCgpa(student.getCgpa());
 
