@@ -64,4 +64,8 @@ public class StudentService {
     public List<Student> getAll() {
         return studentRepository.findAll();
     }
+
+    public List<Student> findByBatchAndSemester(Integer batchNo, SemesterStatus semester) {
+        return studentRepository.findByBatchAndSemesterStatus(batchNo, semester);
+    }
 }
