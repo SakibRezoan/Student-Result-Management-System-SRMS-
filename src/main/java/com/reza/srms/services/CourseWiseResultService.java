@@ -7,10 +7,10 @@ import com.reza.srms.dtos.CourseWiseResultImportDto;
 import com.reza.srms.entities.Course;
 import com.reza.srms.entities.CourseWiseResult;
 import com.reza.srms.entities.Student;
-import com.reza.srms.enums.Grade;
 import com.reza.srms.enums.SemesterStatus;
 import com.reza.srms.repositories.CourseWiseResultRepository;
 import com.reza.srms.repositories.StudentRepository;
+import com.reza.srms.utils.GpaAndGrade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,12 +50,19 @@ public class CourseWiseResultService {
                 return "Student not found with this batch: " + batchNo + " roll: " + dto.getRoll() + " and semester: " + semesterStatus.getLabel();
             courseWiseResult.setStudent(student.get());
 
-            if (dto.getObtainedMarks() > 100 || dto.getObtainedMarks() < 0)
-                return "Obtained marks can't be more than 100 or less than 0";
+            if (dto.getTotalMarksInTheoryExam() < dto.getObtainedMarksInTheoryExam())
+                return "Obtained marks in theory can't be more than total marks in theory";
 
-            courseWiseResult.setObtainedMarks(dto.getObtainedMarks());
-            courseWiseResult.setGpa(calculateGpa(dto.getObtainedMarks()));
-            courseWiseResult.setGrade(calculateGrade(dto.getObtainedMarks()).getLabel());
+            if (dto.getTotalMarksInLabExam() < dto.getObtainedMarksInTheoryExam())
+                return "Obtained marks in lab can't be more than total marks in lab";
+
+            courseWiseResult.setTotalMarksInTheoryExam(dto.getTotalMarksInTheoryExam());
+            courseWiseResult.setTotalMarksInLabExam(dto.getTotalMarksInLabExam());
+            courseWiseResult.setObtainedMarksInTheoryExam(dto.getObtainedMarksInTheoryExam());
+            courseWiseResult.setObtainedMarksInLabExam(dto.getObtainedMarksInLabExam());
+            GpaAndGrade gpaAndGrade = getGpaAndGrade(course, dto.getTotalMarksInTheoryExam(), dto.getTotalMarksInLabExam(), dto.getObtainedMarksInTheoryExam(), dto.getObtainedMarksInLabExam());
+            courseWiseResult.setGpa(gpaAndGrade.getGpa());
+            courseWiseResult.setGrade(gpaAndGrade.getGrade());
 
             courseWiseResultList.add(courseWiseResult);
         }
@@ -64,50 +71,58 @@ public class CourseWiseResultService {
         return SUCCESS;
     }
 
-    private Float calculateGpa(Float obtainedMarks) {
-        if (obtainedMarks <= 100 && obtainedMarks >= 79.5)
-            return 4.0F;
-        else if (obtainedMarks <= 79.4 && obtainedMarks >= 74.5)
-            return 3.75F;
-        else if (obtainedMarks <= 74.4 && obtainedMarks >= 69.5)
-            return 3.5F;
-        else if (obtainedMarks <= 69.4 && obtainedMarks >= 64.5)
-            return 3.25F;
-        else if (obtainedMarks <= 64.4 && obtainedMarks >= 59.5)
-            return 3.0F;
-        else if (obtainedMarks <= 59.4 && obtainedMarks >= 54.5)
-            return 2.75F;
-        else if (obtainedMarks <= 54.4 && obtainedMarks >= 49.5)
-            return 2.5F;
-        else if (obtainedMarks <= 49.4 && obtainedMarks >= 44.5)
-            return 2.25F;
-        else if (obtainedMarks <= 44.4 && obtainedMarks >= 39.5)
-            return 2.0F;
-        else
-            return 0F;
+    private GpaAndGrade getGpaAndGrade(Course course, Integer totalMarksInTheoryExam, Integer totalMarksInLabExam, Float obtainedMarksInTheoryExam, Float obtainedMarksInLabExam) {
+
+        float totalObtainedMarksIn100 = calculateMarksIn100(course, totalMarksInTheoryExam, totalMarksInLabExam, obtainedMarksInTheoryExam, obtainedMarksInLabExam);
+
+        GpaAndGrade gpaAndGrade = new GpaAndGrade();
+
+        if (totalObtainedMarksIn100 <= 100 && totalObtainedMarksIn100 >= 79.5){
+            gpaAndGrade.setGpa(4.0f);
+            gpaAndGrade.setGrade(A_PLUS.getLabel());
+        }
+        else if (totalObtainedMarksIn100 <= 79.4 && totalObtainedMarksIn100 >= 74.5) {
+            gpaAndGrade.setGpa(3.75f);
+            gpaAndGrade.setGrade(A.getLabel());
+        }
+        else if (totalObtainedMarksIn100 <= 74.4 && totalObtainedMarksIn100 >= 69.5) {
+            gpaAndGrade.setGpa(3.50f);
+            gpaAndGrade.setGrade(A_MINUS.getLabel());
+        }
+        else if (totalObtainedMarksIn100 <= 69.4 && totalObtainedMarksIn100 >= 64.5) {
+            gpaAndGrade.setGpa(3.25f);
+            gpaAndGrade.setGrade(B_PLUS.getLabel());
+        }
+        else if (totalObtainedMarksIn100 <= 64.4 && totalObtainedMarksIn100 >= 59.5) {
+            gpaAndGrade.setGpa(3.0f);
+            gpaAndGrade.setGrade(B.getLabel());
+        }
+        else if (totalObtainedMarksIn100 <= 59.4 && totalObtainedMarksIn100 >= 54.5)  {
+            gpaAndGrade.setGpa(2.75f);
+            gpaAndGrade.setGrade(B_MINUS.getLabel());
+        }
+        else if (totalObtainedMarksIn100 <= 54.4 && totalObtainedMarksIn100 >= 49.5) {
+            gpaAndGrade.setGpa(2.50f);
+            gpaAndGrade.setGrade(C_PLUS.getLabel());
+        }
+        else if (totalObtainedMarksIn100 <= 49.4 && totalObtainedMarksIn100 >= 44.5) {
+            gpaAndGrade.setGpa(2.25f);
+            gpaAndGrade.setGrade(C.getLabel());
+        }
+        else if (totalObtainedMarksIn100 <= 44.4 && totalObtainedMarksIn100 >= 39.5) {
+            gpaAndGrade.setGpa(2.0f);
+            gpaAndGrade.setGrade(D.getLabel());
+        }
+        else {
+            gpaAndGrade.setGpa(0f);
+            gpaAndGrade.setGrade(F.getLabel());
+        }
+        return gpaAndGrade;
     }
 
-    private Grade calculateGrade(Float obtainedMarks) {
-        if (obtainedMarks <= 100 && obtainedMarks >= 79.5)
-            return A_PLUS;
-        else if (obtainedMarks <= 79.4 && obtainedMarks >= 74.5)
-            return A;
-        else if (obtainedMarks <= 74.4 && obtainedMarks >= 69.5)
-            return A_MINUS;
-        else if (obtainedMarks <= 69.4 && obtainedMarks >= 64.5)
-            return B_PLUS;
-        else if (obtainedMarks <= 64.4 && obtainedMarks >= 59.5)
-            return B;
-        else if (obtainedMarks <= 59.4 && obtainedMarks >= 54.5)
-            return B_MINUS;
-        else if (obtainedMarks <= 54.4 && obtainedMarks >= 49.5)
-            return C_PLUS;
-        else if (obtainedMarks <= 49.4 && obtainedMarks >= 44.5)
-            return C;
-        else if (obtainedMarks <= 44.4 && obtainedMarks >= 39.5)
-            return D;
-        else
-            return F;
+    private Float calculateMarksIn100(Course course, Integer totalMarksInTheoryExam, Integer totalMarksInLabExam, Float obtainedMarksInTheoryExam, Float obtainedMarksInLabExam) {
+        return (((obtainedMarksInTheoryExam * 100 * course.getNoOfCreditsInTheory()) / totalMarksInTheoryExam) +
+                                ((obtainedMarksInLabExam * 100 * course.getNoOfCreditsInLab()) / totalMarksInLabExam)) / 2.0f;
     }
 
     private List<CourseWiseResultImportDto> fetchResultItems(MultipartFile resultFile) throws IOException {

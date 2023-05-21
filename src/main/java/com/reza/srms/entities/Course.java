@@ -29,7 +29,13 @@ public class Course extends BaseEntity {
     @Column(name = "course_title", nullable = false, length = 50)
     private String courseTitle;
 
-    @Column(name = "no_of_credits", nullable = false)
-    private Integer noOfCredits;
+    @Column(name = "total_credits", nullable = false)
+    private Integer totalCredits;
+
+    @Column(name = "no_of_credits_in_theory")
+    private Integer noOfCreditsInTheory;
+
+    @Column(name = "no_of_credits_in_lab")
+    private Integer noOfCreditsInLab;
 
 }

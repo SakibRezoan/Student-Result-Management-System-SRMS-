@@ -33,10 +33,19 @@ public class CourseWiseResult extends BaseEntity {
     @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     private Course course;
 
-    @Column(name = "obtained_marks", nullable = false, precision = 2, scale = 100)
-    private Float obtainedMarks;
+    @Column(name = "total_marks_in_theory_exam", nullable = false)
+    private Integer totalMarksInTheoryExam;
 
-    @Column(name = "gpa", precision = 2, scale = 4)
+    @Column(name = "total_marks_in_lab_exam", nullable = false)
+    private Integer totalMarksInLabExam;
+
+    @Column(name = "obtained_marks_in_theory_exam", nullable = false)
+    private Float obtainedMarksInTheoryExam;
+
+    @Column(name = "obtained_marks_in_lab_exam", nullable = false)
+    private Float obtainedMarksInLabExam;
+
+    @Column(name = "gpa", precision = 2)
     private Float gpa;
 
     @Column(name = "grade", length = 2)
