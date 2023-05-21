@@ -13,14 +13,23 @@ public class CourseResponse {
 
     private String courseTitle;
 
-    private Integer noOfCredits;
+    private String semester;
+
+    private Integer totalCredits;
+
+    private Integer noOfCreditsInTheory;
+
+    private Integer noOfCreditsInLab;
 
     public static CourseResponse makeResponse(Course course) {
         CourseResponse response = new CourseResponse();
         response.setId(course.getId());
         response.setCourseCode(course.getCourseCode());
         response.setCourseTitle(course.getCourseTitle());
-        response.setNoOfCredits(course.getNoOfCredits());
+        response.setSemester(course.getSemester());
+        response.setTotalCredits(course.getTotalCredits());
+        response.setNoOfCreditsInTheory(course.getNoOfCreditsInTheory());
+        response.setNoOfCreditsInLab(course.getNoOfCreditsInLab());
         return response;
     }
 }

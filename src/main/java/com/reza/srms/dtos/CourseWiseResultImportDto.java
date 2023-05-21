@@ -13,15 +13,15 @@ public class CourseWiseResultImportDto implements Serializable {
     @ExcelCellName("roll")
     private Long roll;
 
-    @ExcelCellName("totalMarksInTheoryExam")
+    @ExcelCellName("TheoryOutOf")
     private Integer totalMarksInTheoryExam;
 
-    @ExcelCellName("totalMarksInLabExam")
+    @ExcelCellName("TheoryObtained")
     private Integer totalMarksInLabExam;
 
-    @ExcelCellName("obtainedMarksInTheoryExam")
+    @ExcelCellName("LabOutOf")
     private Float obtainedMarksInTheoryExam;
 
-    @ExcelCellName("obtainedMarksInLabExam")
+    @ExcelCellName("LabObtained")
     private Float obtainedMarksInLabExam;
 }

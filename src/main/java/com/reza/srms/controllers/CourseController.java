@@ -25,7 +25,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.reza.srms.constant.MessageConstants.*;
+import static com.reza.srms.constant.MessageConstants.COURSE_SAVE;
+import static com.reza.srms.constant.MessageConstants.COURSE_UPDATE;
 import static com.reza.srms.exceptions.ApiError.fieldError;
 import static com.reza.srms.utils.ResponseBuilder.*;
 import static org.springframework.http.ResponseEntity.badRequest;
@@ -80,7 +81,6 @@ public class CourseController {
 
         if (bindingResult.hasErrors()) {
             return badRequest().body(error(fieldError(bindingResult)).getJson());
-
         }
         Optional<Course> course = courseService.findById(dto.getId());
         if (course.isEmpty())
@@ -91,19 +91,19 @@ public class CourseController {
         return ok(success(CourseResponse.makeResponse(updatedCourse), COURSE_UPDATE).getJson());
     }
 
-    @DeleteMapping("/delete/{id}")
-    @Operation(summary = "Delete a course", description = "Delete a course by id", tags = {"deleteCourse"})
-    @ApiResponse(responseCode = "200", description = "successful operation")
-    public ResponseEntity<JSONObject> delete(@PathVariable Long id) {
-
-        Optional<Course> course = courseService.findById(id);
-        if (course.isEmpty())
-            return badRequest().body(error(null, "Course not found with id: " + id).getJson());
-
-        courseService.delete(course.get());
-
-        return ok(success(null, COURSE_DELETE).getJson());
-    }
+//    @DeleteMapping("/delete/{id}")
+//    @Operation(summary = "Delete a course", description = "Delete a course by id", tags = {"deleteCourse"})
+//    @ApiResponse(responseCode = "200", description = "successful operation")
+//    public ResponseEntity<JSONObject> delete(@PathVariable Long id) {
+//
+//        Optional<Course> course = courseService.findById(id);
+//        if (course.isEmpty())
+//            return badRequest().body(error(null, "Course not found with id: " + id).getJson());
+//
+//        courseService.delete(course.get());
+//
+//        return ok(success(null, COURSE_DELETE).getJson());
+//    }
 
     @GetMapping("/list")
     public ResponseEntity<JSONObject> getList(

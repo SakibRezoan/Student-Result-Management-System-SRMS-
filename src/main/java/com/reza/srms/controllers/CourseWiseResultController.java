@@ -4,7 +4,6 @@ import com.reza.srms.entities.Course;
 import com.reza.srms.enums.SemesterStatus;
 import com.reza.srms.services.CourseService;
 import com.reza.srms.services.CourseWiseResultService;
-import com.reza.srms.services.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +28,6 @@ public class CourseWiseResultController {
     private final CourseWiseResultService courseWiseResultService;
 
     private final CourseService courseService;
-
-    private final StudentService studentService;
 
     @RequestMapping(path = "/upload", method = RequestMethod.POST, consumes = {"multipart/form-data"})
     @Operation(summary = "upload result of students", description = "upload result of students of specific Batch, Semester and Course")

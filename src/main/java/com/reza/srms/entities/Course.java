@@ -29,6 +29,9 @@ public class Course extends BaseEntity {
     @Column(name = "course_title", nullable = false, length = 50)
     private String courseTitle;
 
+    @Column(name = "semester")
+    private String semester;
+
     @Column(name = "total_credits", nullable = false)
     private Integer totalCredits;
 

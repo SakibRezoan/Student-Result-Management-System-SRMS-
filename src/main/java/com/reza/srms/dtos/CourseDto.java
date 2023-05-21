@@ -1,6 +1,7 @@
 package com.reza.srms.dtos;
 
 import com.reza.srms.entities.Course;
+import com.reza.srms.enums.SemesterStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,8 @@ public class CourseDto implements Serializable {
     private String courseCode;
     @NotNull
     private String courseTitle;
+
+    private SemesterStatus semester;
     @NotNull
     private Integer noOfCreditsInTheory;
     @NotNull
@@ -25,6 +28,7 @@ public class CourseDto implements Serializable {
     public void update(Course course) {
         course.setCourseCode(courseCode);
         course.setCourseTitle(courseTitle);
+        course.setSemester(semester.getLabel());
         course.setTotalCredits(noOfCreditsInTheory + noOfCreditsInLab);
         course.setNoOfCreditsInTheory(noOfCreditsInTheory);
         course.setNoOfCreditsInLab(noOfCreditsInLab);
@@ -34,6 +38,7 @@ public class CourseDto implements Serializable {
         Course course = new Course();
         course.setCourseCode(courseCode);
         course.setCourseTitle(courseTitle);
+        course.setSemester(semester.getLabel());
         course.setTotalCredits(noOfCreditsInTheory + noOfCreditsInLab);
         course.setNoOfCreditsInTheory(noOfCreditsInTheory);
         course.setNoOfCreditsInLab(noOfCreditsInLab);

@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -37,9 +36,6 @@ public class StudentResponse {
         response.setBatch(student.getBatch());
         response.setSemesterStatus(student.getSemesterStatus());
         response.setCgpa(student.getCgpa());
-
-        if (Objects.nonNull(student.getCourseWiseResultList()))
-            response.setCourseWiseResultList(student.getCourseWiseResultList().stream().map(CourseWiseResultResponse::makeResponse).toList());
 
         return response;
 

@@ -9,7 +9,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
@@ -54,13 +53,4 @@ public class Student extends BaseEntity {
     @Column(name = "cgpa")
     private Double cgpa;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "student")
-    private List<CourseWiseResult> courseWiseResultList;
-
-//    public void addCourseWiseResults(List<CourseWiseResult> courseWiseResultList) {
-//        if (this.courseWiseResultList == null) {
-//            this.courseWiseResultList = new ArrayList<>();
-//        }
-//        this.courseWiseResultList.addAll(courseWiseResultList);
-//    }
 }
