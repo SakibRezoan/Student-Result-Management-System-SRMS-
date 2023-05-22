@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 @Data
@@ -18,13 +19,23 @@ public class StudentDto implements Serializable {
 
     @NotNull
     private Long roll;
+
     @NotNull
     private String name;
+
     private String nameBn;
+
+    @NotNull
+    @Pattern(regexp = "^bsse\\d+@iit\\.du\\.ac\\.bd$", message = "email must be in format like: bsse****@iit.du.ac.bd")
     private String email;
+
+    @Pattern(regexp = "^(01\\d{9})$", message = "mobile number must be 11 digits stated with 01")
     private String mobile;
+
     @NotNull
     private Integer batch;
+
+    @NotNull
     private SemesterStatus semesterStatus;
 
     public void update(Student student) {

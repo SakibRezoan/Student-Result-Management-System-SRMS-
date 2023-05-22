@@ -30,13 +30,13 @@ public class CourseValidator implements Validator {
         if (isNotEmpty(courseDto.getCourseCode())) {
             Optional<Course> course = courseService.findByCourseCode(courseDto.getCourseCode());
             if (course.isPresent()) {
-                errors.rejectValue("courseCode", "500", ALREADY_EXIST);
+                errors.rejectValue("courseCode", "400", ALREADY_EXIST);
             }
         }
         if (isNotEmpty(courseDto.getCourseTitle())) {
             Optional<Course> course = courseService.findByCourseTitle(courseDto.getCourseTitle());
             if (course.isPresent()) {
-                errors.rejectValue("courseTitle", "500", ALREADY_EXIST);
+                errors.rejectValue("courseTitle", "400", ALREADY_EXIST);
             }
         }
         if (isNotEmpty(courseDto.getNoOfCreditsInTheory()) && isNotEmpty(courseDto.getNoOfCreditsInLab())) {

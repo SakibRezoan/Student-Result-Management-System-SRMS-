@@ -29,6 +29,10 @@ public class StudentService {
         return studentRepository.findByRoll(roll);
     }
 
+    public Optional<Student> findByEmail(String email) {
+        return studentRepository.findByEmail(email.trim());
+    }
+
     public Optional<Student> findById(Long id) {
         return studentRepository.findById(id);
     }
@@ -54,7 +58,7 @@ public class StudentService {
     public Map<String, Object> getList(SemesterStatus semesterStatus, Long roll, String search, Integer page, Integer size) {
         ServiceHelper<Student> helper = new ServiceHelper<>(Student.class);
         return helper.getList(
-                studentRepository.getList(semesterStatus, roll, search.trim(),
+                studentRepository.getList(semesterStatus.getLabel(), roll, search.trim(),
                         helper.getPageable("", page, size)),
                 page,
                 size
@@ -65,4 +69,19 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
+    public Optional<Student> findByNewRollExceptExisting(Long newRoll, Long previousRoll) {
+        return studentRepository.findByNewRollExceptExisting(newRoll, previousRoll);
+    }
+
+    public Optional<Student> findByNewEmailExceptExisting(String newEmail, String previousEmail) {
+        return studentRepository.findByNewEmailExceptExisting(newEmail.trim().toLowerCase(), previousEmail);
+    }
+
+    public Optional<Student> findByNewMobileExceptExisting(String newMobile, String previousMobile) {
+        return studentRepository.findByNewMobileExceptExisting(newMobile.trim(), previousMobile);
+    }
+
+    public Optional<Student> findByMobile(String mobile) {
+        return studentRepository.findByMobile(mobile.trim());
+    }
 }

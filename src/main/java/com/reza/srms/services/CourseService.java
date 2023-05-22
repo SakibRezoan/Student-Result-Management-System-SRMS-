@@ -61,4 +61,12 @@ public class CourseService {
     public List<Course> getAll() {
         return courseRepository.findAll();
     }
+
+    public Optional<Course> findByCourseCodeExceptPervious(String newCourseCode, String previousCourseCode) {
+        return courseRepository.findByCourseCodeAndCourseCodeNot(newCourseCode.trim(), previousCourseCode);
+    }
+
+    public Optional<Course> findByCourseTitleExceptPervious(String newCourseTitle, String previousCourseTitle) {
+        return courseRepository.findByCourseTitleAndCourseTitleNot(newCourseTitle.trim(), previousCourseTitle);
+    }
 }

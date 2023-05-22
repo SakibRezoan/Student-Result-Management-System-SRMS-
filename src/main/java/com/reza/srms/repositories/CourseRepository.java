@@ -13,8 +13,10 @@ import java.util.Optional;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecificationExecutor<Course> {
     Optional<Course> findByCourseCode(String courseCode);
-
+    Optional<Course> findByCourseCodeAndCourseCodeNot(String newCourseCode, String previousCourseCode);
     Optional<Course> findByCourseTitle(String courseTitle);
+    Optional<Course> findByCourseTitleAndCourseTitleNot(String newCourseTitle, String previousCourseTitle);
+
 
     @Query(value = """
             SELECT c.* FROM course AS c
@@ -38,4 +40,5 @@ public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecif
                     """
     )
     Page<Course> getList(String search, Pageable pageable);
+
 }

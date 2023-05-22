@@ -25,9 +25,18 @@ public class StudentValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         StudentDto studentDto = (StudentDto) target;
-        Optional<Student> student = studentService.findByRoll(studentDto.getRoll());
-        if (student.isPresent()) {
-            errors.rejectValue("roll", "500", ALREADY_EXIST);
+
+        Optional<Student> studentByRoll = studentService.findByRoll(studentDto.getRoll());
+        if (studentByRoll.isPresent()) {
+            errors.rejectValue("roll", "400", ALREADY_EXIST);
+        }
+        Optional<Student> studentByEmail = studentService.findByEmail(studentDto.getEmail());
+        if (studentByEmail.isPresent()) {
+            errors.rejectValue("email", "400", ALREADY_EXIST);
+        }
+        Optional<Student> studentByMobile = studentService.findByMobile(studentDto.getMobile());
+        if (studentByMobile.isPresent()) {
+            errors.rejectValue("mobile", "400", ALREADY_EXIST);
         }
 
     }

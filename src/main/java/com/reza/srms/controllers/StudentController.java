@@ -85,6 +85,18 @@ public class StudentController {
         if (student.isEmpty())
             return badRequest().body(error(404, "Student not found with id: " + dto.getId()).getJson());
 
+        Optional<Student> studentByNewRoll = studentService.findByNewRollExceptExisting(dto.getRoll(), student.get().getRoll());
+        if (studentByNewRoll.isPresent())
+            return badRequest().body(error(400, "The roll you provided already exists").getJson());
+
+        Optional<Student> studentByNewEmail = studentService.findByNewEmailExceptExisting(dto.getEmail(), student.get().getEmail());
+        if (studentByNewEmail.isPresent())
+            return badRequest().body(error(400, "The email you provided already exists").getJson());
+
+        Optional<Student> studentByNewMobile = studentService.findByNewMobileExceptExisting(dto.getMobile(), student.get().getMobile());
+        if (studentByNewMobile.isPresent())
+            return badRequest().body(error(400, "The mobile number you provided already exists").getJson());
+
         Student updatedStudent = studentService.update(dto, student.get());
 
         return ok(success(StudentResponse.makeResponse(updatedStudent), STUDENT_UPDATE).getJson());

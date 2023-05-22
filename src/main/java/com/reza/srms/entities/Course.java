@@ -25,10 +25,10 @@ public class Course extends BaseEntity {
     @Column(name = "course_id", nullable = false)
     private Long id;
 
-    @Column(name = "course_code", nullable = false, length = 10)
+    @Column(name = "course_code", unique = true, nullable = false, length = 10)
     private String courseCode;
 
-    @Column(name = "course_title", nullable = false, length = 50)
+    @Column(name = "course_title", unique = true, nullable = false, length = 50)
     private String courseTitle;
 
     @Enumerated(EnumType.STRING)

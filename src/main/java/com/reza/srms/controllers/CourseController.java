@@ -84,7 +84,15 @@ public class CourseController {
         }
         Optional<Course> course = courseService.findById(dto.getId());
         if (course.isEmpty())
-            return badRequest().body(error(null, "Course not found with id: " + dto.getId()).getJson());
+            return badRequest().body(error(404, "Course not found with id: " + dto.getId()).getJson());
+
+        Optional<Course> courseByNewCode = courseService.findByCourseCodeExceptPervious(dto.getCourseCode(), course.get().getCourseCode());
+        if (courseByNewCode.isPresent())
+            return badRequest().body(error(400, "The Course Code: " + dto.getCourseCode() + "you provided already exists").getJson());
+
+        Optional<Course> courseByNewTitle = courseService.findByCourseTitleExceptPervious(dto.getCourseTitle(), course.get().getCourseTitle());
+        if (courseByNewTitle.isPresent())
+            return badRequest().body(error(400, "The Course Titile: " + dto.getCourseTitle() + "you provided already exists").getJson());
 
         Course updatedCourse = courseService.update(course.get(), dto);
 
@@ -128,8 +136,6 @@ public class CourseController {
 
     @GetMapping("/all")
     public ResponseEntity<JSONObject> getAll() {
-
-        PaginatedResponse paginatedResponse = new PaginatedResponse();
 
         List<Course> courseList = courseService.getAll();
 
