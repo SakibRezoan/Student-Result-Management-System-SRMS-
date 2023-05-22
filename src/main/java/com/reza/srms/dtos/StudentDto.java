@@ -1,7 +1,7 @@
 package com.reza.srms.dtos;
 
 import com.reza.srms.entities.Student;
-import com.reza.srms.enums.SemesterStatus;
+import com.reza.srms.enums.Semester;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,7 +36,7 @@ public class StudentDto implements Serializable {
     private Integer batch;
 
     @NotNull
-    private SemesterStatus semesterStatus;
+    private Semester semester;
 
     public void update(Student student) {
         student.setRoll(roll);
@@ -45,7 +45,7 @@ public class StudentDto implements Serializable {
         student.setEmail(email);
         student.setMobile(mobile);
         student.setBatch(batch);
-        student.setSemesterStatus(semesterStatus);
+        student.setSemester(semester);
     }
 
     public Student toEntity() {
@@ -56,7 +56,7 @@ public class StudentDto implements Serializable {
         student.setEmail(email);
         student.setMobile(mobile);
         student.setBatch(batch);
-        student.setSemesterStatus(semesterStatus);
+        student.setSemester(semester);
         return student;
     }
 }

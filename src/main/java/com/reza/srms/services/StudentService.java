@@ -2,7 +2,7 @@ package com.reza.srms.services;
 
 import com.reza.srms.dtos.StudentDto;
 import com.reza.srms.entities.Student;
-import com.reza.srms.enums.SemesterStatus;
+import com.reza.srms.enums.Semester;
 import com.reza.srms.repositories.StudentRepository;
 import com.reza.srms.utils.ServiceHelper;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +46,8 @@ public class StudentService {
 
     }
 
-    public Student changeSemesterStatus(Student student, SemesterStatus status) {
-        student.setSemesterStatus(status);
+    public Student changeSemesterStatus(Student student, Semester status) {
+        student.setSemester(status);
         return studentRepository.save(student);
     }
 
@@ -55,10 +55,10 @@ public class StudentService {
         studentRepository.delete(student);
     }
 
-    public Map<String, Object> getList(SemesterStatus semesterStatus, Long roll, String search, Integer page, Integer size) {
+    public Map<String, Object> getList(Semester semester, Long roll, String search, Integer page, Integer size) {
         ServiceHelper<Student> helper = new ServiceHelper<>(Student.class);
         return helper.getList(
-                studentRepository.getList(semesterStatus.getLabel(), roll, search.trim(),
+                studentRepository.getList(semester.getLabel(), roll, search.trim(),
                         helper.getPageable("", page, size)),
                 page,
                 size

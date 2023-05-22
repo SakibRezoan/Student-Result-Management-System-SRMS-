@@ -2,7 +2,7 @@ package com.reza.srms.dtos;
 
 import com.reza.srms.entities.Course;
 import com.reza.srms.enums.CourseType;
-import com.reza.srms.enums.SemesterStatus;
+import com.reza.srms.enums.Semester;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +22,7 @@ public class CourseDto implements Serializable {
     @NotNull
     private String courseTitle;
 
-    private SemesterStatus semester;
+    private Semester semester;
 
     @NotNull
     private Integer totalCredits;

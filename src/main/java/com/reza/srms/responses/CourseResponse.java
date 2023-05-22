@@ -2,7 +2,7 @@ package com.reza.srms.responses;
 
 import com.reza.srms.entities.Course;
 import com.reza.srms.enums.CourseType;
-import com.reza.srms.enums.SemesterStatus;
+import com.reza.srms.enums.Semester;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +15,7 @@ public class CourseResponse {
 
     private String courseTitle;
 
-    private SemesterStatus semester;
+    private Semester semester;
 
     private Integer totalCredits;
 

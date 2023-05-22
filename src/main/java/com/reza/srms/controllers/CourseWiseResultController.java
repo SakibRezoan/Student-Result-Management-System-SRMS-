@@ -1,7 +1,7 @@
 package com.reza.srms.controllers;
 
 import com.reza.srms.entities.Course;
-import com.reza.srms.enums.SemesterStatus;
+import com.reza.srms.enums.Semester;
 import com.reza.srms.services.CourseService;
 import com.reza.srms.services.CourseWiseResultService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +32,7 @@ public class CourseWiseResultController {
     @RequestMapping(path = "/upload", method = RequestMethod.POST, consumes = {"multipart/form-data"})
     @Operation(summary = "upload result of students", description = "upload result of students of specific Batch, Semester and Course")
     public ResponseEntity<?> upload(@RequestParam(value = "batchNo") Integer batchNo,
-                                    @RequestParam(value = "semester") SemesterStatus semesterStatus,
+                                    @RequestParam(value = "semester") Semester semester,
                                     @RequestParam(value = "courseId") Long courseId,
                                     @RequestPart(value = "resultFile") MultipartFile resultFile) {
 
@@ -40,10 +40,8 @@ public class CourseWiseResultController {
         if (course.isEmpty()) {
             return badRequest().body(error(null, "Course not found with courseId: " + courseId).getJson());
         }
-        if (semesterStatus.equals(SemesterStatus.PASSED) || semesterStatus.equals(SemesterStatus.DROPPED))
-            return badRequest().body(error(null, "Invalid semester...").getJson());
 
-        String message = courseWiseResultService.uploadResult(batchNo, semesterStatus, course.get(), resultFile);
+        String message = courseWiseResultService.uploadResult(batchNo, semester, course.get(), resultFile);
 
         if (message.equals(SUCCESS))
             return ok(success(null, "Result uploaded successfully").getJson());

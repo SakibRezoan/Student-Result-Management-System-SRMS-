@@ -1,7 +1,7 @@
 package com.reza.srms.entities;
 
 import com.reza.srms.enums.CourseType;
-import com.reza.srms.enums.SemesterStatus;
+import com.reza.srms.enums.Semester;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,7 +33,7 @@ public class Course extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "semester")
-    private SemesterStatus semester;
+    private Semester semester;
 
     @Column(name = "total_credits", nullable = false)
     private Integer totalCredits;

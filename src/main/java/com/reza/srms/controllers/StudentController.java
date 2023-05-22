@@ -2,7 +2,7 @@ package com.reza.srms.controllers;
 
 import com.reza.srms.dtos.StudentDto;
 import com.reza.srms.entities.Student;
-import com.reza.srms.enums.SemesterStatus;
+import com.reza.srms.enums.Semester;
 import com.reza.srms.responses.StudentResponse;
 import com.reza.srms.services.StudentService;
 import com.reza.srms.utils.CommonDataHelper;
@@ -105,7 +105,7 @@ public class StudentController {
     @PutMapping("/change-semester-status/{id}/{status}")
     @Operation(summary = "Change semester status of a course by id", description = "Change semester status of a course by id", tags = {"changeSemester"})
     @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = StudentResponse.class)))
-    public ResponseEntity<JSONObject> changeSemesterStatus(@PathVariable Long id, @PathVariable SemesterStatus status) {
+    public ResponseEntity<JSONObject> changeSemesterStatus(@PathVariable Long id, @PathVariable Semester status) {
 
         Optional<Student> student = studentService.findById(id);
         if (student.isEmpty())
@@ -120,7 +120,7 @@ public class StudentController {
     public ResponseEntity<JSONObject> getList(
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "size", defaultValue = "10") Integer size,
-            @RequestParam(value = "semesterStatus", defaultValue = "") SemesterStatus semesterStatus,
+            @RequestParam(value = "semester", defaultValue = "") Semester semester,
             @RequestParam(value = "roll", defaultValue = "") Long roll,
             @RequestParam(value = "search", defaultValue = "") String search
     ) {
@@ -128,7 +128,7 @@ public class StudentController {
 
         PaginatedResponse paginatedResponse = new PaginatedResponse();
 
-        Map<String, Object> mappedResult = studentService.getList(semesterStatus, roll, search,
+        Map<String, Object> mappedResult = studentService.getList(semester, roll, search,
                 page, size);
         List<Student> studentList = (List<Student>) mappedResult.get("lists");
 

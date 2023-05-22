@@ -1,7 +1,7 @@
 package com.reza.srms.repositories;
 
 import com.reza.srms.entities.Student;
-import com.reza.srms.enums.SemesterStatus;
+import com.reza.srms.enums.Semester;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -47,7 +47,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
                     )
                     AND
                     (
-                    	:semesterStatus IS NULL OR :semesterStatus = '' OR LOWER(s.semester_status) = LOWER(:semesterStatus)
+                    	:semester IS NULL OR :semester = '' OR LOWER(s.semester_status) = LOWER(:semester)
                     )
                     AND
                     (
@@ -66,7 +66,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
                                 )
                                 AND
                                 (
-                                    :semesterStatus IS NULL OR :semesterStatus = '' OR LOWER(s.semester_status) = LOWER(:semesterStatus)
+                                    :semester IS NULL OR :semester = '' OR LOWER(s.semester_status) = LOWER(:semester)
                                 )
                                 AND
                                 (
@@ -74,7 +74,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
                                 )
                              """
     )
-    Page<Student> getList(String semesterStatus, Long roll, String search, Pageable pageable);
+    Page<Student> getList(String semester, Long roll, String search, Pageable pageable);
 
-    Optional<Student> findByBatchAndRollAndSemesterStatus(Integer batchNo, Long roll,  SemesterStatus semesterStatus);
+    Optional<Student> findByBatchAndRollAndSemesterStatus(Integer batchNo, Long roll,  Semester semester);
 }

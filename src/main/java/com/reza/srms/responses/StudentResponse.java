@@ -1,7 +1,7 @@
 package com.reza.srms.responses;
 
 import com.reza.srms.entities.Student;
-import com.reza.srms.enums.SemesterStatus;
+import com.reza.srms.enums.Semester;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ public class StudentResponse {
     private String email;
     private String mobile;
     private Integer batch;
-    private SemesterStatus semesterStatus;
+    private Semester semester;
 
     public static StudentResponse makeResponse(Student student) {
         StudentResponse response = new StudentResponse();
@@ -28,7 +28,7 @@ public class StudentResponse {
         response.setEmail(student.getEmail());
         response.setMobile(student.getMobile());
         response.setBatch(student.getBatch());
-        response.setSemesterStatus(student.getSemesterStatus());
+        response.setSemester(student.getSemester());
 
         return response;
 

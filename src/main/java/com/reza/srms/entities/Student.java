@@ -1,6 +1,6 @@
 package com.reza.srms.entities;
 
-import com.reza.srms.enums.SemesterStatus;
+import com.reza.srms.enums.Semester;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +9,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -48,7 +50,17 @@ public class Student extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "semester_status", nullable = false)
-    private SemesterStatus semesterStatus;
+    private Semester semester;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "student")
+    private List<SemesterWiseResult> semesterWiseResultList;
+
+    public void addSemesterWiseResultList(List<SemesterWiseResult> semesterWiseResultList) {
+        if (this.semesterWiseResultList == null) {
+            this.semesterWiseResultList = new ArrayList<>();
+        }
+        this.semesterWiseResultList.addAll(semesterWiseResultList);
+    }
 
     @Column(name = "cgpa")
     private Double cgpa;

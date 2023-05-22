@@ -8,7 +8,7 @@ import com.reza.srms.entities.Course;
 import com.reza.srms.entities.CourseWiseResult;
 import com.reza.srms.entities.Student;
 import com.reza.srms.entities.StudentResult;
-import com.reza.srms.enums.SemesterStatus;
+import com.reza.srms.enums.Semester;
 import com.reza.srms.repositories.CourseWiseResultRepository;
 import com.reza.srms.repositories.StudentRepository;
 import com.reza.srms.utils.GpaAndGrade;
@@ -34,7 +34,7 @@ public class CourseWiseResultService {
     private final CourseWiseResultRepository courseWiseResultRepository;
     private final StudentRepository studentRepository;
 
-    public String uploadResult(Integer batchNo, SemesterStatus semesterStatus, Course course, MultipartFile resultFile) {
+    public String uploadResult(Integer batchNo, Semester semester, Course course, MultipartFile resultFile) {
         List<CourseWiseResultImportDto> resultImportDtoList;
         try {
             resultImportDtoList = fetchResultItems(resultFile);
@@ -44,7 +44,7 @@ public class CourseWiseResultService {
         CourseWiseResult courseWiseResult = new CourseWiseResult();
         courseWiseResult.setCourse(course);
         courseWiseResult.setBatchNo(batchNo);
-        courseWiseResult.setSemesterStatus(semesterStatus);
+        courseWiseResult.setSemester(semester);
         courseWiseResult.setFileName(resultFile.getOriginalFilename());
 
         List<StudentResult> studentResultList = new ArrayList<>();
@@ -53,10 +53,10 @@ public class CourseWiseResultService {
 
             StudentResult studentResult = new StudentResult();
 
-            Optional<Student> student = studentRepository.findByBatchAndRollAndSemesterStatus(batchNo, dto.getRoll(), semesterStatus);
+            Optional<Student> student = studentRepository.findByBatchAndRollAndSemesterStatus(batchNo, dto.getRoll(), semester);
 
             if (student.isEmpty())
-                return "Student not found with this batch: " + batchNo + " roll: " + dto.getRoll() + " and semester: " + semesterStatus;
+                return "Student not found with this batch: " + batchNo + " roll: " + dto.getRoll() + " and semester: " + semester;
 
             studentResult.setStudent(student.get());
 

@@ -1,6 +1,6 @@
 package com.reza.srms.entities;
 
-import com.reza.srms.enums.SemesterStatus;
+import com.reza.srms.enums.Semester;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,8 +31,9 @@ public class CourseWiseResult extends BaseEntity {
     @Column(name = "batch_no")
     private Integer batchNo;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "semester")
-    private SemesterStatus semesterStatus;
+    private Semester semester;
 
     @Column(name = "result_file_name")
     private String fileName;
