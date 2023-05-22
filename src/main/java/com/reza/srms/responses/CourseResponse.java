@@ -1,6 +1,8 @@
 package com.reza.srms.responses;
 
 import com.reza.srms.entities.Course;
+import com.reza.srms.enums.CourseType;
+import com.reza.srms.enums.SemesterStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,13 +15,15 @@ public class CourseResponse {
 
     private String courseTitle;
 
-    private String semester;
+    private SemesterStatus semester;
 
     private Integer totalCredits;
 
     private Integer noOfCreditsInTheory;
 
     private Integer noOfCreditsInLab;
+
+    private CourseType courseType;
 
     public static CourseResponse makeResponse(Course course) {
         CourseResponse response = new CourseResponse();
@@ -30,6 +34,7 @@ public class CourseResponse {
         response.setTotalCredits(course.getTotalCredits());
         response.setNoOfCreditsInTheory(course.getNoOfCreditsInTheory());
         response.setNoOfCreditsInLab(course.getNoOfCreditsInLab());
+        response.setCourseType(course.getCourseType());
         return response;
     }
 }

@@ -1,6 +1,7 @@
 package com.reza.srms.dtos;
 
 import com.reza.srms.entities.Course;
+import com.reza.srms.enums.CourseType;
 import com.reza.srms.enums.SemesterStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,34 +15,44 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class CourseDto implements Serializable {
     private Long id;
+
     @NotNull
     private String courseCode;
+
     @NotNull
     private String courseTitle;
 
     private SemesterStatus semester;
+
     @NotNull
+    private Integer totalCredits;
+
     private Integer noOfCreditsInTheory;
-    @NotNull
+
     private Integer noOfCreditsInLab;
 
-    public void update(Course course) {
-        course.setCourseCode(courseCode);
-        course.setCourseTitle(courseTitle);
-        course.setSemester(semester.getLabel());
-        course.setTotalCredits(noOfCreditsInTheory + noOfCreditsInLab);
-        course.setNoOfCreditsInTheory(noOfCreditsInTheory);
-        course.setNoOfCreditsInLab(noOfCreditsInLab);
-    }
+    private CourseType courseType;
 
     public Course toEntity() {
         Course course = new Course();
         course.setCourseCode(courseCode);
         course.setCourseTitle(courseTitle);
-        course.setSemester(semester.getLabel());
-        course.setTotalCredits(noOfCreditsInTheory + noOfCreditsInLab);
+        course.setSemester(semester);
+        course.setTotalCredits(totalCredits);
         course.setNoOfCreditsInTheory(noOfCreditsInTheory);
         course.setNoOfCreditsInLab(noOfCreditsInLab);
+        course.setCourseType(courseType);
+
         return course;
+    }
+
+    public void update(Course course) {
+        course.setCourseCode(courseCode);
+        course.setCourseTitle(courseTitle);
+        course.setSemester(semester);
+        course.setTotalCredits(totalCredits);
+        course.setNoOfCreditsInTheory(noOfCreditsInTheory);
+        course.setNoOfCreditsInLab(noOfCreditsInLab);
+        course.setCourseType(courseType);
     }
 }

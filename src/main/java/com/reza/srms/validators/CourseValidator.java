@@ -1,7 +1,7 @@
 package com.reza.srms.validators;
 
-import com.reza.srms.entities.Course;
 import com.reza.srms.dtos.CourseDto;
+import com.reza.srms.entities.Course;
 import com.reza.srms.services.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,6 +11,7 @@ import org.springframework.validation.Validator;
 import java.util.Optional;
 
 import static com.reza.srms.constant.ValidatorConstants.ALREADY_EXIST;
+import static com.reza.srms.constant.ValidatorConstants.BAD_REQUEST;
 import static com.reza.srms.utils.StringUtils.isNotEmpty;
 @Component
 @RequiredArgsConstructor
@@ -36,6 +37,11 @@ public class CourseValidator implements Validator {
             Optional<Course> course = courseService.findByCourseTitle(courseDto.getCourseTitle());
             if (course.isPresent()) {
                 errors.rejectValue("courseTitle", "500", ALREADY_EXIST);
+            }
+        }
+        if (isNotEmpty(courseDto.getNoOfCreditsInTheory()) && isNotEmpty(courseDto.getNoOfCreditsInLab())) {
+            if (courseDto.getTotalCredits() != (courseDto.getNoOfCreditsInTheory() + courseDto.getNoOfCreditsInLab())) {
+                errors.rejectValue("totalCredits", "400", BAD_REQUEST);
             }
         }
 

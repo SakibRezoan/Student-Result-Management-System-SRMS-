@@ -1,5 +1,7 @@
 package com.reza.srms.entities;
 
+import com.reza.srms.enums.CourseType;
+import com.reza.srms.enums.SemesterStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,8 +31,9 @@ public class Course extends BaseEntity {
     @Column(name = "course_title", nullable = false, length = 50)
     private String courseTitle;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "semester")
-    private String semester;
+    private SemesterStatus semester;
 
     @Column(name = "total_credits", nullable = false)
     private Integer totalCredits;
@@ -40,5 +43,9 @@ public class Course extends BaseEntity {
 
     @Column(name = "no_of_credits_in_lab")
     private Integer noOfCreditsInLab;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "course_type", length = 20)
+    private CourseType courseType;
 
 }
