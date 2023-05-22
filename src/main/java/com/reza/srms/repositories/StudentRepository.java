@@ -76,5 +76,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     )
     Page<Student> getList(String semesterStatus, Long roll, String search, Pageable pageable);
 
-    Optional<Student> findByBatchAndRollAndSemesterStatus(Integer batchNo, Long roll,  SemesterStatus semester);
+    Optional<Student> findByBatchAndRollAndSemesterStatus(Integer batchNo, Long roll,  SemesterStatus semesterStatus);
 }

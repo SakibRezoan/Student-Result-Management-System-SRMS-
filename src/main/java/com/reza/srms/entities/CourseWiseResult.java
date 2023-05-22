@@ -1,5 +1,6 @@
 package com.reza.srms.entities;
 
+import com.reza.srms.enums.SemesterStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -30,12 +32,19 @@ public class CourseWiseResult extends BaseEntity {
     private Integer batchNo;
 
     @Column(name = "semester")
-    private String semester;
+    private SemesterStatus semesterStatus;
 
     @Column(name = "result_file_name")
     private String fileName;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "courseWiseResult")
     private List<StudentResult> studentResultList;
+
+    public void addStudentResultList(List<StudentResult> studentResultList) {
+        if (this.studentResultList == null) {
+            this.studentResultList = new ArrayList<>();
+        }
+        this.studentResultList.addAll(studentResultList);
+    }
 
 }

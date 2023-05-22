@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -42,26 +44,27 @@ public class CourseWiseResultService {
         CourseWiseResult courseWiseResult = new CourseWiseResult();
         courseWiseResult.setCourse(course);
         courseWiseResult.setBatchNo(batchNo);
-        courseWiseResult.setSemester(semesterStatus.getLabel());
+        courseWiseResult.setSemesterStatus(semesterStatus);
         courseWiseResult.setFileName(resultFile.getOriginalFilename());
 
         List<StudentResult> studentResultList = new ArrayList<>();
 
         for (CourseWiseResultImportDto dto : resultImportDtoList) {
+
             StudentResult studentResult = new StudentResult();
 
             Optional<Student> student = studentRepository.findByBatchAndRollAndSemesterStatus(batchNo, dto.getRoll(), semesterStatus);
 
             if (student.isEmpty())
-                return "Student not found with this batch: " + batchNo + " roll: " + dto.getRoll() + " and semester: " + semesterStatus.getLabel();
+                return "Student not found with this batch: " + batchNo + " roll: " + dto.getRoll() + " and semester: " + semesterStatus;
 
             studentResult.setStudent(student.get());
 
             if (dto.getTotalMarksInTheoryExam() < dto.getObtainedMarksInTheoryExam())
-                return "Obtained marks in theory can't be more than total marks in theory";
+                return "Obtained marks in theory can't be more than total marks in theory for roll: " + dto.getRoll();
 
-            if (dto.getTotalMarksInLabExam() < dto.getObtainedMarksInTheoryExam())
-                return "Obtained marks in lab can't be more than total marks in lab";
+            if (dto.getTotalMarksInLabExam() < dto.getObtainedMarksInLabExam())
+                return "Obtained marks in lab can't be more than total marks in lab for roll: " + dto.getRoll();
 
             studentResult.setTotalMarksInTheoryExam(dto.getTotalMarksInTheoryExam());
             studentResult.setTotalMarksInLabExam(dto.getTotalMarksInLabExam());
@@ -82,6 +85,8 @@ public class CourseWiseResultService {
 
             studentResultList.add(studentResult);
         }
+        courseWiseResult.addStudentResultList(studentResultList);
+
         courseWiseResultRepository.save(courseWiseResult);
 
         return SUCCESS;
@@ -126,8 +131,23 @@ public class CourseWiseResultService {
     }
 
     private Float calculateMarksIn100(Course course, Integer totalMarksInTheoryExam, Integer totalMarksInLabExam, Float obtainedMarksInTheoryExam, Float obtainedMarksInLabExam) {
-        return (((obtainedMarksInTheoryExam * 100 * course.getNoOfCreditsInTheory()) / totalMarksInTheoryExam) +
-                ((obtainedMarksInLabExam * 100 * course.getNoOfCreditsInLab()) / totalMarksInLabExam)) / 2.0f;
+        float creditedMarksInTheoryExam = creditedMarks(course.getNoOfCreditsInTheory(), (float)totalMarksInTheoryExam);
+        float creditedMarksInLabExam = creditedMarks(course.getNoOfCreditsInLab(), (float)totalMarksInLabExam);
+        float creditedObtainedMarksInTheoryExam = creditedMarks(course.getNoOfCreditsInTheory(), obtainedMarksInTheoryExam);
+        float creditedObtainedMarksInLabExam = creditedMarks(course.getNoOfCreditsInLab(), obtainedMarksInLabExam);
+
+        float totalCreditedMarksInExam = creditedMarksInTheoryExam + creditedMarksInLabExam;
+        float totalCreditedObtainedMarksInExam = creditedObtainedMarksInTheoryExam + creditedObtainedMarksInLabExam;
+
+        float totalObtainedMarksIn100 = (totalCreditedObtainedMarksInExam * 100) / totalCreditedMarksInExam;
+
+        BigDecimal decimal = new BigDecimal(totalObtainedMarksIn100);
+
+        return decimal.setScale(2, RoundingMode.HALF_UP).floatValue();
+    }
+
+    private float creditedMarks(Integer noOfCreditsInTheory, float marks) {
+        return noOfCreditsInTheory * marks;
     }
 
     private List<CourseWiseResultImportDto> fetchResultItems(MultipartFile resultFile) throws IOException {

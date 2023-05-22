@@ -10,16 +10,16 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class CourseWiseResultImportDto implements Serializable {
 
-    @ExcelCellName("roll")
+    @ExcelCellName("Roll")
     private Long roll;
 
     @ExcelCellName("TheoryOutOf")
     private Integer totalMarksInTheoryExam;
 
-    @ExcelCellName("TheoryObtained")
+    @ExcelCellName("LabOutOf")
     private Integer totalMarksInLabExam;
 
-    @ExcelCellName("LabOutOf")
+    @ExcelCellName("TheoryObtained")
     private Float obtainedMarksInTheoryExam;
 
     @ExcelCellName("LabObtained")
