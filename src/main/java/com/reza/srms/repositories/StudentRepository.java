@@ -47,7 +47,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
                     )
                     AND
                     (
-                    	:semester IS NULL OR :semester = '' OR LOWER(s.semester_status) = LOWER(:semester)
+                    	:semester IS NULL OR :semester = '' OR LOWER(s.semester) = LOWER(:semester)
                     )
                     AND
                     (
@@ -66,7 +66,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
                                 )
                                 AND
                                 (
-                                    :semester IS NULL OR :semester = '' OR LOWER(s.semester_status) = LOWER(:semester)
+                                    :semester IS NULL OR :semester = '' OR LOWER(s.semester) = LOWER(:semester)
                                 )
                                 AND
                                 (
@@ -76,5 +76,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     )
     Page<Student> getList(String semester, Long roll, String search, Pageable pageable);
 
-    Optional<Student> findByBatchAndRollAndSemesterStatus(Integer batchNo, Long roll,  Semester semester);
+    Optional<Student> findByBatchAndRollAndSemester(Integer batchNo, Long roll,  Semester semester);
 }

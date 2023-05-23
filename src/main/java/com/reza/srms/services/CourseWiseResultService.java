@@ -6,10 +6,11 @@ import com.poiji.option.PoijiOptions;
 import com.reza.srms.dtos.CourseWiseResultImportDto;
 import com.reza.srms.entities.Course;
 import com.reza.srms.entities.CourseWiseResult;
+import com.reza.srms.entities.SemesterWiseResult;
 import com.reza.srms.entities.Student;
-import com.reza.srms.entities.StudentResult;
 import com.reza.srms.enums.Semester;
 import com.reza.srms.repositories.CourseWiseResultRepository;
+import com.reza.srms.repositories.SemesterWiseResultRepository;
 import com.reza.srms.repositories.StudentRepository;
 import com.reza.srms.utils.GpaAndGrade;
 import lombok.RequiredArgsConstructor;
@@ -31,34 +32,37 @@ import static com.reza.srms.enums.Grade.*;
 @RequiredArgsConstructor
 public class CourseWiseResultService {
 
+    private final SemesterWiseResultRepository semesterWiseResultRepository;
     private final CourseWiseResultRepository courseWiseResultRepository;
     private final StudentRepository studentRepository;
 
-    public String uploadResult(Integer batchNo, Semester semester, Course course, MultipartFile resultFile) {
+    public String uploadResult(Integer batch, Semester semester, Course course, MultipartFile resultFile) {
         List<CourseWiseResultImportDto> resultImportDtoList;
         try {
             resultImportDtoList = fetchResultItems(resultFile);
         } catch (IOException e) {
             return e.getMessage();
         }
-        CourseWiseResult courseWiseResult = new CourseWiseResult();
-        courseWiseResult.setCourse(course);
-        courseWiseResult.setBatchNo(batchNo);
-        courseWiseResult.setSemester(semester);
-        courseWiseResult.setFileName(resultFile.getOriginalFilename());
 
-        List<StudentResult> studentResultList = new ArrayList<>();
+        List<SemesterWiseResult> semesterWiseResultList = new ArrayList<>();
 
         for (CourseWiseResultImportDto dto : resultImportDtoList) {
 
-            StudentResult studentResult = new StudentResult();
-
-            Optional<Student> student = studentRepository.findByBatchAndRollAndSemesterStatus(batchNo, dto.getRoll(), semester);
+            Optional<Student> student = studentRepository.findByBatchAndRollAndSemester(batch, dto.getRoll(), semester);
 
             if (student.isEmpty())
-                return "Student not found with this batch: " + batchNo + " roll: " + dto.getRoll() + " and semester: " + semester;
+                return "Student not found with this batch: " + batch + " roll: " + dto.getRoll() + " and semester: " + semester;
 
-            studentResult.setStudent(student.get());
+            Optional<SemesterWiseResult> semesterWiseResult = semesterWiseResultRepository.findByStudentIdAndSemester(dto.getRoll(), semester.toString());
+
+            if (semesterWiseResult.isEmpty())
+                return "Please update semester status for roll no: " + dto.getRoll();
+
+            CourseWiseResult courseWiseResult = new CourseWiseResult();
+
+            courseWiseResult.setCourse(course);
+            courseWiseResult.setFileName(resultFile.getOriginalFilename());
+            courseWiseResult.setSemesterWiseResult(semesterWiseResult.get());
 
             if (dto.getTotalMarksInTheoryExam() < dto.getObtainedMarksInTheoryExam())
                 return "Obtained marks in theory can't be more than total marks in theory for roll: " + dto.getRoll();
@@ -66,28 +70,28 @@ public class CourseWiseResultService {
             if (dto.getTotalMarksInLabExam() < dto.getObtainedMarksInLabExam())
                 return "Obtained marks in lab can't be more than total marks in lab for roll: " + dto.getRoll();
 
-            studentResult.setTotalMarksInTheoryExam(dto.getTotalMarksInTheoryExam());
-            studentResult.setTotalMarksInLabExam(dto.getTotalMarksInLabExam());
-            studentResult.setObtainedMarksInTheoryExam(dto.getObtainedMarksInTheoryExam());
-            studentResult.setObtainedMarksInLabExam(dto.getObtainedMarksInLabExam());
+
+            courseWiseResult.setTotalMarksInTheoryExam(dto.getTotalMarksInTheoryExam());
+            courseWiseResult.setTotalMarksInLabExam(dto.getTotalMarksInLabExam());
+            courseWiseResult.setObtainedMarksInTheoryExam(dto.getObtainedMarksInTheoryExam());
+            courseWiseResult.setObtainedMarksInLabExam(dto.getObtainedMarksInLabExam());
 
             float totalObtainedMarksIn100 = calculateMarksIn100(course, dto.getTotalMarksInTheoryExam(), dto.getTotalMarksInLabExam(), dto.getObtainedMarksInTheoryExam(), dto.getObtainedMarksInLabExam());
 
-            studentResult.setObtainedMarksInScale100(totalObtainedMarksIn100);
+            courseWiseResult.setObtainedMarksInScale100(totalObtainedMarksIn100);
 
             GpaAndGrade gpaAndGrade = getGpaAndGrade(totalObtainedMarksIn100);
 
-            studentResult.setGpa(gpaAndGrade.getGpa());
+            courseWiseResult.setGpa(gpaAndGrade.getGpa());
 
-            studentResult.setGrade(gpaAndGrade.getGrade());
+            courseWiseResult.setGrade(gpaAndGrade.getGrade());
 
-            studentResult.setCourseWiseResult(courseWiseResult);
+            semesterWiseResult.get().getCourseWiseResultList().add(courseWiseResult);
 
-            studentResultList.add(studentResult);
+            semesterWiseResultList.add(semesterWiseResult.get());
         }
-        courseWiseResult.addStudentResultList(studentResultList);
 
-        courseWiseResultRepository.save(courseWiseResult);
+        semesterWiseResultRepository.saveAll(semesterWiseResultList);
 
         return SUCCESS;
     }
@@ -131,8 +135,8 @@ public class CourseWiseResultService {
     }
 
     private Float calculateMarksIn100(Course course, Integer totalMarksInTheoryExam, Integer totalMarksInLabExam, Float obtainedMarksInTheoryExam, Float obtainedMarksInLabExam) {
-        float creditedMarksInTheoryExam = creditedMarks(course.getNoOfCreditsInTheory(), (float)totalMarksInTheoryExam);
-        float creditedMarksInLabExam = creditedMarks(course.getNoOfCreditsInLab(), (float)totalMarksInLabExam);
+        float creditedMarksInTheoryExam = creditedMarks(course.getNoOfCreditsInTheory(), (float) totalMarksInTheoryExam);
+        float creditedMarksInLabExam = creditedMarks(course.getNoOfCreditsInLab(), (float) totalMarksInLabExam);
         float creditedObtainedMarksInTheoryExam = creditedMarks(course.getNoOfCreditsInTheory(), obtainedMarksInTheoryExam);
         float creditedObtainedMarksInLabExam = creditedMarks(course.getNoOfCreditsInLab(), obtainedMarksInLabExam);
 

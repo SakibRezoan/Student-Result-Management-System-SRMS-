@@ -1,8 +1,10 @@
 package com.reza.srms.services;
 
 import com.reza.srms.dtos.StudentDto;
+import com.reza.srms.entities.SemesterWiseResult;
 import com.reza.srms.entities.Student;
 import com.reza.srms.enums.Semester;
+import com.reza.srms.repositories.SemesterWiseResultRepository;
 import com.reza.srms.repositories.StudentRepository;
 import com.reza.srms.utils.ServiceHelper;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +21,23 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
+    private final SemesterWiseResultRepository semesterWiseResultRepository;
+
     @Transactional
     public Student save(StudentDto dto) {
         Student student = dto.toEntity();
-        return studentRepository.save(student);
+
+        studentRepository.save(student);
+
+        SemesterWiseResult semesterWiseResult = semesterWiseResultRepository.findByStudentIdAndSemester(student.getId(), student.getSemester().toString()).orElse(new SemesterWiseResult());
+
+        semesterWiseResult.setStudent(student);
+        semesterWiseResult.setSemester(student.getSemester());
+
+        semesterWiseResultRepository.save(semesterWiseResult);
+
+        return student;
+
     }
 
     public Optional<Student> findByRoll(Long roll) {
@@ -46,8 +61,18 @@ public class StudentService {
 
     }
 
-    public Student changeSemesterStatus(Student student, Semester status) {
-        student.setSemester(status);
+    public Student changeSemesterStatus(Student student, Semester semester) {
+
+        student.setSemester(semester);
+
+        SemesterWiseResult semesterWiseResult = semesterWiseResultRepository.findByStudentIdAndSemester(student.getId(), semester.toString()).orElse(new SemesterWiseResult());
+
+        semesterWiseResult.setStudent(student);
+
+        semesterWiseResult.setSemester(semester);
+
+        semesterWiseResultRepository.save(semesterWiseResult);
+
         return studentRepository.save(student);
     }
 

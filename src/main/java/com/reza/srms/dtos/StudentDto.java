@@ -35,19 +35,6 @@ public class StudentDto implements Serializable {
     @NotNull
     private Integer batch;
 
-    @NotNull
-    private Semester semester;
-
-    public void update(Student student) {
-        student.setRoll(roll);
-        student.setName(name);
-        student.setNameBn(nameBn);
-        student.setEmail(email);
-        student.setMobile(mobile);
-        student.setBatch(batch);
-        student.setSemester(semester);
-    }
-
     public Student toEntity() {
         Student student = new Student();
         student.setRoll(roll);
@@ -56,7 +43,15 @@ public class StudentDto implements Serializable {
         student.setEmail(email);
         student.setMobile(mobile);
         student.setBatch(batch);
-        student.setSemester(semester);
+        student.setSemester(Semester.FIRST_SEMESTER);
         return student;
+    }
+    public void update(Student student) {
+        student.setRoll(roll);
+        student.setName(name);
+        student.setNameBn(nameBn);
+        student.setEmail(email);
+        student.setMobile(mobile);
+        student.setBatch(batch);
     }
 }

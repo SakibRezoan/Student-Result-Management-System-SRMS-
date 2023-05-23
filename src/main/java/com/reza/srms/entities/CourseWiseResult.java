@@ -1,15 +1,13 @@
 package com.reza.srms.entities;
 
-import com.reza.srms.enums.Semester;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Setter
 @Getter
@@ -28,24 +26,33 @@ public class CourseWiseResult extends BaseEntity {
     @JoinColumn(name = "course_id", referencedColumnName = "course_id")
     private Course course;
 
-    @Column(name = "batch_no")
-    private Integer batchNo;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "semester")
-    private Semester semester;
-
-    @Column(name = "result_file_name")
+    @Column(name = "result_upload_file_name")
     private String fileName;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "courseWiseResult")
-    private List<StudentResult> studentResultList;
+    @Column(name = "total_marks_in_theory_exam", nullable = false)
+    private Integer totalMarksInTheoryExam;
 
-    public void addStudentResultList(List<StudentResult> studentResultList) {
-        if (this.studentResultList == null) {
-            this.studentResultList = new ArrayList<>();
-        }
-        this.studentResultList.addAll(studentResultList);
-    }
+    @Column(name = "total_marks_in_lab_exam", nullable = false)
+    private Integer totalMarksInLabExam;
+
+    @Column(name = "obtained_marks_in_theory_exam", nullable = false)
+    private Float obtainedMarksInTheoryExam;
+
+    @Column(name = "obtained_marks_in_lab_exam", nullable = false)
+    private Float obtainedMarksInLabExam;
+
+    @Column(name = "total_obtained_marks_in_scale_100", nullable = false)
+    private Float obtainedMarksInScale100;
+
+    @Column(name = "gpa", precision = 2)
+    private Float gpa;
+
+    @Column(name = "grade", length = 2)
+    private String grade;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "semester_wise_result_id")
+    private SemesterWiseResult semesterWiseResult;
 
 }

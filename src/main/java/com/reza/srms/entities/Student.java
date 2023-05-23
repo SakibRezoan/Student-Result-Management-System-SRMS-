@@ -49,8 +49,11 @@ public class Student extends BaseEntity {
     private Integer passingYear;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "semester_status", nullable = false)
+    @Column(name = "semester", nullable = false)
     private Semester semester;
+
+    @Column(name = "cgpa")
+    private Double cgpa;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "student")
     private List<SemesterWiseResult> semesterWiseResultList;
@@ -61,8 +64,5 @@ public class Student extends BaseEntity {
         }
         this.semesterWiseResultList.addAll(semesterWiseResultList);
     }
-
-    @Column(name = "cgpa")
-    private Double cgpa;
 
 }

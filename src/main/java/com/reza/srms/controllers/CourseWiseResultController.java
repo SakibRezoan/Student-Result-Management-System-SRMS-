@@ -31,7 +31,7 @@ public class CourseWiseResultController {
 
     @RequestMapping(path = "/upload", method = RequestMethod.POST, consumes = {"multipart/form-data"})
     @Operation(summary = "upload result of students", description = "upload result of students of specific Batch, Semester and Course")
-    public ResponseEntity<?> upload(@RequestParam(value = "batchNo") Integer batchNo,
+    public ResponseEntity<?> upload(@RequestParam(value = "batchNo") Integer batch,
                                     @RequestParam(value = "semester") Semester semester,
                                     @RequestParam(value = "courseId") Long courseId,
                                     @RequestPart(value = "resultFile") MultipartFile resultFile) {
@@ -41,7 +41,7 @@ public class CourseWiseResultController {
             return badRequest().body(error(null, "Course not found with courseId: " + courseId).getJson());
         }
 
-        String message = courseWiseResultService.uploadResult(batchNo, semester, course.get(), resultFile);
+        String message = courseWiseResultService.uploadResult(batch, semester, course.get(), resultFile);
 
         if (message.equals(SUCCESS))
             return ok(success(null, "Result uploaded successfully").getJson());
