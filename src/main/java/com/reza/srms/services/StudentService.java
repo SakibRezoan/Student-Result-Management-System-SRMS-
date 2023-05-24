@@ -1,5 +1,8 @@
 package com.reza.srms.services;
 
+import com.poiji.bind.Poiji;
+import com.poiji.exception.PoijiExcelType;
+import com.poiji.option.PoijiOptions;
 import com.reza.srms.dtos.StudentDto;
 import com.reza.srms.entities.SemesterWiseResult;
 import com.reza.srms.entities.Student;
@@ -9,11 +12,13 @@ import com.reza.srms.repositories.StudentRepository;
 import com.reza.srms.utils.ServiceHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
+
+import static com.reza.srms.constant.ResponseStatus.SUCCESS;
 
 @Service
 @RequiredArgsConstructor
@@ -108,5 +113,50 @@ public class StudentService {
 
     public Optional<Student> findByMobile(String mobile) {
         return studentRepository.findByMobile(mobile.trim());
+    }
+
+    @Transactional
+    public String uploadStudents(Integer batch, MultipartFile studentFile) {
+        List<StudentDto> studentDtoList;
+        try {
+            studentDtoList = fetchStudentItems(studentFile);
+        } catch (IOException e) {
+            return e.getMessage();
+        }
+
+        List<SemesterWiseResult> semesterWiseResultList = new ArrayList<>();
+
+        List<Student> studentList = new ArrayList<>();
+
+        for (StudentDto dto : studentDtoList) {
+
+            Student student = dto.toEntity();
+
+            studentList.add(student);
+
+            SemesterWiseResult semesterWiseResult = new SemesterWiseResult();
+
+            semesterWiseResult.setStudent(student);
+
+            semesterWiseResult.setSemester(student.getSemester());
+
+            semesterWiseResultList.add(semesterWiseResult);
+        }
+
+        semesterWiseResultRepository.saveAll(semesterWiseResultList);
+
+        studentRepository.saveAll(studentList);
+
+        return SUCCESS;
+    }
+
+    private List<StudentDto> fetchStudentItems(MultipartFile studentFile) throws IOException {
+        String extension = Objects.requireNonNull(studentFile.getOriginalFilename()).substring(studentFile.getOriginalFilename().lastIndexOf(".") + 1);
+        return Poiji.fromExcel(
+                studentFile.getInputStream(),
+                PoijiExcelType.valueOf(extension.toUpperCase()),
+                StudentDto.class,
+                PoijiOptions.PoijiOptionsBuilder.settings().preferNullOverDefault(true).build()
+        ).parallelStream().toList();
     }
 }

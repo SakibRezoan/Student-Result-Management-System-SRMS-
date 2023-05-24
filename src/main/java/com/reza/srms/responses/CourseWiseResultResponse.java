@@ -1,7 +1,6 @@
 package com.reza.srms.responses;
 
 import com.reza.srms.entities.CourseWiseResult;
-import com.reza.srms.enums.Semester;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,8 +22,6 @@ public class CourseWiseResultResponse implements Serializable {
 
     private Integer batchNo;
 
-    private Semester semester;
-
     private String resultFileName;
 
 
@@ -36,7 +33,6 @@ public class CourseWiseResultResponse implements Serializable {
         response.setNoOfCreditsInTheory(courseWiseResult.getCourse().getNoOfCreditsInTheory());
         response.setNoOfCreditsInLab(courseWiseResult.getCourse().getNoOfCreditsInLab());
         response.setResultFileName(courseWiseResult.getFileName());
-
         return response;
     }
 }

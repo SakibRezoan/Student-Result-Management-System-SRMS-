@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.reza.srms.constant.MessageConstants.*;
+import static com.reza.srms.constant.ResponseStatus.SUCCESS;
 import static com.reza.srms.exceptions.ApiError.fieldError;
 import static com.reza.srms.utils.ResponseBuilder.*;
 import static org.springframework.http.ResponseEntity.badRequest;
@@ -58,7 +60,7 @@ public class StudentController {
 
         Student student = studentService.save(studentDto);
 
-        return ok(success(StudentResponse.makeResponse(student), STUDENT_SAVE).getJson());
+        return ok(success(StudentResponse.makeCommonResponse(student), STUDENT_SAVE).getJson());
     }
 
     @GetMapping("/find/{id}")
@@ -70,7 +72,7 @@ public class StudentController {
         if (student.isEmpty())
             return badRequest().body(error(404, "Student not found with id: " + id).getJson());
 
-        return ok(success(StudentResponse.makeResponse(student.get())).getJson());
+        return ok(success(StudentResponse.makeDetailResponse(student.get())).getJson());
     }
 
     @PutMapping("/update")
@@ -99,7 +101,7 @@ public class StudentController {
 
         Student updatedStudent = studentService.update(dto, student.get());
 
-        return ok(success(StudentResponse.makeResponse(updatedStudent), STUDENT_UPDATE).getJson());
+        return ok(success(StudentResponse.makeCommonResponse(updatedStudent), STUDENT_UPDATE).getJson());
     }
 
     @PutMapping("/change-semester-status/{id}/{status}")
@@ -113,7 +115,7 @@ public class StudentController {
 
         Student updatedStudent = studentService.changeSemesterStatus(student.get(), status);
 
-        return ok(success(StudentResponse.makeResponse(updatedStudent), SEMESTER_STATUS_UPDATE).getJson());
+        return ok(success(StudentResponse.makeCommonResponse(updatedStudent), SEMESTER_STATUS_UPDATE).getJson());
     }
 
     @GetMapping("/list")
@@ -132,7 +134,7 @@ public class StudentController {
                 page, size);
         List<Student> studentList = (List<Student>) mappedResult.get("lists");
 
-        List<StudentResponse> responseList = studentList.stream().map(StudentResponse::makeResponse).
+        List<StudentResponse> responseList = studentList.stream().map(StudentResponse::makeCommonResponse).
                 collect(Collectors.toList());
 
         commonDataHelper.getCommonData(page, size, mappedResult, paginatedResponse, responseList);
@@ -145,7 +147,7 @@ public class StudentController {
 
         List<Student> studentList = studentService.getAll();
 
-        List<StudentResponse> responseList = studentList.stream().map(StudentResponse::makeResponse).toList();
+        List<StudentResponse> responseList = studentList.stream().map(StudentResponse::makeCommonResponse).toList();
 
         return ok(success(responseList).getJson());
     }
@@ -163,5 +165,18 @@ public class StudentController {
         studentService.delete(student.get());
 
         return ok(success(null, STUDENT_DELETE).getJson());
+    }
+
+    @RequestMapping(path = "/upload", method = RequestMethod.POST, consumes = {"multipart/form-data"})
+    @Operation(summary = "upload students data of a specific batch", description = "upload students data of a specific batch")
+    public ResponseEntity<?> upload(@RequestParam(value = "batch") Integer batch,
+                                    @RequestPart(value = "studentFile") MultipartFile studentFile) {
+
+        String message = studentService.uploadStudents(batch, studentFile);
+
+        if (message.equals(SUCCESS))
+            return ok(success(null, "Students uploaded successfully").getJson());
+
+        else return badRequest().body(error(null, message).getJson());
     }
 }

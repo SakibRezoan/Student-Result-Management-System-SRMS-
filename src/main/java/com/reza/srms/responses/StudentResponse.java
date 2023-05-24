@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+import static java.util.Objects.nonNull;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,9 +21,13 @@ public class StudentResponse {
     private String email;
     private String mobile;
     private Integer batch;
+    private String session;
+    private Integer passingYear;
     private Semester semester;
+    private Double cgpa;
+    private List<SemesterWiseResultResponse> semesterWiseResultList;
 
-    public static StudentResponse makeResponse(Student student) {
+    public static StudentResponse makeCommonResponse(Student student) {
         StudentResponse response = new StudentResponse();
         response.setId(student.getId());
         response.setRoll(student.getRoll());
@@ -35,4 +43,13 @@ public class StudentResponse {
     }
 
 
+    public static StudentResponse makeDetailResponse(Student student) {
+        StudentResponse response = makeCommonResponse(student);
+        response.setPassingYear(student.getPassingYear());
+        response.setSession(student.getSession());
+        response.setCgpa(student.getCgpa());
+        if (nonNull(student.getSemesterWiseResultList()))
+            response.setSemesterWiseResultList(student.getSemesterWiseResultList().stream().map(SemesterWiseResultResponse::makeResponse).toList());
+        return response;
+    }
 }

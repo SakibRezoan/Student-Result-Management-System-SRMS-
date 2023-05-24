@@ -9,7 +9,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -42,27 +41,30 @@ public class Student extends BaseEntity {
     @Column(name = "student_mobile", unique = true, length = 11)
     private String mobile;
 
-    @Column(name = "batch", nullable = false)
+    @Column(name = "student_batch", nullable = false)
     private Integer batch;
 
-    @Column(name = "passing_year")
+    @Column(name = "student_session", length = 20, nullable = false)
+    private String session;
+
+    @Column(name = "student_passing_year")
     private Integer passingYear;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "semester", nullable = false)
+    @Column(name = "student_semester", nullable = false)
     private Semester semester;
 
-    @Column(name = "cgpa")
+    @Column(name = "student_cgpa")
     private Double cgpa;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "student")
     private List<SemesterWiseResult> semesterWiseResultList;
 
-    public void addSemesterWiseResultList(List<SemesterWiseResult> semesterWiseResultList) {
-        if (this.semesterWiseResultList == null) {
-            this.semesterWiseResultList = new ArrayList<>();
-        }
-        this.semesterWiseResultList.addAll(semesterWiseResultList);
-    }
+//    public void addSemesterWiseResultList(List<SemesterWiseResult> semesterWiseResultList) {
+//        if (this.semesterWiseResultList == null) {
+//            this.semesterWiseResultList = new ArrayList<>();
+//        }
+//        this.semesterWiseResultList.addAll(semesterWiseResultList);
+//    }
 
 }

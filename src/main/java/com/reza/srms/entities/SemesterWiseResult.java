@@ -11,7 +11,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -50,10 +49,10 @@ public class SemesterWiseResult {
     @JoinColumn(name = "student_id")
     private Student student;
 
-    public void addCourseWiseResultList(List<CourseWiseResult> courseWiseResultList) {
-        if (this.courseWiseResultList == null) {
-            this.courseWiseResultList = new ArrayList<>();
-        }
-        this.courseWiseResultList.addAll(courseWiseResultList);
-    }
+//    public void addCourseWiseResultList(List<CourseWiseResult> courseWiseResultList) {
+//        if (this.courseWiseResultList == null) {
+//            this.courseWiseResultList = new ArrayList<>();
+//        }
+//        this.courseWiseResultList.addAll(courseWiseResultList);
+//    }
 }
