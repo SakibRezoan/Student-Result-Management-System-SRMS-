@@ -18,29 +18,29 @@ public class StudentDto implements Serializable {
 
     private Long id;
 
-    @ExcelCellName("roll")
+    @ExcelCellName("Roll")
     private Long roll;
 
     @NotNull
-    @ExcelCellName("name")
+    @ExcelCellName("Name")
     private String name;
 
-    @ExcelCellName("nameBn")
+    @ExcelCellName("NameBn")
     private String nameBn;
 
     @NotNull
-    @ExcelCellName("email")
+    @ExcelCellName("Email")
     @Pattern(regexp = "^bsse\\d+@iit\\.du\\.ac\\.bd$", message = "email must be in format like: bsse****@iit.du.ac.bd")
     private String email;
 
     @Pattern(regexp = "^(01\\d{9})$", message = "mobile number must be 11 digits stated with 01")
-    @ExcelCellName("mobile")
+    @ExcelCellName("Mobile")
     private String mobile;
     @NotNull
-    @ExcelCellName("batch")
+    @ExcelCellName("Batch")
     private Integer batch;
     @NotNull
-    @ExcelCellName("session")
+    @ExcelCellName("Session")
     private String session;
 
     public Student toEntity() {
